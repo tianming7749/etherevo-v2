@@ -1,0 +1,65 @@
+/* SocialSupportPage.css */
+
+.social-support-container {
+  font-family: 'Arial', sans-serif;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.social-support-container h2 {
+  color: #333;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.social-support-container h3 {
+  color: #555;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+.social-support-container label {
+  display: block;
+  margin-bottom: 10px;
+}
+
+.social-support-container select {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.social-support-container button {
+  background-color: #004085;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+  margin-top: 20px;
+}
+
+.social-support-container button:hover {
+  background-color: #0279f0;
+}
+
+.social-support-container button:disabled {
+  background-color: #888;
+  cursor: not-allowed;
+}
+
+.loading-message {
+  text-align: center;
+  padding: 20px;
+  font-size: 18px;
+  color: #666;
+}

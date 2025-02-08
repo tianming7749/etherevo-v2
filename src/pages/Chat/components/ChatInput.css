@@ -1,0 +1,31 @@
+.chat-input-container {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.chat-input {
+  flex-grow: 1;
+  padding: 10px;
+  font-size: 16px;
+  line-height: 1.5;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  resize: none; /* 禁止用户手动调整大小 */
+  overflow: auto; /* 超过高度显示滚动条 */
+  max-height: 96px; /* 限制最大高度为 3 行 */
+}
+
+.send-button {
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: #4682B4;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.send-button:hover {
+  background-color: #35608a;
+}

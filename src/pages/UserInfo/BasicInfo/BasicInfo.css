@@ -1,0 +1,87 @@
+/* BasicInfo.css */
+
+.basic-info-container {
+    font-family: 'Arial', sans-serif;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .basic-info-container h2 {
+    color: #333;
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  
+  .basic-info-container > div {
+    margin-bottom: 20px;
+  }
+  
+  /* 输入框和选择器的样式 */
+  .basic-info-container input[type="text"],
+  .basic-info-container select {
+    width: 100%; /* 设置为100%宽度以适应父容器 */
+    max-width: 200px; /* 设置一个最大宽度，保证一致性 */
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+    margin-top: 5px;
+    display: block; /* 确保它们是块级元素，宽度生效 */
+  }
+  
+  /* 按钮样式 */
+  .basic-info-container button {
+    background-color: #004085;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+  }
+  
+  .basic-info-container button:hover {
+    background-color: #0279f0;
+  }
+  
+  /* 针对自定义组件的样式调整 */
+  .name-input, .age-selector, .gender-selector, 
+  .occupation-selector, .location-selector, 
+  .education-selector, .religions-selector {
+    margin-bottom: 20px;
+  }
+  
+  /* 针对其他输入和选择器的统一样式 */
+  .name-input input,
+  .age-selector select,
+  .gender-selector select, .gender-selector input,
+  .occupation-selector select, .occupation-selector input,
+  .location-selector input,
+  .education-selector select, .education-selector input,
+  .religions-selector select, .religions-selector input {
+    width: 100%;
+    max-width: 200px; /* 与上面保持一致 */
+    /* 这里可以添加更具体的样式，如果需要的话 */
+  }
+  
+  /* 提示或错误信息样式 */
+  .error-message {
+    color: #ff0000;
+    font-size: 14px;
+    margin-top: 5px;
+  }
+  
+  /* 加载中提示 */
+.loading-message {
+    text-align: center;
+    padding: 20px;
+    font-size: 18px;
+    color: #666;
+  }
+
+  

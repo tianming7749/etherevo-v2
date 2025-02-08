@@ -1,0 +1,32 @@
+.chat-header {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  background-color: #e3f2fd;
+  border-bottom: 1px solid #ccc;
+}
+
+.connection-status {
+  flex-grow: 1;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+.status-connected {
+  color: green;
+}
+
+.status-disconnected {
+  color: red;
+}
+
+.clear-chat-button {
+  margin-left: 10px;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #1976d2;
+  color: white;
+  cursor: pointer;
+  width: auto;
+}

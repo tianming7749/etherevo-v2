@@ -1,0 +1,114 @@
+/* 全局设置 */
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+/* 动态导航栏高度，适配不同设备 */
+:root {
+  --navbar-height: 60px; /* 默认导航栏高度 */
+}
+
+body {
+  margin: 0;
+  padding-top: var(--navbar-height); /* 动态导航栏高度，避免遮挡 */
+  font-family: Arial, sans-serif;
+}
+
+/* 动态调整导航栏高度，适配小屏设备 */
+@media (max-width: 768px) {
+  :root {
+    --navbar-height: 70px; /* 小屏设备导航栏高度 */
+  }
+}
+
+/* 自定义动画 */
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+/* 卡片样式 */
+.card {
+  padding: 2em;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.read-the-docs {
+  color: #888;
+  margin-top: 1em;
+}
+
+/* Chat 页面样式 */
+.chat-container {
+  margin: 0 auto;
+  padding: 20px;
+  max-width: 800px;
+  min-height: calc(100vh - var(--navbar-height)); /* 避免遮挡，内容填充全屏 */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between; /* 按钮始终贴近底部 */
+  box-sizing: border-box; /* 确保内边距不影响整体宽高 */
+}
+
+.chat-messages {
+  flex-grow: 1; /* 消息区域自动扩展 */
+  overflow-y: auto; /* 消息超出时可滚动 */
+  margin-bottom: 20px;
+}
+
+.chat-input {
+  display: flex;
+  gap: 10px;
+}
+
+.chat-input input {
+  flex-grow: 1;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.chat-input button {
+  padding: 10px 20px;
+  background-color: #4682b4;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 200ms;
+}
+
+.chat-input button:hover {
+  background-color: #5a9bd6;
+}

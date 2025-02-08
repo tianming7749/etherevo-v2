@@ -1,0 +1,56 @@
+/* 导航栏样式 */
+.user-info-nav {
+  margin-bottom: 20px;
+}
+
+/* 导航列表样式 */
+.user-info-nav-list {
+  display: flex;
+  flex-wrap: wrap; /* 内容超出一行时自动换行 */
+  gap: 10px; /* 每个导航项之间的水平间距 */
+  list-style: none; /* 移除前面的黑点 */
+  padding: 0;
+  margin: 0;
+  justify-content: center; /* 居中对齐，可根据需求修改 */
+}
+
+.user-info-container h1 {
+  font-size: 30px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.user-info-container h1 {
+  color: #333; /* 可以调整颜色 */
+  margin-bottom: 30px; /* 添加下边距 */
+}
+
+/* 链接基础样式 */
+.nav-link {
+  text-decoration: none;
+  color: black;
+  padding: 10px 15px;
+  border-radius: 5px;
+  background-color: #95bdddb2;
+  transition: background-color 0.3s, color 0.3s;
+  font-size: 1rem;
+  font-weight: bold;
+  white-space: nowrap; /* 防止链接内容换行 */
+  margin: 0 5px 5px 5px; /* 上 右 下 左 */
+}
+
+/* 悬停效果 */
+.nav-link:hover {
+  background-color: #e0f7fa;
+  color: #00796b;
+}
+
+/* 激活状态样式 */
+.nav-link-active {
+  background-color: #184670; /* 绿色背景 */
+  color: white; /* 白色文字 */
+  border: 1px solid #15707c; /* 添加一个边框 */
+  box-shadow: 0 0 10px rgba(1, 66, 110, 0.5); /* 增加阴影效果 */
+  font-weight: bolder; /* 加粗文字 */
+  transform: scale(1.05); /* 轻微放大效果 */
+}

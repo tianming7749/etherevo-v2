@@ -1,0 +1,70 @@
+:root {
+  --logo-filter-color: #646cffaa;
+  --logo-react-filter-color: #61dafbaa;
+  --max-width: 1280px;
+  --padding: 2rem;
+  --logo-height: 6em;
+  --logo-padding: 1.5em;
+  --card-padding: 2em;
+  --read-the-docs-color: #888;
+}
+
+#root {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: var(--padding);
+  text-align: center;
+}
+
+.logo {
+  height: var(--logo-height);
+  padding: var(--logo-padding);
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em var(--logo-filter-color));
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em var(--logo-react-filter-color));
+}
+
+body {
+  margin: 0;
+  /* 这个padding-top会自动适应，通过JS或CSS内联样式设置 */
+  padding-top: 0;
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: var(--card-padding);
+}
+
+.read-the-docs {
+  color: var(--read-the-docs-color);
+}
+
+/* 针对不同屏幕大小的调整 */
+@media (max-width: 768px) {
+  #root {
+    padding: 1rem; /* 在小屏幕上减少内边距 */
+  }
+}
+
+/* 如果有固定的头部，使用JavaScript动态设置body的padding-top，类似这样：
+document.body.style.paddingTop = `${headerHeight}px`;
+或者通过CSS内联样式直接设置 */

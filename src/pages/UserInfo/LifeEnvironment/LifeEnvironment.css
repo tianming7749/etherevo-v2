@@ -1,0 +1,109 @@
+/* LifeEnvironment.css */
+
+.life-environment {
+  font-family: 'Arial', sans-serif;
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.life-environment h2 {
+  color: #333;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+/* 选择器和输入框的统一样式 */
+.life-environment select,
+.life-environment input[type="text"] {
+  width: 100%;
+  max-width: 300px;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+/* 自定义选择器组件的样式 */
+.stress-level-selector,
+.relationship-stress-selector,
+.financial-stress-selector,
+.health-status-selector,
+.additional-details-input {
+  margin-bottom: 20px;
+}
+
+/* 特别为睡眠质量和饮食习惯添加的样式 */
+.health-status-selector label {
+  display: block;
+  margin-top: 10px;
+  margin-bottom: 5px;
+}
+
+.button-group {
+  display: flex;
+  gap: 5px; /* 减少按钮间距以使其更为紧凑 */
+}
+
+.sleep-quality-button,
+.diet-satisfaction-button {
+  padding: 5px 10px; /* 减小按钮padding以使其更小 */
+  border: 1px solid #405367;
+  border-radius: 3px; /* 减少圆角大小 */
+  cursor: pointer;
+  font-size: 15px; /* 减小字体大小 */
+  transition: background-color 0.3s;
+}
+
+.sleep-quality-button {
+  background-color: #a3a3a3;
+}
+
+.sleep-quality-selected {
+  background-color: #6c9aff;
+  color: white;
+}
+
+.diet-satisfaction-button {
+  background-color: #a3a3a3;
+}
+
+.diet-satisfaction-selected {
+  background-color: #6c9aff;
+  color: white;
+}
+
+/* 按钮样式 */
+.save-button {
+  background-color: #004085;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+  margin-top: 20px;
+}
+
+.save-button:hover {
+  background-color: #0279f0;
+  
+}
+
+.save-button:disabled {
+  background-color: #510bbb;
+  cursor: not-allowed;
+}
+
+/* 加载中提示 */
+.loading-message {
+  text-align: center;
+  padding: 20px;
+  font-size: 18px;
+  color: #666;
+}
