@@ -1,3 +1,4 @@
+/*
 import React, { useEffect, useState } from "react";
 import { supabase } from "../../supabaseClient";
 import { saveEnvironmentPromptToDatabase } from "../../utils/supabaseHelpers";
@@ -14,7 +15,7 @@ const LifeEnvironmentPrompts = () => {
 
   /**
    * Fetches the latest life environment info for the authenticated user
-   */
+  
   const fetchLatestEnvironmentInfo = async () => {
     setLoading(true);
     try {
@@ -61,7 +62,7 @@ const LifeEnvironmentPrompts = () => {
    * and saves it to the database
    * @param data - The latest life environment data
    * @param userId - The authenticated user's ID
-   */
+   
   const generatePrompt = async (data: any, userId: string) => {
     if (!data) {
       setPrompt(null);
@@ -123,3 +124,4 @@ const LifeEnvironmentPrompts = () => {
 };
 
 export default LifeEnvironmentPrompts;
+*/

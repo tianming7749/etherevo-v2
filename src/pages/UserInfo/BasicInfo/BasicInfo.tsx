@@ -6,9 +6,6 @@ import NameInput from "./NameInput";
 import AgeSelector from "./AgeSelector";
 import GenderSelector from "./GenderSelector";
 import OccupationSelector from "./OccupationSelector";
-import LocationSelector from "./LocationSelector";
-import EducationSelector from "./EducationSelector";
-import ReligionsSelector from "./ReligionsSelector";
 import "./BasicInfo.css";
 
 const BasicInfo: React.FC = () => {
@@ -19,11 +16,6 @@ const BasicInfo: React.FC = () => {
     gender_other: "",
     occupation: "",
     occupation_other: "",
-    current_location: "",
-    birth_location: "",
-    education: "",
-    education_other: "",
-    religions: "",
   });
 
   const [userId, setUserId] = useState<string | null>(null);
@@ -66,11 +58,6 @@ const BasicInfo: React.FC = () => {
             gender_other: data.gender_other || "",
             occupation: data.occupation || "",
             occupation_other: data.occupation_other || "",
-            current_location: data.current_location || "",
-            birth_location: data.birth_location || "",
-            education: data.education || "",
-            education_other: data.education_other || "",
-            religions: data.religions || "",
           });
         }
       } catch (err) {
@@ -104,11 +91,8 @@ const BasicInfo: React.FC = () => {
 
       alert("保存成功！");
 
-      // Step 3: 生成提示词并保存（不使用 ai_id）
-      // 假设这里有一个新的函数或方法来生成提示词，不依赖于 ai_id
       const updatedPrompt = await generatePromptsForUser(userId);
 
-      // Step 4: 保存提示词到数据库（去掉 ai_id 相关信息）
       const { error: savePromptError } = await supabase
           .from("user_prompts_summary")
           .upsert({
@@ -149,24 +133,7 @@ const BasicInfo: React.FC = () => {
         onChange={(field, value) => handleFieldChange(field, value)}
         onOtherChange={(value) => handleFieldChange("occupation_other", value)}
       />
-      <LocationSelector
-        currentLocation={basicInfo.current_location}
-        birthLocation={basicInfo.birth_location}
-        onChange={(field, value) => handleFieldChange(field, value)}
-        onBirthChange={(value) => handleFieldChange("birth_location", value)}
-      />
-      <EducationSelector
-        value={basicInfo.education}
-        otherValue={basicInfo.education_other}
-        onChange={(value) => handleFieldChange("education", value)}
-        onOtherChange={(value) => handleFieldChange("education_other", value)}
-      />
-      <ReligionsSelector
-        value={basicInfo.religions}
-        otherValue={basicInfo.Religions_other}
-        onChange={(value) => handleFieldChange("religions", value)}
-        onOtherChange={(value) => handleFieldChange("religions_other", value)}
-      />
+      
       <button onClick={handleSave}>保存</button>
     </div>
   );

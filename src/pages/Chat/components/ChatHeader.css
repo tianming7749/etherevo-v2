@@ -4,8 +4,10 @@
   padding: 10px;
   background-color: #e3f2fd;
   border-bottom: 1px solid #ccc;
+  justify-content: flex-end; 
 }
 
+/*
 .connection-status {
   flex-grow: 1;
   font-size: 16px;
@@ -19,6 +21,7 @@
 .status-disconnected {
   color: red;
 }
+*/
 
 .clear-chat-button {
   margin-left: 10px;
@@ -29,4 +32,5 @@
   color: white;
   cursor: pointer;
   width: auto;
+  
 }

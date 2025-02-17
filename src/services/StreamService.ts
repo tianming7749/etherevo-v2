@@ -1,16 +1,24 @@
 // services/StreamService.ts
 
-export const handleStreamedResponse = async (url: string, data: any, onMessage: (chunk: string, isFirstChunk: boolean) => void) => {
+export const handleStreamedResponse = async (apiKey: string, url: string, data: any, onMessage: (chunk: string, isFirstChunk: boolean) => void) => { // ✅ 添加 apiKey 作为第一个参数
   try {
+     // **🚀 添加 console.log 语句， 打印 apiKey 🚀**
+     console.log("StreamService - apiKey before fetch:", apiKey); // ✅ 现在应该正确记录 apiKey 参数
+
     const response = await fetch(url, {
       method: 'POST',
       headers: {
+        'Authorization': `Bearer ${apiKey}`, //  👈 **✅  关键修改： 添加 Authorization 标头， 并使用 apiKey 参数  ✅**
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(data)
     });
 
     if (!response.ok) {
+      console.error('Network response was not ok');
+      // **🚀  添加更详细的错误日志  🚀**
+      console.error('Response status:', response.status); //  👈  打印 HTTP 状态码
+      console.error('Response text:', await response.text()); //  👈  打印响应文本内容
       throw new Error('Network response was not ok');
     }
 

@@ -56,14 +56,6 @@ const UserInfo: React.FC = () => {
           </li>
           <li>
             <NavLink 
-              to="habits-lifestyle" 
-              className={({ isActive }) => checkActive(isActive, 'habits-lifestyle')}
-            >
-              日常习惯和生活方式
-            </NavLink>
-          </li>
-          <li>
-            <NavLink 
               to="recent-events" 
               className={({ isActive }) => checkActive(isActive, 'recent-events')}
             >

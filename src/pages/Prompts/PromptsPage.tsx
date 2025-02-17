@@ -1,3 +1,4 @@
+/*
 import React from "react";
 import { generatePromptsForUser } from "../../utils/generatePrompts";
 import { useUserContext } from "../../context/UserContext";
@@ -55,3 +56,4 @@ const PromptsPage = () => {
 };
 
 export default PromptsPage;
+*/

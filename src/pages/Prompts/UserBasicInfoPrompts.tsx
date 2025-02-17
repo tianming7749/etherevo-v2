@@ -1,3 +1,4 @@
+/*
 import React, { useEffect, useState } from "react";
 import { supabase } from "/src/supabaseClient";
 import { savePromptToDatabase } from "/src/utils/supabaseHelpers";
@@ -79,3 +80,4 @@ const UserBasicInfoPrompts = () => {
 };
 
 export default UserBasicInfoPrompts;
+*/

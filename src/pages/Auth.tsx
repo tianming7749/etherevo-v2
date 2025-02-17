@@ -6,6 +6,7 @@ import "./Auth.css";
 const Auth: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState(""); // 新增确认密码 state
   const [isLogin, setIsLogin] = useState(true);
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
@@ -25,6 +26,12 @@ const Auth: React.FC = () => {
     }
     if (!validatePassword(password)) {
       setMessage("Password must be at least 8 characters long.");
+      setLoading(false);
+      return;
+    }
+
+    if (!isLogin && password !== confirmPassword) { // 注册时检查确认密码
+      setMessage("Passwords do not match.");
       setLoading(false);
       return;
     }
@@ -67,11 +74,11 @@ const Auth: React.FC = () => {
           // 确保用户在user_settings中有记录
           await supabase
             .from('user_settings')
-            .upsert({ 
-              user_id: userId, 
-              setup_completed: settings?.setup_completed ?? false, 
-              privacy_confirmed: false 
-            }, 
+            .upsert({
+              user_id: userId,
+              setup_completed: settings?.setup_completed ?? false,
+              privacy_confirmed: false
+            },
             { onConflict: 'user_id' });
 
           localStorage.setItem("supabase.auth.token", JSON.stringify(result.data));
@@ -79,10 +86,10 @@ const Auth: React.FC = () => {
           // 新注册的用户直接跳转到欢迎页面
           await supabase
             .from('user_settings')
-            .insert({ 
-              user_id: result.data.user.id, 
-              setup_completed: false, 
-              privacy_confirmed: false 
+            .insert({
+              user_id: result.data.user.id,
+              setup_completed: false,
+              privacy_confirmed: false
             });
           navigate("/");
         }
@@ -113,6 +120,16 @@ const Auth: React.FC = () => {
           onChange={(e) => setPassword(e.target.value)}
           className="auth-input"
         />
+        {/* 注册时显示确认密码输入框 */}
+        {!isLogin && (
+          <input
+            type="password"
+            placeholder="Confirm Password"
+            value={confirmPassword}
+            onChange={(e) => setConfirmPassword(e.target.value)}
+            className="auth-input"
+          />
+        )}
       </div>
       <button
         onClick={handleAuth}
@@ -122,7 +139,7 @@ const Auth: React.FC = () => {
         {loading ? "Loading..." : (isLogin ? "Login" : "Sign Up")}
       </button>
       <p className="auth-toggle">
-        {isLogin ? "Don't have an account?" : "Already have an account?"} 
+        {isLogin ? "Don't have an account?" : "Already have an account?"}
         <span onClick={() => setIsLogin(!isLogin)}> {isLogin ? "Sign Up" : "Login"}</span>
       </p>
       <a href="/forgot-password" className="auth-forgot-password">Forgot Password?</a>

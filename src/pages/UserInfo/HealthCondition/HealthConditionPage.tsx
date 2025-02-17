@@ -10,10 +10,6 @@ const HealthConditionPage = () => {
   const [healthCondition, setHealthCondition] = useState({
     mentalHealthHistory: [],
     isReceivingTreatment: false,
-    treatmentDetails: "",
-    physicalHealthIssues: "",
-    isTakingMedication: false,
-    medicationDetails: "",
   });
 
   const [loading, setLoading] = useState(false);
@@ -33,8 +29,11 @@ const HealthConditionPage = () => {
         .eq("user_id", userId)
         .single();
 
-      if (data) {
-        setHealthCondition(data.health_condition);
+      if (data && data.health_condition) { // 确保 data 和 data.health_condition 存在
+        setHealthCondition({
+          mentalHealthHistory: data.health_condition.mentalHealthHistory || [],
+          isReceivingTreatment: data.health_condition.isReceivingTreatment || false,
+        });
       } else if (error) {
         console.error("Error fetching health condition:", error);
       }
@@ -56,7 +55,10 @@ const HealthConditionPage = () => {
         .from("user_health_condition")
         .upsert({
           user_id: userId,
-          health_condition: healthCondition,
+          health_condition: { //  <--  手动创建 health_condition 对象
+            mentalHealthHistory: healthCondition.mentalHealthHistory,
+            isReceivingTreatment: healthCondition.isReceivingTreatment,
+          },
         });
 
       if (error) {
@@ -67,10 +69,8 @@ const HealthConditionPage = () => {
 
       alert("保存成功！");
 
-        // Step 3: 生成提示词并保存（不使用 ai_id）
         const updatedPrompt = await generatePromptsForUser(userId);
-      
-        // Step 4: 保存提示词到数据库（去掉 ai_id 相关信息）
+
         const { error: savePromptError } = await supabase
             .from("user_prompts_summary")
             .upsert({
@@ -79,13 +79,13 @@ const HealthConditionPage = () => {
             },
             { onConflict: ["user_id"] }  // 确保只有相同 user_id 的记录才会被更新
           );
-      
+
         if (savePromptError) {
           console.error("保存提示词失败：", savePromptError.message);
         } else {
           console.log("提示词已成功保存");
         }
-      
+
         // 提示用户保存成功
         //alert("健康状况保存成功！提示词已更新并保存！");
       } catch (error) {
@@ -97,7 +97,7 @@ const HealthConditionPage = () => {
   };
 
   // 处理输入变化
-  const handleChange = (field: string, value: string) => {
+  const handleChange = (field: string, value: any) => {
     setHealthCondition((prev) => ({ ...prev, [field]: value }));
   };
 
@@ -162,51 +162,6 @@ const HealthConditionPage = () => {
             />
             否
           </label>
-          {healthCondition.isReceivingTreatment && (
-            <label>
-              如果是，请提供更多细节（可选）:
-              <textarea
-                value={healthCondition.treatmentDetails}
-                onChange={(e) => handleChange("treatmentDetails", e.target.value)}
-              />
-            </label>
-          )}
-
-          <h3>一般健康状况和药物使用</h3>
-          <label>
-            你是否有任何影响心理健康的身体健康问题？
-            <textarea
-              value={healthCondition.physicalHealthIssues}
-              onChange={(e) => handleChange("physicalHealthIssues", e.target.value)}
-            />
-          </label>
-
-          <h3>你目前是否在服用任何药物？</h3>
-          <label>
-            <input
-              type="radio"
-              checked={healthCondition.isTakingMedication === true}
-              onChange={() => handleChange("isTakingMedication", true)}
-            />
-            是
-          </label>
-          <label>
-            <input
-              type="radio"
-              checked={healthCondition.isTakingMedication === false}
-              onChange={() => handleChange("isTakingMedication", false)}
-            />
-            否
-          </label>
-          {healthCondition.isTakingMedication && (
-            <label>
-              如果是，请分享药物名称和用途（可选）:
-              <textarea
-                value={healthCondition.medicationDetails}
-                onChange={(e) => handleChange("medicationDetails", e.target.value)}
-              />
-            </label>
-          )}
 
           <button type="button" onClick={saveHealthCondition}>
             保存

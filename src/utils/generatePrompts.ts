@@ -1,12 +1,6 @@
 import { supabase } from "../supabaseClient";
 
-/**
- * Fetches and generates prompts for a given user.
- * @param userId - The user's unique ID (UUID).
- * @param aiId - The unique ID of the AI personality.
- * @returns A promise that resolves to the generated prompt string.
- */
-export const generatePromptsForUser = async (userId: string, aiId: string): Promise<string> => {
+export const generatePromptsForUser = async (userId: string): Promise<string> => {
   let prompt = "";
   let basicInfo;
 
@@ -21,12 +15,12 @@ export const generatePromptsForUser = async (userId: string, aiId: string): Prom
       throw new Error(`Failed to fetch tones: ${tonesError.message}`);
     }
 
-    const tonesSummary = tones?.map(tone => `提示模板：${tone.prompt_template || "未填写"}`).join("\n") || "无提示模板";
+    const tonesSummary = tones?.map(tone => `提示：${tone.prompt_template || "未填写"}`).join("\n") || "无提示";
 
     // Fetch basic information
     const { data: initialBasicInfo, error: basicInfoError } = await supabase
       .from("user_basic_info")
-      .select("name, age_group, gender, occupation, current_location, birth_location, education, religions")
+      .select("name, age_group, gender, occupation")
       .eq("user_id", userId)
       .maybeSingle();
 
@@ -51,7 +45,7 @@ export const generatePromptsForUser = async (userId: string, aiId: string): Prom
     // Fetch latest life environment
     const { data: lifeEnvironment, error: environmentError } = await supabase
       .from("life_environment")
-      .select("stress_level, relationship_stress, financial_stress, sleep_quality, diet_satisfaction, additional_details")
+      .select("stress_level, relationship_stress, financial_stress, sleep_quality, additional_details")
       .eq("user_id", userId)
       .order("created_at", { ascending: false })
       .limit(1)
@@ -63,16 +57,17 @@ export const generatePromptsForUser = async (userId: string, aiId: string): Prom
 
     const relationshipStressString = lifeEnvironment?.relationship_stress
       ? lifeEnvironment.relationship_stress.map((rel: { type: string; status: string }) => `${rel.type}：${rel.status}`).join("，")
-      : "未填写";
+      : undefined; // 修改：无数据时返回 undefined
 
-    const environmentSummary = lifeEnvironment ? `
-      工作或学习压力：${lifeEnvironment.stress_level || "未填写"}，
-      家庭关系或个人关系状况：${relationshipStressString}，
-      经济压力：${lifeEnvironment.financial_stress || "未填写"}，
-      睡眠质量：${lifeEnvironment.sleep_quality || "未填写"}，
-      饮食满意度：${lifeEnvironment.diet_satisfaction || "未填写"}，
-      其他详情：${lifeEnvironment.additional_details || "无"}。
-    `.trim() : "无生活环境数据";
+    // 修改 environmentSummary 构建逻辑
+    const environmentSummary = lifeEnvironment ? [
+      lifeEnvironment.stress_level ? `工作或学习压力：${lifeEnvironment.stress_level}` : null,
+      relationshipStressString ? `家庭关系或个人关系状况：${relationshipStressString}` : null,
+      lifeEnvironment.financial_stress ? `经济压力：${lifeEnvironment.financial_stress}` : null,
+      lifeEnvironment.sleep_quality ? `睡眠质量：${lifeEnvironment.sleep_quality}` : null,
+      lifeEnvironment.additional_details ? `其他详情：${lifeEnvironment.additional_details}` : null,
+    ].filter(Boolean).join("\n") : null; // 修改：无数据时返回 null，并过滤和连接有效行
+
 
     // Fetch user HealthCondition
     const { data: healthCondition, error: healthConditionError } = await supabase
@@ -93,14 +88,12 @@ export const generatePromptsForUser = async (userId: string, aiId: string): Prom
       treatmentDetailsString = healthConditionObject.treatmentDetails.toString();
     }
 
-    const healthConditionSummary = `
-      心理健康历史：${Array.isArray(healthConditionObject.mentalHealthHistory) ? healthConditionObject.mentalHealthHistory.join("，") : "无"}，
-      是否在接受心理健康治疗：${healthConditionObject.isReceivingTreatment === true ? "是" : healthConditionObject.isReceivingTreatment === false ? "否" : "未填写"}，
-      治疗细节：${treatmentDetailsString}，
-      身体健康问题：${Array.isArray(healthConditionObject.physicalHealthIssues) ? healthConditionObject.physicalHealthIssues.join("，") : healthConditionObject.physicalHealthIssues || "无"}，
-      是否服用药物：${healthConditionObject.isTakingMedication === true ? "是" : healthConditionObject.isTakingMedication === false ? "否" : "未填写"}，
-      用药详情：${Array.isArray(healthConditionObject.medicationDetails) ? healthConditionObject.medicationDetails.join("，") : healthConditionObject.medicationDetails || "无"}，
-    `.trim();
+    // 修改 healthConditionSummary 构建逻辑
+    const healthConditionSummary = [
+      healthConditionObject.mentalHealthHistory && healthConditionObject.mentalHealthHistory.length > 0 ? `心理健康历史：${Array.isArray(healthConditionObject.mentalHealthHistory) ? healthConditionObject.mentalHealthHistory.join("，") : "无"}` : null,
+      healthConditionObject.isReceivingTreatment !== undefined ? `是否在接受心理健康治疗：${healthConditionObject.isReceivingTreatment === true ? "是" : healthConditionObject.isReceivingTreatment === false ? "否" : "未填写"}` : null,
+    ].filter(Boolean).join("\n") || null; // 修改：无数据时返回 null，并过滤和连接有效行
+
 
     // Fetch user interests
     const { data: interestsData, error: interestsError } = await supabase
@@ -114,9 +107,18 @@ export const generatePromptsForUser = async (userId: string, aiId: string): Prom
     }
 
     const interestsObject = interestsData?.interests ? JSON.parse(interestsData.interests) : {};
-    const interestsSummary = Object.entries(interestsObject).map(([category, interests]) => {
-      return `${category}：${Array.isArray(interests) && interests.length > 0 ? interests.join("，") : "无兴趣"}`;
-    }).join("\n") || "无兴趣与爱好数据";
+    // 修改 interestsSummary 构建逻辑
+    const interestsSummary = Object.entries(interestsObject)
+      .map(([category, interests]) => {
+        if (Array.isArray(interests) && interests.length > 0) { // 只有当兴趣数组不为空时才返回字符串
+          return `${category}：${interests.join("，")}`;
+        } else {
+          return null; //  否则返回 null
+        }
+      })
+      .filter(Boolean) // 移除 null 值
+      .join("\n") || null; // 修改：无有效数据时返回 null
+
 
     // Fetch user social support
     const { data: socialSupport, error: socialSupportError } = await supabase
@@ -130,42 +132,13 @@ export const generatePromptsForUser = async (userId: string, aiId: string): Prom
     }
 
     const socialSupportObject = socialSupport?.social_support || {};
-    const socialSupportSummary = `
-      经常联系的家庭成员数量：${socialSupportObject.family || "未填写"}，
-      好友数量：${socialSupportObject.friends || "未填写"}，
-      打电话/发信息的频率：${socialSupportObject.callFrequency || "未填写"}，
-      与朋友/家人见面的频率：${socialSupportObject.meetFrequency || "未填写"}。
-    `.trim() || "无社交支持系统数据";
+    // 修改 socialSupportSummary 构建逻辑
+    const socialSupportSummary = [
+      socialSupportObject.family ? `经常联系的家庭成员数量：${socialSupportObject.family}` : null,
+      socialSupportObject.friends ? `好友数量：${socialSupportObject.friends}` : null,
+      socialSupportObject.meetFrequency ? `与朋友/家人见面的频率：${socialSupportObject.meetFrequency}` : null,
+    ].filter(Boolean).join("\n") || null; // 修改：无数据时返回 null，并过滤和连接有效行
 
-    // Fetch user habits and lifestyle
-    const { data: habitsLifestyle, error: habitsLifestyleError } = await supabase
-      .from("user_habits_lifestyle")
-      .select("habits")
-      .eq("user_id", userId)
-      .maybeSingle();
-
-    if (habitsLifestyleError) {
-      throw new Error(`获取日常习惯和生活方式失败: ${habitsLifestyleError.message}`);
-    }
-
-    const habitsLifestyleObject = habitsLifestyle?.habits || {};
-    const habitsLifestyleSummary = `
-      饮食习惯：
-        每天吃几餐：${habitsLifestyleObject.diet?.meals || "未填写"}，
-        零食习惯：${habitsLifestyleObject.diet?.snacks || "未填写"}，
-        饮食结构偏向：${habitsLifestyleObject.diet?.dietType || "未填写"}，
-        每日水摄入量：${habitsLifestyleObject.diet?.waterIntake || "未填写"}，
-      睡眠模式：
-        平时几点起床：${habitsLifestyleObject.sleep?.wakeTime || "未填写"}，
-        平时几点睡觉：${habitsLifestyleObject.sleep?.sleepTime || "未填写"}，
-        睡眠时长：${habitsLifestyleObject.sleep?.sleepHours || "未填写"}，
-        睡眠质量：${habitsLifestyleObject.sleep?.sleepQuality || "未填写"}，
-      锻炼习惯：
-        主要锻炼类型：${habitsLifestyleObject.exercise?.type || "未填写"}，
-        每簇锻炼时长：${habitsLifestyleObject.exercise?.duration || "未填写"}，
-        每周锻炼频率：${habitsLifestyleObject.exercise?.frequency || "未填写"}，
-        锻炼强度：${habitsLifestyleObject.exercise?.intensity || "未填写"}。
-    `.trim() || "无日常习惯和生活方式数据";
 
     // Fetch user recent events
     const { data: recentEvents, error: recentEventsError } = await supabase
@@ -179,71 +152,95 @@ export const generatePromptsForUser = async (userId: string, aiId: string): Prom
     }
 
     const recentEventsObject = recentEvents?.recent_events || {};
-    const recentEventsSummary = `
-      是否最近搬了新家？${recentEventsObject.moving === true ? "是" : "否"}，
-      失业或换工作？${recentEventsObject.jobChange === true ? "是" : "否"}，
-      升职或降职？${recentEventsObject.promotion === true ? "是" : "否"}，
-      开始或结束学业？${recentEventsObject.studyChange === true ? "是" : "否"}，
-      结婚或离婚？${recentEventsObject.marriage === true ? "是" : "否"}，
-      新生儿的到来或孩子离家？${recentEventsObject.newBaby === true ? "是" : "否"}，
-      新的亲密关系或关系结束？${recentEventsObject.relationshipChange === true ? "是" : "否"}，
-      是否有亲人或非常亲近的朋友去世？${recentEventsObject.bereavement === true ? "是" : "否"}，
-      是否自己或家人经历了重大健康问题或诊断？${recentEventsObject.healthIssue === true ? "是" : "否"}，
-      重大财务问题或改善？${recentEventsObject.financialChange === true ? "是" : "否"}，
-      其他重大事件：${recentEventsObject.other || "无"}。
-    `.trim() || "无近期重大生活事件";
+    // 修改 recentEventsSummary 构建逻辑
+    let recentEventsSummary = null; // 初始化为 null
+    const eventStrings: string[] = [];
+
+    if (recentEventsObject) {
+
+      if (recentEventsObject.moving === true) {
+        eventStrings.push("最近搬了新家");
+      }
+      if (recentEventsObject.jobChange === true) {
+        eventStrings.push("失业或换工作");
+      }
+      if (recentEventsObject.promotion === true) {
+        eventStrings.push("升职或降职");
+      }
+      if (recentEventsObject.studyChange === true) {
+        eventStrings.push("开始或结束学业");
+      }
+      if (recentEventsObject.marriage === true) {
+        eventStrings.push("结婚或离婚");
+      }
+      if (recentEventsObject.newBaby === true) {
+        eventStrings.push("新生儿的到来或孩子离家");
+      }
+      if (recentEventsObject.relationshipChange === true) {
+        eventStrings.push("新的亲密关系或关系结束");
+      }
+      if (recentEventsObject.bereavement === true) {
+        eventStrings.push("有亲人或非常亲近的朋友去世");
+      }
+      if (recentEventsObject.healthIssue === true) {
+        eventStrings.push("自己或家人经历了重大健康问题或诊断");
+      }
+      if (recentEventsObject.financialChange === true) {
+        eventStrings.push("重大财务问题或改善");
+      }
+      if (recentEventsObject.other) {
+        eventStrings.push(`其他重大事件：${recentEventsObject.other}`);
+      }
+
+      if (eventStrings.length > 0) {
+        recentEventsSummary = eventStrings.join("\n"); // 只有当有事件时才赋值
+      }
+    }
+
 
     // Fetch user goals
     const { data: goals, error: goalsError } = await supabase
       .from("user_goals")
-      .select("goals, priority")
+      .select("goals")
       .eq("user_id", userId);
 
     if (goalsError) {
       throw new Error(`Failed to fetch goals: ${goalsError.message}`);
     }
 
+    // 修改 goalsSummary 构建逻辑
     const goalsSummary = goals?.map(goal => {
       const goalList = JSON.parse(goal.goals || '[]');
-      const goalText = goalList.length > 0 ? goalList.join(", ") : "未填写";
-      return `目标：${goalText}，优先级：${goal.priority || "未填写"}`;
-    }).join("\n") || "无目标";
+      if (goalList.length > 0) { // 只有当目标列表不为空时才返回字符串
+        const goalText = goalList.join(", ");
+        return `希望达成如下目标：${goalText}`;
+      } else {
+        return null; // 否则返回 null
+      }
+    }).filter(Boolean).join("\n") || null; // 修改：无有效数据时返回 null
+
 
     // Generate the complete prompt
     prompt = `
-      
-      ${tonesSummary}。
 
-      用户希望达成如下
-      ${goalsSummary}。
+      ${tonesSummary}。
+      ${goalsSummary ? `\n用户\n${goalsSummary}` : ""}  ${/* 修改： 只有 goalsSummary 不为空时才添加 */''}
 
       基本信息：
       名字：${basicInfo.name || "未填写"}，
       年龄范围：${basicInfo.age_group || "未填写"}，
       性别：${basicInfo.gender || "未填写"}，
       职业：${basicInfo.occupation || "未填写"}，
-      当前居住地：${basicInfo.current_location || "未填写"}，
-      出生地：${basicInfo.birth_location || "未填写"}，
-      教育背景：${basicInfo.education || "未填写"}，
-      宗教信仰：${basicInfo.religions || "未填写"}。
 
-      生活环境与压力源：
-      ${environmentSummary}。
+      ${environmentSummary ? `\n生活环境与压力源：\n${environmentSummary}` : ""} ${/* 修改： 只有 environmentSummary 不为空时才添加 */''}
 
-      健康状况：
-      ${healthConditionSummary}。
+      ${healthConditionSummary ? `\n健康状况：\n${healthConditionSummary}` : ""} ${/* 修改： 只有 healthConditionSummary 不为空时才添加 */''}
 
-      兴趣与爱好：
-      ${interestsSummary}。
+      ${interestsSummary ? `\n兴趣与爱好：\n${interestsSummary}` : ""} ${/* 修改： 只有 interestsSummary 不为空时才添加 */''}
 
-      社交支持系统：
-      ${socialSupportSummary}。
+      ${socialSupportSummary ? `\n社交支持系统：\n${socialSupportSummary}` : ""} ${/* 修改： 只有 socialSupportSummary 不为空时才添加 */''}
 
-      日常习惯和生活方式：
-      ${habitsLifestyleSummary}。
-
-      近期经历的重大事件：
-      ${recentEventsSummary}。
+      ${recentEventsSummary ? `\n近期经历的重大事件：\n${recentEventsSummary}` : ""} ${/* 修改： 只有 recentEventsSummary 不为空时才添加 */''}
 
     `.trim();
 
@@ -253,20 +250,15 @@ export const generatePromptsForUser = async (userId: string, aiId: string): Prom
       prompt_template: tonesSummary,
       user_goals: goalsSummary,
       basic_info: `
-        名字：${basicInfo.name || "未填写"}，
-        年龄范围：${basicInfo.age_group || "未填写"}，
-        性别：${basicInfo.gender || "未填写"}，
-        职业：${basicInfo.occupation || "未填写"}，
-        当前居住地：${basicInfo.current_location || "未填写"}，
-        出生地：${basicInfo.birth_location || "未填写"}，
-        教育背景：${basicInfo.education || "未填写"}，
-        宗教信仰：${basicInfo.religions || "未填写"}。
+      名字：${basicInfo.name || "未填写"}，
+      年龄范围：${basicInfo.age_group || "未填写"}，
+      性别：${basicInfo.gender || "未填写"}，
+      职业：${basicInfo.occupation || "未填写"}，
       `.trim(),
       life_environment: environmentSummary,
       health_condition: healthConditionSummary,
       interests: interestsSummary,
       social_support: socialSupportSummary,
-      habits_lifestyle: habitsLifestyleSummary,
       recent_events: recentEventsSummary,
       full_prompt: prompt,
     }, { onConflict: ["user_id"] });
@@ -282,6 +274,7 @@ export const generatePromptsForUser = async (userId: string, aiId: string): Prom
     throw error;
   }
 };
+
 
 // Helper function to create a new user if one does not exist
 async function createNewUser(userId: string) {

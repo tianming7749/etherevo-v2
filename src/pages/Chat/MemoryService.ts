@@ -16,7 +16,7 @@ export const loadLongTermMemory = async (userId: string, sessionId: string) => {
       .eq('user_id', userId)
       .eq('session_id', sessionId)
       .order('last_update', { ascending: false })
-      .limit(3);
+      .limit(2);
 
     if (error) {
       console.error('Error loading long term memory:', error);

@@ -1,4 +1,4 @@
-import { supabase } from "/src/supabaseClient";
+import { supabase } from "../supabaseClient";
 
 export const saveBasicInfo = async (basicInfo: any) => {
   try {

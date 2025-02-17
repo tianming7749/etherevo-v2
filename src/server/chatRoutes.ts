@@ -1,3 +1,4 @@
+/*
 import express from 'express';
 import { SupabaseClient } from '@supabase/supabase-js'; // 假设你使用了这个类型
 import { supabase } from '../supabaseClient'; // 确保这个导入路径是正确的
@@ -47,3 +48,4 @@ router.post("/api/chat/message", async (req: express.Request, res: express.Respo
 });
 
 export default router;
+*/

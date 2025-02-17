@@ -13,7 +13,6 @@ interface LifeEnvironmentData {
   relationship_stress: string[];
   financial_stress: string;
   sleep_quality: string;
-  diet_satisfaction: string;
   additional_details: string;
 }
 
@@ -22,7 +21,6 @@ const defaultData: LifeEnvironmentData = {
   relationship_stress: [],
   financial_stress: "",
   sleep_quality: "",
-  diet_satisfaction: "",
   additional_details: "",
 };
 
@@ -51,7 +49,7 @@ const LifeEnvironment: React.FC = () => {
 
       const { data, error } = await supabase
         .from("life_environment")
-        .select("*")
+        .select("stress_level, relationship_stress, financial_stress, sleep_quality, additional_details")
         .eq("user_id", user.id)
         .order("created_at", { ascending: false })
         .limit(1);
@@ -65,7 +63,6 @@ const LifeEnvironment: React.FC = () => {
           relationship_stress: data[0].relationship_stress || [],
           financial_stress: data[0].financial_stress || "",
           sleep_quality: data[0].sleep_quality || "",
-          diet_satisfaction: data[0].diet_satisfaction || "",
           additional_details: data[0].additional_details || "",
         });
       }
@@ -100,7 +97,6 @@ const LifeEnvironment: React.FC = () => {
           relationship_stress: formData.relationship_stress,
           financial_stress: formData.financial_stress,
           sleep_quality: formData.sleep_quality,
-          diet_satisfaction: formData.diet_satisfaction,
           additional_details: formData.additional_details,
         },
       ], {
@@ -156,8 +152,7 @@ const LifeEnvironment: React.FC = () => {
       />
       <HealthStatusSelector
         sleepQuality={formData.sleep_quality}
-        dietSatisfaction={formData.diet_satisfaction}
-        onChange={(field, value) => handleChange(field, value)}
+        onChange={(field, value) => handleChange(field, value)} 
       />
       <AdditionalDetailsInput
         value={formData.additional_details}

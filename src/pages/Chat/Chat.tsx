@@ -11,7 +11,7 @@ import ChatController from "./ChatController";
 import ChatDisplay from "./ChatDisplay";
 
 const Chat: React.FC = () => {
-  const { userId, loading } = useUserContext(); 
+  const { userId, loading } = useUserContext();
   const navigate = useNavigate();
   const [showConfirmation, setShowConfirmation] = useState(false);
   const { sessionId } = SessionManager({ userId });
@@ -24,11 +24,14 @@ const Chat: React.FC = () => {
     handleSendMessage,
     clearChat,
     messagesEndRef,
-    input, 
+    input,
     setInput,
     fullPrompt,
     setFullPrompt
   });
+
+  // **✅  修改点 1:  从环境变量获取 API Key  ✅**
+  const apiKey = import.meta.env.VITE_DASHSCOPE_API_KEY;
 
   if (loading) return <div>加载中...</div>;
   if (!userId) {
@@ -38,7 +41,8 @@ const Chat: React.FC = () => {
 
   return (
     <div className="chat-container">
-      <ChatHeader connectionStatus="已连接" onClearChat={() => setShowConfirmation(true)} />
+      {/* **🚀 修改点 2:  将 apiKey prop 传递给 ChatHeader 组件  🚀** */}
+      <ChatHeader apiKey={apiKey} onClearChat={() => setShowConfirmation(true)} />
       {MessageListComponent}
       {ChatInputComponent}
       {ConfirmationModal}

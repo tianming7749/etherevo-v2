@@ -1,67 +1,6 @@
 import { supabase } from "../supabaseClient";
 
 /**
- * 保存或更新用户提示词到 ai_prompts 表
- * @param aiId AI 的标识符（UUID 或其他唯一值）
- * @param prompt 提示词内容
- */
-export const saveAIPromptToDatabase = async (aiId: string, prompt: string) => {
-  try {
-    const { data, error } = await supabase
-      .from("ai_prompts")
-      .upsert([{ ai_id: aiId, prompt }]);
-
-    if (error) {
-      console.error("Error saving AI prompt to database:", error.message);
-      throw error;
-    }
-
-    console.log("AI prompt saved successfully:", data);
-    return data;
-  } catch (err: any) {
-    console.error("Error saving AI prompt to database:", err.message || err);
-    throw err;
-  }
-};
-
-/**
- * 保存或更新用户提示词到 user_prompts 表
- * @param userId 用户 ID
- * @param promptType 提示词类型
- * @param content 提示词内容
- */
-export const savePromptToDatabase = async (
-  userId: string,
-  promptType: string,
-  content: string
-) => {
-  try {
-    const { data, error } = await supabase
-      .from("user_prompts")
-      .upsert(
-        {
-          user_id: userId,
-          prompt_type: promptType,
-          content,
-          updated_at: new Date().toISOString(),
-        },
-        { onConflict: ["user_id", "prompt_type"] } // 确保同一用户同一类型只有一条记录
-      );
-
-    if (error) {
-      console.error("Error saving user prompt to database:", error.message);
-      throw error;
-    }
-
-    console.log("User prompt saved successfully:", data);
-    return data;
-  } catch (err: any) {
-    console.error("Error saving user prompt to database:", err.message || err);
-    throw err;
-  }
-};
-
-/**
  * 保存或更新生活环境和压力源提示词到 environment_prompts 表
  * @param userId 用户 ID
  * @param content 提示词内容

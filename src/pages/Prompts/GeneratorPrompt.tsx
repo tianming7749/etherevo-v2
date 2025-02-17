@@ -1,3 +1,4 @@
+/*
 import React, { useState, useEffect } from "react";
 import { supabase } from "../../supabaseClient";
 import { saveAIPromptToDatabase } from "../../utils/supabaseHelpers";
@@ -106,6 +107,8 @@ const GeneratorPrompt = () => {
     setLoading(false);
   };
 
+  */
+ /*
   return (
     <div>
       <h2>AI 性格设定提示词生成</h2>
@@ -113,7 +116,7 @@ const GeneratorPrompt = () => {
         {loading ? "正在生成和保存..." : "生成并保存所有提示词"}
       </button>
 
-      {/* 显示生成的所有提示词 */}
+      {/* 显示生成的所有提示词 */  /*}
       <div style={{ marginTop: "20px" }}>
         {prompts.map((item) => (
           <div
@@ -130,3 +133,4 @@ const GeneratorPrompt = () => {
 };
 
 export default GeneratorPrompt;
+*/

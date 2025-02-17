@@ -86,10 +86,8 @@ const RecentEventsPage: React.FC = () => {
       console.log("Recent events saved successfully!");
       alert("保存成功！");
 
-      // Step 3: 生成提示词并保存（不使用 ai_id）
       const updatedPrompt = await generatePromptsForUser(userId);
 
-      // Step 4: 保存提示词到数据库（去掉 ai_id 相关信息）
       const { error: savePromptError } = await supabase
           .from("user_prompts_summary")
           .upsert({
