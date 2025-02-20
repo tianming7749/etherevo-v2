@@ -109,6 +109,8 @@ const TonesPage: React.FC = () => {
   return (
     <div className="tones-page">
       <h1>Select Your Tone</h1>
+      <p>选择对话语气，定制专属对话体验</p>
+      <p>根据您的当前状态和对话需求，选择最符合您心境的语气，EtherEvo 将以您选择的风格与您进行对话，提供更贴心、个性化的交流体验。</p>
       {tones.length === 0 ? (
         <p> </p>
       ) : (
