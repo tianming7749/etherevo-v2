@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { saveBasicInfo } from "../../../api/userInfo";
 import { supabase } from "../../../supabaseClient";
-import { generatePromptsForUser } from "../../../utils/generatePrompts";  // 引入生成提示词的功能
+import { generatePromptsForUser } from "../../../utils/generatePrompts";
 import NameInput from "./NameInput";
 import AgeSelector from "./AgeSelector";
 import GenderSelector from "./GenderSelector";
 import OccupationSelector from "./OccupationSelector";
 import "./BasicInfo.css";
+import { useTranslation } from 'react-i18next';
 
 const BasicInfo: React.FC = () => {
   const [basicInfo, setBasicInfo] = useState({
@@ -19,9 +20,9 @@ const BasicInfo: React.FC = () => {
   });
 
   const [userId, setUserId] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(true); // 新增状态，用于管理加载状态
+  const [isLoading, setIsLoading] = useState(true);
+  const { t } = useTranslation();
 
-  // 获取当前用户的 user_id
   useEffect(() => {
     const fetchUserId = async () => {
       const { data, error } = await supabase.auth.getUser();
@@ -35,7 +36,6 @@ const BasicInfo: React.FC = () => {
     fetchUserId();
   }, []);
 
-  // 加载用户基本信息
   useEffect(() => {
     const fetchBasicInfo = async () => {
       if (!userId) return;
@@ -63,7 +63,7 @@ const BasicInfo: React.FC = () => {
       } catch (err) {
         console.error("Error loading basic info:", err);
       } finally {
-        setIsLoading(false); // 数据加载完成
+        setIsLoading(false);
       }
     };
 
@@ -76,31 +76,46 @@ const BasicInfo: React.FC = () => {
 
   const handleSave = async () => {
     if (!userId) {
-      alert("用户未登录，请先登录！");
+      alert(t('basicInfoPage.noLoginAlert'));
       return;
     }
 
     try {
-      // Step 1: 保存基本信息到数据库
+      // 保存到 user_basic_info 表（使用键）
       const result = await saveBasicInfo({ ...basicInfo, user_id: userId });
-  
       if (!result.success) {
-        alert("保存失败，请重试！");
+        alert(t('basicInfoPage.saveFailedAlert'));
         return;
       }
 
-      alert("保存成功！");
+      // 生成翻译后的基本信息
+      const ageOptions = t('ageSelector.options', { returnObjects: true }) as Record<string, string>;
+      const genderOptions = t('genderSelector.options', { returnObjects: true }) as Record<string, string>;
+      const occupationOptions = t('occupationSelector.options', { returnObjects: true }) as Record<string, string>;
 
+      const translatedBasicInfo = {
+        name: basicInfo.name || t('prompts.notProvided'),
+        age_group: ageOptions[basicInfo.age_group] || t('prompts.notProvided'),
+        gender: basicInfo.gender === "other" ? (basicInfo.gender_other || t('prompts.notProvided')) : (genderOptions[basicInfo.gender] || t('prompts.notProvided')),
+        occupation: basicInfo.occupation === "other" ? (basicInfo.occupation_other || t('prompts.notProvided')) : (occupationOptions[basicInfo.occupation] || t('prompts.notProvided')),
+      };
+
+      // 生成提示词
       const updatedPrompt = await generatePromptsForUser(userId);
 
+      // 保存翻译后的提示词到 user_prompts_summary
       const { error: savePromptError } = await supabase
-          .from("user_prompts_summary")
-          .upsert({
-            user_id: userId,
-            full_prompt: updatedPrompt,
-          },
-          { onConflict: ["user_id"] }  // 确保只有相同 user_id 的记录才会被更新
-        );
+        .from("user_prompts_summary")
+        .upsert({
+          user_id: userId,
+          full_prompt: updatedPrompt,
+          basic_info: `
+            ${t('prompts.name')} ${translatedBasicInfo.name},
+            ${t('prompts.ageGroup')} ${translatedBasicInfo.age_group},
+            ${t('prompts.gender')} ${translatedBasicInfo.gender},
+            ${t('prompts.occupation')} ${translatedBasicInfo.occupation}
+          `.trim(),
+        }, { onConflict: ["user_id"] });
 
       if (savePromptError) {
         console.error("保存提示词失败：", savePromptError.message);
@@ -108,17 +123,15 @@ const BasicInfo: React.FC = () => {
         console.log("提示词已成功保存");
       }
 
-      // 提示用户保存成功
-      //alert("保存成功！");
+      alert(t('basicInfoPage.saveSuccessAlert'));
     } catch (error) {
       console.error("保存失败：", error);
-      alert("保存过程中出错，请稍后重试！");
+      alert(t('basicInfoPage.saveErrorAlert'));
     }
   };
 
   return (
     <div className="basic-info-container">
-      <h2>基本信息</h2>
       <NameInput value={basicInfo.name} onChange={(value) => handleFieldChange("name", value)} />
       <AgeSelector value={basicInfo.age_group} onChange={(value) => handleFieldChange("age_group", value)} />
       <GenderSelector
@@ -133,8 +146,7 @@ const BasicInfo: React.FC = () => {
         onChange={(field, value) => handleFieldChange(field, value)}
         onOtherChange={(value) => handleFieldChange("occupation_other", value)}
       />
-      
-      <button onClick={handleSave}>保存</button>
+      <button onClick={handleSave}>{t('basicInfoPage.saveButton')}</button>
     </div>
   );
 };

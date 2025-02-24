@@ -11,6 +11,8 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  --navbar-height: 60px; /*  ✅  定义 CSS 变量 --navbar-height，  设置导航栏高度为 60px (示例值) */
+
 }
 
 a {
@@ -26,6 +28,7 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+  padding-top: var(--navbar-height); /*  ✅  为 body 元素添加 padding-top，  值设置为导航栏高度变量 */
 }
 
 h1 {

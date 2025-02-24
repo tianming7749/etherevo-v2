@@ -1,4 +1,7 @@
+// generatePrompts.ts
 import { supabase } from "../supabaseClient";
+import i18next from 'i18next';
+import { fetchUserTone } from "./supabaseHelpers";
 
 export const generatePromptsForUser = async (userId: string): Promise<string> => {
   let prompt = "";
@@ -8,19 +11,23 @@ export const generatePromptsForUser = async (userId: string): Promise<string> =>
     // Fetch user selected tones
     const { data: tones, error: tonesError } = await supabase
       .from("user_select_tones")
-      .select("prompt_template")
+      .select("prompt_template_key")
       .eq("user_id", userId);
 
     if (tonesError) {
       throw new Error(`Failed to fetch tones: ${tonesError.message}`);
     }
 
-    const tonesSummary = tones?.map(tone => `提示：${tone.prompt_template || "未填写"}`).join("\n") || "无提示";
+    const tonesSummary = tones?.map(tone => {
+      const translationKey = `tonesPage.${tone.prompt_template_key}`;
+      const translatedPrompt = i18next.t(translationKey);
+      return translatedPrompt === translationKey ? tone.prompt_template_key : translatedPrompt;
+    }).join("\n") || i18next.t('prompts.noPrompt');
 
     // Fetch basic information
     const { data: initialBasicInfo, error: basicInfoError } = await supabase
       .from("user_basic_info")
-      .select("name, age_group, gender, occupation")
+      .select("name, age_group, gender, gender_other, occupation, occupation_other")
       .eq("user_id", userId)
       .maybeSingle();
 
@@ -30,9 +37,8 @@ export const generatePromptsForUser = async (userId: string): Promise<string> =>
 
     basicInfo = initialBasicInfo;
 
-    // Handle case where user might not exist or basic info is not found
     if (!basicInfo) {
-      await createNewUser(userId); // Assuming this function creates a new user record
+      await createNewUser(userId);
       const { data: newBasicInfo } = await supabase
         .from("user_basic_info")
         .select("*")
@@ -41,6 +47,18 @@ export const generatePromptsForUser = async (userId: string): Promise<string> =>
       if (!newBasicInfo) throw new Error("Failed to create or fetch new user's basic info");
       basicInfo = newBasicInfo;
     }
+
+    // Translate basic info values
+    const ageOptions = i18next.t('ageSelector.options', { returnObjects: true }) as Record<string, string>;
+    const genderOptions = i18next.t('genderSelector.options', { returnObjects: true }) as Record<string, string>;
+    const occupationOptions = i18next.t('occupationSelector.options', { returnObjects: true }) as Record<string, string>;
+
+    const translatedBasicInfo = {
+      name: basicInfo.name || i18next.t('prompts.notProvided'),
+      age_group: basicInfo.age_group ? (ageOptions[basicInfo.age_group] || i18next.t('prompts.notProvided')) : i18next.t('prompts.notProvided'),
+      gender: basicInfo.gender === "other" ? (basicInfo.gender_other || i18next.t('prompts.notProvided')) : (basicInfo.gender ? genderOptions[basicInfo.gender] || i18next.t('prompts.notProvided') : i18next.t('prompts.notProvided')),
+      occupation: basicInfo.occupation === "other" ? (basicInfo.occupation_other || i18next.t('prompts.notProvided')) : (basicInfo.occupation ? occupationOptions[basicInfo.occupation] || i18next.t('prompts.notProvided') : i18next.t('prompts.notProvided')),
+    };
 
     // Fetch latest life environment
     const { data: lifeEnvironment, error: environmentError } = await supabase
@@ -55,19 +73,24 @@ export const generatePromptsForUser = async (userId: string): Promise<string> =>
       throw new Error(`Failed to fetch life environment: ${environmentError.message}`);
     }
 
-    const relationshipStressString = lifeEnvironment?.relationship_stress
-      ? lifeEnvironment.relationship_stress.map((rel: { type: string; status: string }) => `${rel.type}：${rel.status}`).join("，")
-      : undefined; // 修改：无数据时返回 undefined
+    const stressLevelOptions = i18next.t('prompts.stressLevels', { returnObjects: true }) as Record<string, string>;
+    const relationshipTypeOptions = i18next.t('prompts.relationshipTypes', { returnObjects: true }) as Record<string, string>;
+    const relationshipStatusOptions = i18next.t('prompts.relationshipStatuses', { returnObjects: true }) as Record<string, string>;
+    const financialStressOptions = i18next.t('prompts.financialStresses', { returnObjects: true }) as Record<string, string>;
+    const sleepQualityOptions = i18next.t('prompts.sleepQualities', { returnObjects: true }) as Record<string, string>;
 
-    // 修改 environmentSummary 构建逻辑
+    const translatedRelationshipStress = lifeEnvironment?.relationship_stress
+      ? lifeEnvironment.relationship_stress.map((rel: { type: string; status: string }) => 
+          `${relationshipTypeOptions[rel.type] || rel.type}: ${relationshipStatusOptions[rel.status] || rel.status}`).join(", ")
+      : undefined;
+
     const environmentSummary = lifeEnvironment ? [
-      lifeEnvironment.stress_level ? `工作或学习压力：${lifeEnvironment.stress_level}` : null,
-      relationshipStressString ? `家庭关系或个人关系状况：${relationshipStressString}` : null,
-      lifeEnvironment.financial_stress ? `经济压力：${lifeEnvironment.financial_stress}` : null,
-      lifeEnvironment.sleep_quality ? `睡眠质量：${lifeEnvironment.sleep_quality}` : null,
-      lifeEnvironment.additional_details ? `其他详情：${lifeEnvironment.additional_details}` : null,
-    ].filter(Boolean).join("\n") : null; // 修改：无数据时返回 null，并过滤和连接有效行
-
+      lifeEnvironment.stress_level ? `${i18next.t('prompts.environment.stressLevel')} ${stressLevelOptions[lifeEnvironment.stress_level] || i18next.t('prompts.notProvided')}` : null,
+      translatedRelationshipStress ? `${i18next.t('prompts.environment.relationshipStress')} ${translatedRelationshipStress}` : null,
+      lifeEnvironment.financial_stress ? `${i18next.t('prompts.environment.financialStress')} ${financialStressOptions[lifeEnvironment.financial_stress] || i18next.t('prompts.notProvided')}` : null,
+      lifeEnvironment.sleep_quality ? `${i18next.t('prompts.environment.sleepQuality')} ${sleepQualityOptions[lifeEnvironment.sleep_quality] || i18next.t('prompts.notProvided')}` : null,
+      lifeEnvironment.additional_details ? `${i18next.t('prompts.environment.additionalDetails')} ${lifeEnvironment.additional_details}` : null,
+    ].filter(Boolean).join("\n") : null;
 
     // Fetch user HealthCondition
     const { data: healthCondition, error: healthConditionError } = await supabase
@@ -77,23 +100,30 @@ export const generatePromptsForUser = async (userId: string): Promise<string> =>
       .maybeSingle();
 
     if (healthConditionError) {
-      throw new Error(`获取健康状况失败: ${healthConditionError.message}`);
+      throw new Error(`Failed to fetch health condition: ${healthConditionError.message}`);
     }
 
     const healthConditionObject = healthCondition?.health_condition || {};
-    let treatmentDetailsString = "无";
+    let treatmentDetailsString = i18next.t('prompts.none');
     if (Array.isArray(healthConditionObject.treatmentDetails)) {
-      treatmentDetailsString = healthConditionObject.treatmentDetails.join("，");
+      treatmentDetailsString = healthConditionObject.treatmentDetails.join(", ");
     } else if (healthConditionObject.treatmentDetails) {
       treatmentDetailsString = healthConditionObject.treatmentDetails.toString();
     }
 
-    // 修改 healthConditionSummary 构建逻辑
-    const healthConditionSummary = [
-      healthConditionObject.mentalHealthHistory && healthConditionObject.mentalHealthHistory.length > 0 ? `心理健康历史：${Array.isArray(healthConditionObject.mentalHealthHistory) ? healthConditionObject.mentalHealthHistory.join("，") : "无"}` : null,
-      healthConditionObject.isReceivingTreatment !== undefined ? `是否在接受心理健康治疗：${healthConditionObject.isReceivingTreatment === true ? "是" : healthConditionObject.isReceivingTreatment === false ? "否" : "未填写"}` : null,
-    ].filter(Boolean).join("\n") || null; // 修改：无数据时返回 null，并过滤和连接有效行
+    const mentalHealthOptions = i18next.t('prompts.mentalHealthOptions', { returnObjects: true }) as Record<string, string>;
+    const translatedMentalHealthHistory = healthConditionObject.mentalHealthHistory && healthConditionObject.mentalHealthHistory.length > 0
+      ? healthConditionObject.mentalHealthHistory.map((condition: string) => mentalHealthOptions[condition] || condition).join(", ")
+      : i18next.t('prompts.none');
 
+    const healthConditionSummary = [
+      healthConditionObject.mentalHealthHistory && healthConditionObject.mentalHealthHistory.length > 0 
+        ? `${i18next.t('prompts.mentalHealthHistory')} ${translatedMentalHealthHistory}` 
+        : null,
+      healthConditionObject.isReceivingTreatment !== undefined 
+        ? `${i18next.t('prompts.isReceivingTreatment')} ${healthConditionObject.isReceivingTreatment === true ? i18next.t('prompts.yes') : healthConditionObject.isReceivingTreatment === false ? i18next.t('prompts.no') : i18next.t('prompts.notProvided')}` 
+        : null,
+    ].filter(Boolean).join("\n") || null;
 
     // Fetch user interests
     const { data: interestsData, error: interestsError } = await supabase
@@ -103,22 +133,25 @@ export const generatePromptsForUser = async (userId: string): Promise<string> =>
       .maybeSingle();
 
     if (interestsError) {
-      throw new Error(`获取兴趣与爱好失败: ${interestsError.message}`);
+      throw new Error(`Failed to fetch interests: ${interestsError.message}`);
     }
 
     const interestsObject = interestsData?.interests ? JSON.parse(interestsData.interests) : {};
-    // 修改 interestsSummary 构建逻辑
+    const interestCategories = i18next.t('prompts.interestCategories', { returnObjects: true }) as Record<string, string>;
+    const interestOptions = i18next.t('prompts.interestOptions', { returnObjects: true }) as Record<string, Record<string, string>>;
+
     const interestsSummary = Object.entries(interestsObject)
       .map(([category, interests]) => {
-        if (Array.isArray(interests) && interests.length > 0) { // 只有当兴趣数组不为空时才返回字符串
-          return `${category}：${interests.join("，")}`;
-        } else {
-          return null; //  否则返回 null
+        if (Array.isArray(interests) && interests.length > 0) {
+          const translatedInterests = interests.map(interest => 
+            interestOptions[category] && interestOptions[category][interest] ? interestOptions[category][interest] : interest
+          ).join(", ");
+          return `${interestCategories[category] || category}: ${translatedInterests}`;
         }
+        return null;
       })
-      .filter(Boolean) // 移除 null 值
-      .join("\n") || null; // 修改：无有效数据时返回 null
-
+      .filter(Boolean)
+      .join("\n") || null;
 
     // Fetch user social support
     const { data: socialSupport, error: socialSupportError } = await supabase
@@ -128,17 +161,18 @@ export const generatePromptsForUser = async (userId: string): Promise<string> =>
       .maybeSingle();
 
     if (socialSupportError) {
-      throw new Error(`获取社交支持系统数据失败: ${socialSupportError.message}`);
+      throw new Error(`Failed to fetch social support: ${socialSupportError.message}`);
     }
 
     const socialSupportObject = socialSupport?.social_support || {};
-    // 修改 socialSupportSummary 构建逻辑
-    const socialSupportSummary = [
-      socialSupportObject.family ? `经常联系的家庭成员数量：${socialSupportObject.family}` : null,
-      socialSupportObject.friends ? `好友数量：${socialSupportObject.friends}` : null,
-      socialSupportObject.meetFrequency ? `与朋友/家人见面的频率：${socialSupportObject.meetFrequency}` : null,
-    ].filter(Boolean).join("\n") || null; // 修改：无数据时返回 null，并过滤和连接有效行
+    const numberOptions = i18next.t('socialSupportPage.numberOptions', { returnObjects: true }) as Record<string, string>;
+    const frequencyOptions = i18next.t('socialSupportPage.frequencyOptions', { returnObjects: true }) as Record<string, string>;
 
+    const socialSupportSummary = [
+      socialSupportObject.family ? `${i18next.t('prompts.socialSupport.family')} ${numberOptions[socialSupportObject.family] || socialSupportObject.family}` : null,
+      socialSupportObject.friends ? `${i18next.t('prompts.socialSupport.friends')} ${numberOptions[socialSupportObject.friends] || socialSupportObject.friends}` : null,
+      socialSupportObject.meetFrequency ? `${i18next.t('prompts.socialSupport.meetFrequency')} ${frequencyOptions[socialSupportObject.meetFrequency] || socialSupportObject.meetFrequency}` : null,
+    ].filter(Boolean).join("\n") || null;
 
     // Fetch user recent events
     const { data: recentEvents, error: recentEventsError } = await supabase
@@ -148,55 +182,27 @@ export const generatePromptsForUser = async (userId: string): Promise<string> =>
       .maybeSingle();
 
     if (recentEventsError) {
-      throw new Error(`获取近期生活事件失败: ${recentEventsError.message}`);
+      throw new Error(`Failed to fetch recent events: ${recentEventsError.message}`);
     }
 
     const recentEventsObject = recentEvents?.recent_events || {};
-    // 修改 recentEventsSummary 构建逻辑
-    let recentEventsSummary = null; // 初始化为 null
+    let recentEventsSummary = null;
     const eventStrings: string[] = [];
 
     if (recentEventsObject) {
-
-      if (recentEventsObject.moving === true) {
-        eventStrings.push("最近搬了新家");
-      }
-      if (recentEventsObject.jobChange === true) {
-        eventStrings.push("失业或换工作");
-      }
-      if (recentEventsObject.promotion === true) {
-        eventStrings.push("升职或降职");
-      }
-      if (recentEventsObject.studyChange === true) {
-        eventStrings.push("开始或结束学业");
-      }
-      if (recentEventsObject.marriage === true) {
-        eventStrings.push("结婚或离婚");
-      }
-      if (recentEventsObject.newBaby === true) {
-        eventStrings.push("新生儿的到来或孩子离家");
-      }
-      if (recentEventsObject.relationshipChange === true) {
-        eventStrings.push("新的亲密关系或关系结束");
-      }
-      if (recentEventsObject.bereavement === true) {
-        eventStrings.push("有亲人或非常亲近的朋友去世");
-      }
-      if (recentEventsObject.healthIssue === true) {
-        eventStrings.push("自己或家人经历了重大健康问题或诊断");
-      }
-      if (recentEventsObject.financialChange === true) {
-        eventStrings.push("重大财务问题或改善");
-      }
-      if (recentEventsObject.other) {
-        eventStrings.push(`其他重大事件：${recentEventsObject.other}`);
-      }
-
-      if (eventStrings.length > 0) {
-        recentEventsSummary = eventStrings.join("\n"); // 只有当有事件时才赋值
-      }
+      if (recentEventsObject.moving === true) eventStrings.push(i18next.t('prompts.recentEventsDetails.moving'));
+      if (recentEventsObject.jobChange === true) eventStrings.push(i18next.t('prompts.recentEventsDetails.jobChange'));
+      if (recentEventsObject.promotion === true) eventStrings.push(i18next.t('prompts.recentEventsDetails.promotion'));
+      if (recentEventsObject.studyChange === true) eventStrings.push(i18next.t('prompts.recentEventsDetails.studyChange'));
+      if (recentEventsObject.marriage === true) eventStrings.push(i18next.t('prompts.recentEventsDetails.marriage'));
+      if (recentEventsObject.newBaby === true) eventStrings.push(i18next.t('prompts.recentEventsDetails.newBaby'));
+      if (recentEventsObject.relationshipChange === true) eventStrings.push(i18next.t('prompts.recentEventsDetails.relationshipChange'));
+      if (recentEventsObject.bereavement === true) eventStrings.push(i18next.t('prompts.recentEventsDetails.bereavement'));
+      if (recentEventsObject.healthIssue === true) eventStrings.push(i18next.t('prompts.recentEventsDetails.healthIssue'));
+      if (recentEventsObject.financialChange === true) eventStrings.push(i18next.t('prompts.recentEventsDetails.financialChange'));
+      if (recentEventsObject.other) eventStrings.push(`${i18next.t('prompts.recentEventsDetails.other')} ${recentEventsObject.other}`);
+      if (eventStrings.length > 0) recentEventsSummary = eventStrings.join("\n");
     }
-
 
     // Fetch user goals
     const { data: goals, error: goalsError } = await supabase
@@ -208,40 +214,31 @@ export const generatePromptsForUser = async (userId: string): Promise<string> =>
       throw new Error(`Failed to fetch goals: ${goalsError.message}`);
     }
 
-    // 修改 goalsSummary 构建逻辑
     const goalsSummary = goals?.map(goal => {
       const goalList = JSON.parse(goal.goals || '[]');
-      if (goalList.length > 0) { // 只有当目标列表不为空时才返回字符串
-        const goalText = goalList.join(", ");
-        return `希望达成如下目标：${goalText}`;
-      } else {
-        return null; // 否则返回 null
+      if (goalList.length > 0) {
+        const goalText = goalList.map((g: string) => i18next.t(`goalsPage.predefinedGoals.${g}`)).join(", ");
+        return `${i18next.t('prompts.goalsPrefix')} ${goalText}`;
       }
-    }).filter(Boolean).join("\n") || null; // 修改：无有效数据时返回 null
+      return null;
+    }).filter(Boolean).join("\n") || null;
 
-
-    // Generate the complete prompt
+    // Generate the complete prompt with translated values
     prompt = `
+      ${tonesSummary}
+      ${goalsSummary ? `\n${i18next.t('prompts.user')}\n${goalsSummary}` : ""}
 
-      ${tonesSummary}。
-      ${goalsSummary ? `\n用户\n${goalsSummary}` : ""}  ${/* 修改： 只有 goalsSummary 不为空时才添加 */''}
+      ${i18next.t('prompts.basicInfo')}
+      ${i18next.t('prompts.name')} ${translatedBasicInfo.name},
+      ${i18next.t('prompts.ageGroup')} ${translatedBasicInfo.age_group},
+      ${i18next.t('prompts.gender')} ${translatedBasicInfo.gender},
+      ${i18next.t('prompts.occupation')} ${translatedBasicInfo.occupation},
 
-      基本信息：
-      名字：${basicInfo.name || "未填写"}，
-      年龄范围：${basicInfo.age_group || "未填写"}，
-      性别：${basicInfo.gender || "未填写"}，
-      职业：${basicInfo.occupation || "未填写"}，
-
-      ${environmentSummary ? `\n生活环境与压力源：\n${environmentSummary}` : ""} ${/* 修改： 只有 environmentSummary 不为空时才添加 */''}
-
-      ${healthConditionSummary ? `\n健康状况：\n${healthConditionSummary}` : ""} ${/* 修改： 只有 healthConditionSummary 不为空时才添加 */''}
-
-      ${interestsSummary ? `\n兴趣与爱好：\n${interestsSummary}` : ""} ${/* 修改： 只有 interestsSummary 不为空时才添加 */''}
-
-      ${socialSupportSummary ? `\n社交支持系统：\n${socialSupportSummary}` : ""} ${/* 修改： 只有 socialSupportSummary 不为空时才添加 */''}
-
-      ${recentEventsSummary ? `\n近期经历的重大事件：\n${recentEventsSummary}` : ""} ${/* 修改： 只有 recentEventsSummary 不为空时才添加 */''}
-
+      ${environmentSummary ? `\n${i18next.t('prompts.lifeEnvironment')}\n${environmentSummary}` : ""}
+      ${healthConditionSummary ? `\n${i18next.t('prompts.healthConditionTitle')}\n${healthConditionSummary}` : ""}
+      ${interestsSummary ? `\n${i18next.t('prompts.interestsSection')}\n${interestsSummary}` : ""}
+      ${socialSupportSummary ? `\n${i18next.t('prompts.socialSupportTitle')}\n${socialSupportSummary}` : ""}
+      ${recentEventsSummary ? `\n${i18next.t('prompts.recentEvents')}\n${recentEventsSummary}` : ""}
     `.trim();
 
     // Save the generated prompt to the database
@@ -250,10 +247,10 @@ export const generatePromptsForUser = async (userId: string): Promise<string> =>
       prompt_template: tonesSummary,
       user_goals: goalsSummary,
       basic_info: `
-      名字：${basicInfo.name || "未填写"}，
-      年龄范围：${basicInfo.age_group || "未填写"}，
-      性别：${basicInfo.gender || "未填写"}，
-      职业：${basicInfo.occupation || "未填写"}，
+        ${i18next.t('prompts.name')} ${translatedBasicInfo.name},
+        ${i18next.t('prompts.ageGroup')} ${translatedBasicInfo.age_group},
+        ${i18next.t('prompts.gender')} ${translatedBasicInfo.gender},
+        ${i18next.t('prompts.occupation')} ${translatedBasicInfo.occupation}
       `.trim(),
       life_environment: environmentSummary,
       health_condition: healthConditionSummary,
@@ -267,7 +264,7 @@ export const generatePromptsForUser = async (userId: string): Promise<string> =>
       throw new Error(`Failed to save prompt: ${saveError.message}`);
     }
 
-    console.log("Prompt successfully generated and saved.");
+    console.log("Prompt successfully generated and saved:", prompt);
     return prompt;
   } catch (error) {
     console.error("Error generating prompts:", error);
@@ -275,11 +272,7 @@ export const generatePromptsForUser = async (userId: string): Promise<string> =>
   }
 };
 
-
 // Helper function to create a new user if one does not exist
 async function createNewUser(userId: string) {
-  // Implement logic to insert new user data into relevant tables
-  // This is a placeholder function; you should implement the actual logic based on your data model
   await supabase.from("user_basic_info").insert({ user_id: userId });
-  // ... insert into other tables if needed
 }

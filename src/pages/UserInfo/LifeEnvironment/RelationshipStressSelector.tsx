@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from 'react-i18next';
 
 interface Relationship {
   type: string;
@@ -14,16 +15,17 @@ const RelationshipStressSelector: React.FC<RelationshipStressSelectorProps> = ({
   value,
   onChange,
 }) => {
-  const relationshipTypes = ["配偶", "父母", "子女", "朋友"];
-  const statusOptions = ["和谐", "紧张", "冲突", "疏远"];
+  const { t } = useTranslation();
+  const relationshipTypes = t('relationshipStressSelector.types', { returnObjects: true }) as Record<string, string>;
+  const statusOptions = t('relationshipStressSelector.statusOptions', { returnObjects: true }) as Record<string, string>;
+  const typeKeys = Object.keys(relationshipTypes);
+  const statusKeys = Object.keys(statusOptions);
 
-  // 更新某种关系的状况
   const handleStatusChange = (type: string, status: string) => {
     const updatedValue = value.map((item) =>
       item.type === type ? { ...item, status } : item
     );
 
-    // 如果不存在，则添加新项
     if (!updatedValue.some((item) => item.type === type)) {
       updatedValue.push({ type, status });
     }
@@ -33,22 +35,22 @@ const RelationshipStressSelector: React.FC<RelationshipStressSelectorProps> = ({
 
   return (
     <div>
-      <h3>家庭关系或个人关系状况</h3>
-      {relationshipTypes.map((type) => (
-        <div key={type} style={{ marginBottom: "10px" }}>
-          <strong>{type}</strong>
+      <h3>{t('relationshipStressSelector.title')}</h3>
+      {typeKeys.map((typeKey) => (
+        <div key={typeKey} style={{ marginBottom: "10px" }}>
+          <strong>{relationshipTypes[typeKey]}</strong>
           <div style={{ display: "flex", gap: "10px", marginTop: "5px" }}>
-            {statusOptions.map((status) => (
-              <label key={status}>
+            {statusKeys.map((statusKey) => (
+              <label key={statusKey}>
                 <input
                   type="radio"
-                  name={`${type}-status`}
+                  name={`${typeKey}-status`}
                   checked={
-                    value.find((item) => item.type === type)?.status === status
+                    value.find((item) => item.type === typeKey)?.status === statusKey
                   }
-                  onChange={() => handleStatusChange(type, status)}
+                  onChange={() => handleStatusChange(typeKey, statusKey)}
                 />
-                {status}
+                {statusOptions[statusKey]}
               </label>
             ))}
           </div>

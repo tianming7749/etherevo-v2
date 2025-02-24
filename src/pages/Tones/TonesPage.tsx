@@ -1,38 +1,52 @@
 import React, { useState, useEffect } from "react";
+import i18next from 'i18next';
 import { useUserContext } from "../../context/UserContext";
 import { fetchUserTone, saveUserPrompt } from "../../utils/supabaseHelpers";
 import { supabase } from "../../supabaseClient";
-import { generatePromptsForUser } from "../../utils/generatePrompts";
+import { generatePromptsForUser } from "../../utils/generatePrompts"; // 导入外部版本
+import { useTranslation } from 'react-i18next';
 import "./TonesPage.css";
 
 interface Tone {
   id: string;
-  tone_name: string;
-  tone_description: string;
-  prompt_template: string;
+  tone_name_key: string;
+  tone_description_key: string;
+  prompt_template_key: string;
+  prompt_template_default: string;
 }
 
 const TonesPage: React.FC = () => {
   const { userId } = useUserContext();
   const [tones, setTones] = useState<Tone[]>([]);
   const [selectedToneId, setSelectedToneId] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(false); // 改为局部加载状态
+  const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  const { t } = useTranslation();
 
   useEffect(() => {
     const fetchTonesAndUserSelection = async () => {
       setLoading(true);
       setError(null);
 
+      console.log("TonesPage useEffect - Start, current language:", i18next.language);
+
       try {
-        const { data: tonesData, error: tonesError } = await supabase.from("tones_options").select("*");
+        const { data: tonesData, error: tonesError } = await supabase
+          .from("tones_options")
+          .select(`
+            id,
+            tone_name_key,
+            tone_description_key,
+            prompt_template_key,
+            prompt_template_default
+          `);
         if (tonesError) throw new Error(tonesError.message);
-        setTones(tonesData || []);
+        setTones(tonesData as Tone[] || []);
 
         if (userId) {
           const { data: userToneData, error: userToneError } = await supabase
             .from("user_select_tones")
-            .select("prompt_template")
+            .select("prompt_template_key")
             .eq("user_id", userId)
             .single();
 
@@ -42,7 +56,7 @@ const TonesPage: React.FC = () => {
 
           if (userToneData) {
             const previouslySelectedTone = tonesData?.find(
-              (tone: Tone) => tone.prompt_template === userToneData.prompt_template
+              (tone: Tone) => tone.prompt_template_key === userToneData.prompt_template_key
             );
             if (previouslySelectedTone) {
               setSelectedToneId(previouslySelectedTone.id);
@@ -53,6 +67,7 @@ const TonesPage: React.FC = () => {
         setError(error.message);
       } finally {
         setLoading(false);
+        console.log("TonesPage useEffect - End, current language:", i18next.language);
       }
     };
 
@@ -65,54 +80,59 @@ const TonesPage: React.FC = () => {
 
   const saveSelection = async () => {
     if (!selectedToneId) {
-      alert("请先选择一个 Tone！");
+      alert(t('tonesPage.toneSelectionAlert'));
       return;
     }
 
     setLoading(true);
     try {
       const selectedTone = tones.find((tone) => tone.id === selectedToneId);
-      if (!selectedTone) throw new Error("未找到选定的 Tone 信息。");
+      if (!selectedTone) throw new Error(t('tonesPage.noTonesMessage'));
+
+      console.log("Saving tone:", selectedTone);
 
       const { error: saveToneError } = await supabase.from("user_select_tones").upsert(
         {
           user_id: userId,
-          prompt_template: selectedTone.prompt_template,
+          prompt_template_key: selectedTone.prompt_template_key,
         },
         { onConflict: ["user_id"] }
       );
-      if (saveToneError) throw saveToneError;
+      if (saveToneError) throw new Error(`Save tone error: ${saveToneError.message}`);
 
-      const updatedPrompt = await generatePromptsForUser(userId);
+      const updatedPrompt = await generatePromptsForUser(userId); // 使用外部版本
+      console.log("Generated prompt:", updatedPrompt);
       if (updatedPrompt) {
         await saveUserPrompt(userId, updatedPrompt);
+        console.log("提示词已更新并保存。");
       } else {
-        console.warn("提示词生成失败。");
+        throw new Error("Prompt generation failed");
       }
 
-      await supabase
+      const { error: settingsError } = await supabase
         .from("user_settings")
         .update({ setup_completed: true })
         .eq("user_id", userId);
+      if (settingsError) throw new Error(`Settings update error: ${settingsError.message}`);
 
-      alert("保存成功！");
+      alert(t('tonesPage.saveSuccessAlert'));
     } catch (error: any) {
-      console.error("保存 Tone 出错：", error.message);
-      alert("保存失败，请稍后重试！");
+      console.error(t('tonesPage.saveErrorLog'), error.message);
+      alert(t('tonesPage.saveErrorAlert'));
     } finally {
       setLoading(false);
     }
   };
 
-  if (error) return <div className="tones-page"><p>Error: {error}</p></div>;
+  if (error) return <div className="tones-page"><p>{t('tonesPage.errorMessagePrefix') + error}</p></div>;
 
   return (
     <div className="tones-page">
-      <h1>Select Your Tone</h1>
-      <p>选择对话语气，定制专属对话体验</p>
-      <p>根据您的当前状态和对话需求，选择最符合您心境的语气，EtherEvo 将以您选择的风格与您进行对话，提供更贴心、个性化的交流体验。</p>
+      <h1>{t('tonesPage.title')}</h1>
+      <p>{t('tonesPage.descriptionLine1')}</p>
+      <p>{t('tonesPage.descriptionLine2')}</p>
       {tones.length === 0 ? (
-        <p> </p>
+        <p>{t('tonesPage.noTonesMessage')}</p>
       ) : (
         <>
           <div className="tones-list">
@@ -124,17 +144,17 @@ const TonesPage: React.FC = () => {
                   value={tone.id}
                   checked={selectedToneId === tone.id}
                   onChange={() => handleToneSelection(tone.id)}
-                  disabled={loading} // 禁用按钮避免重复提交
+                  disabled={loading}
                 />
                 <div className="tone-details">
-                  <div className="tone-name">{tone.tone_name}</div>
-                  <div className="tone-description">{tone.tone_description}</div>
+                  <div className="tone-name">{t(`tonesPage.${tone.tone_name_key}`)}</div>
+                  <div className="tone-description">{t(`tonesPage.${tone.tone_description_key}`)}</div>
                 </div>
               </label>
             ))}
           </div>
           <button onClick={saveSelection} disabled={loading}>
-            {loading ? "Saving..." : "Save"}
+            {loading ? t('tonesPage.savingButton') : t('tonesPage.saveButton')}
           </button>
         </>
       )}

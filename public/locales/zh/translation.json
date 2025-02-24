@@ -1,0 +1,695 @@
+{
+  "auth": {
+    "title": "欢迎使用 EtherEvo！",
+    "loginTitle": "登录",
+    "signUpTitle": "注册",
+    "inputs": {
+      "emailPlaceholder": "邮箱",
+      "passwordPlaceholder": "密码",
+      "confirmPasswordPlaceholder": "确认密码"
+    },
+    "buttons": {
+      "loading": "加载中...",
+      "login": "登录",
+      "signUp": "注册"
+    },
+    "toggle": {
+      "noAccount": "还没有账号？",
+      "hasAccount": "已有账号？",
+      "signUpLink": "注册",
+      "loginLink": "登录"
+    },
+    "links": {
+      "forgotPassword": "忘记密码？"
+    },
+    "messages": {
+      "invalidEmail": "请输入有效的邮箱地址。",
+      "shortPassword": "密码长度必须至少为 8 个字符。",
+      "passwordMismatch": "密码不匹配。",
+      "loginSuccess": "登录成功！",
+      "signUpSuccess": "注册成功！请检查您的邮箱。",
+      "unexpectedError": "发生意外错误。"
+    },
+    "languageSwitch": {
+      "toChinese": "切换到中文",
+      "toEnglish": "切换到英文"
+    }
+  },
+  "forgotPassword": {
+    "title": "重置您的密码",
+    "input": {
+      "emailPlaceholder": "输入您的邮箱"
+    },
+    "buttons": {
+      "resetPassword": "重置密码",
+      "backToLogin": "返回登录"
+    },
+    "messages": {
+      "error": "发送重置邮件时出错，请重试。",
+      "success": "密码重置邮件已发送，请检查您的邮箱。"
+    }
+  },
+  "resetPassword": {
+    "title": "重置您的密码",
+    "labels": {
+      "newPassword": "新密码：",
+      "confirmNewPassword": "确认新密码："
+    },
+    "buttons": {
+      "resetPassword": "重置密码"
+    },
+    "messages": {
+      "passwordMismatch": "密码不匹配",
+      "unexpectedError": "发生意外错误。",
+      "invalidToken": "无效或缺少令牌。",
+      "success": "密码已成功重置。您将很快被重定向到登录页面。"
+    }
+  },
+  "navbar": {
+    "title": "EtherEvo",
+    "welcome": "欢迎",
+    "tones": "语气",
+    "goals": "目标",
+    "userInfo": "信息",
+    "chat": "聊天",
+    "logout": "退出"
+  },
+  "tonesPage": {
+    "title": "选择对话语气",
+    "descriptionLine1": "选择对话语气，定制专属对话体验",
+    "descriptionLine2": "根据您的当前状态和对话需求，选择最符合您心境的语气，EtherEvo 将以您选择的风格与您进行对话，提供更贴心、个性化的交流体验。",
+    "noTonesMessage": " ",
+    "toneSelectionAlert": "请先选择一个 语气！",
+    "saveSuccessAlert": "保存成功！",
+    "saveErrorLog": "保存 语气 出错：",
+    "saveErrorAlert": "保存失败，请稍后重试！",
+    "errorMessagePrefix": "错误: ",
+    "savingButton": "保存中...",
+    "saveButton": "保存",
+    "tone_motivational": "动机提升型",
+    "tone_motivational_description": "在面对某个任务或目标时缺乏动力,需要鼓励或行动指引。处于迷茫状态,希望通过行动找到方向。经历过失败或拖延,需要重新激发信心和活力。",
+    "prompt_motivational": "角色定位：\n你是一位充满活力和感染力的动力教练，专注于帮助用户克服拖延与迷茫，通过分解目标、激励行动，为他们点燃内心的激情和信心，逐步迈向成功。\n交流风格：\n你热情、富有鼓励性，像朋友一样真诚支持用户，同时像导师一样提供清晰的指导。你通过正向反馈和切实可行的建议，帮助用户建立信心并持续行动。\n对话指引：\n1. 激发信心：强调用户的潜力和已有成就。\n2. 引导目标感：帮助用户明确下一步行动。\n3. 分解任务：将目标化繁为简，让行动更加轻松可行。\n4. 强化成就感：及时表扬用户的每一次进步。\n5. 适度干预：当用户拖延时，主动提出方法帮助他们打破僵局。\n特质关键词：\n热情（通过感染力激发行动）、鼓励（持续为用户提供正能量）、目标感（帮助用户找到方向）、行动导向（注重具体执行）、支持（提供持续反馈和指导）。",
+    "tone_relaxed": "轻松娱乐型",
+    "tone_relaxed_description": "无聊或压力较大,想要轻松的对话。希望通过幽默和互动获得一些心理放松。暂时不想讨论严肃话题,仅希望放松心情。",
+    "prompt_relaxed": "角色定位：\n你是一位幽默风趣的朋友，擅长通过有趣的对话和互动，帮助用户缓解无聊和压力。你总是有笑话、冷知识或轻松的话题在手，能让每一次对话都充满乐趣。\n交流风格：\n你富有感染力和幽默感，时而调皮但不失温暖。你的对话充满轻松愉快的语气，同时你也非常敏锐，能够快速适应用户的情绪状态。\n对话指引：\n1. 幽默风趣：通过笑话、俏皮话或趣味互动营造轻松氛围。\n2. 互动性强：提出有趣的问题或小游戏，鼓励用户参与。\n3. 推荐趣味内容：根据对话推荐娱乐化内容，如电影、冷知识等。\n4. 适当调侃：用善意的调侃让对话更生动有趣。\n5. 避免负面情绪：不过多谈论严肃或让人情绪低落的话题。\n特质关键词：\n幽默（带来轻松愉快的对话）、轻松（帮助用户放松身心）、互动性（鼓励用户参与对话）、调皮（通过俏皮语言增添趣味）、娱乐化（推荐趣味内容）、温暖（保持对用户情绪的敏锐和关怀）。",
+    "tone_problem_solving": "问题解决型",
+    "tone_problem_solving_description": "倾向于找到实际问题的解决方案。愿意主动探讨问题的细节,寻找具体方法改变现状。",
+    "prompt_problem_solving": "角色定位：\n你是一位冷静睿智、逻辑清晰的问题解决专家，擅长分析问题的核心并提供实用、高效的解决方案，帮助用户快速应对挑战并改变现状。\n交流风格：\n你条理分明、直击重点，语气冷静而坚定，注重事实与可行性。通过简洁的语言和结构化的建议，你引导用户逐步梳理问题并采取行动。\n对话指引：\n1. 剖析问题：提出针对性问题（如“这个问题最困扰你的地方是什么？”），帮助用户明确问题根源和关键细节。\n2. 分解步骤：将复杂问题拆解为可管理的部分，引导用户逐一解决。\n3. 提供方案：根据用户的情况，提出具体、可执行的建议（如“我们可以先试试这个方法：...”）。\n4. 推动行动：鼓励用户制定明确的目标或下一步计划，确保解决方案落地。\n5. 保持客观：避免过多情感干预，聚焦问题本身，提供理性支持。\n特质关键词：\n逻辑（以清晰思路分析问题）、实用（提供切实可行的建议）、效率（快速找到解决方案切入点）、冷静（保持理性与条理）、引导（推动用户主动解决问题）。",
+    "tone_deeply_empathetic": "深度共鸣型",
+    "tone_deeply_empathetic_description": "正在经历复杂的情感或思想困扰,寻求深层次的理解和共鸣。希望通过对话更好地认识自己或处理内心的情绪和认知矛盾。愿意敞开心扉,深入探讨自身问题或观点。",
+    "prompt_deeply_empathetic": "角色定位：\n你是一位富有洞察力和深度共情能力的对话伙伴,擅长通过敏锐的观察和深刻的问题,引导用户发现内心深处的情感和想法。你始终保持真诚的态度，为用户提供安全和开放的空间，帮助他们更好地理解自己。\n交流风格：\n你语调平和而真挚，善于通过深刻的提问引发用户思考。在倾听的同时，你会通过适当的反馈和总结，帮助用户清晰表达他们的情感和想法。\n对话指引：\n深刻提问：提出开放性问题，激发用户的深入思考。\n情感反馈：用理解性的语言回应用户的情感表达。\n提供关联见解：在适当时机引导用户建立新的关联，发现未被注意到的思维模式。\n避免强加观点：不直接告诉用户答案，而是让他们在对话中找到答案。\n保持耐心：尊重用户的节奏，避免急于解决问题。\n特质关键词：\n深刻（引导用户思考深层情感）、共情（对情感表达出真实的理解）、洞察（通过反馈和提问提供新的视角）、真诚（始终保持温暖和真挚）、开放（为用户创造安全的表达环境）、启发性（激发用户新的认知和感悟）。",
+    "tone_emotionally_supportive": "情感支持型",
+    "tone_emotionally_supportive_description": "情绪较低、需要情感支持和安慰。避免深入探讨,只想寻求一种被认可和被接纳的感觉。",
+    "prompt_emotionally_supportive": "角色：\n智慧、同理心、灵活的情感陪护助手。\n目标：\n通过温暖对话提供情感支持和生活指导，助用户缓解压力、疏解情绪、激发积极心态。\n风格：\n乐观幽默，轻松愉快氛围，批判性思维提供实用建议，倾听共情，以用户为中心，建议中带幽默，对话节奏循序渐进，语速放缓，信息密度适中，注重对话互动性，回复风格口语化日常化。\n对话要点：\n- 共情支持：真诚表达理解关怀。\n- 轻松氛围：幽默语气缓解压力，鼓励积极。\n- 启发思考：开放提问，积极建议，鼓励看到问题多面性。\n- 实用建议：提供有效情绪支持。\n- 避免教条：语气轻松灵活，建议非命令。\n- 互动引导：在对话中主动放慢语速和节奏，逐步展开信息，避免信息过载。在适当时候主动停顿，并使用留白，营造思考空间。注重对话互动性，鼓励用户参与，主动询问用户是否理解或需要更多信息。\n- 口语日常：使用更口语化、更贴近日常对话的语言风格，避免过于正式或书面化的表达。\n关键词：\n乐观，幽默，鼓励，批判性，同理心，灵活。"
+  },
+  "goalsPage": {
+    "title": "设定你的目标",
+    "description": "提示：设定你的目标可以帮助我们为你量身定制心理健康支持。你可以选择最多3个目标，以便我们专注于重要的事情。随时可以调整你的目标以适应你的需求变化。",
+    "noLoginMessage": "请先登录以查看和设置你的目标。",
+    "errorMessage": "加载目标时发生错误，请稍后重试。",
+    "saveSuccessAlert": "目标已保存！",
+    "saveErrorAlert": "保存目标或更新提示词时发生错误，请稍后再试。",
+    "maxGoalsAlert": "最多只能选择 3 个目标！",
+    "saveButton": "保存目标",
+    "predefinedGoals": {
+      "reduce_anxiety": "减轻焦虑",
+      "improve_depression": "改善抑郁情绪",
+      "enhance_social_skills": "增强社交技能",
+      "increase_self_awareness": "提升自我认知",
+      "learn_stress_management": "学习应对压力技巧",
+      "improve_sleep_quality": "改善睡眠质量",
+      "boost_life_satisfaction": "提高生活满意度",
+      "strengthen_emotion_regulation": "增强情绪调节能力",
+      "build_relationships": "建立或改善人际关系",
+      "increase_confidence": "提升自信",
+      "cultivate_positive_mindset": "培养积极的心态",
+      "manage_negative_emotions": "管理愤怒或其他负面情绪"
+    }
+  },
+  "userInfoPage": {
+    "title": "用户信息",
+    "nav": {
+      "basicInfo": "基本信息",
+      "environment": "生活环境和压力源",
+      "healthCondition": "健康状况",
+      "interests": "兴趣与爱好",
+      "socialSupport": "社交支持系统",
+      "recentEvents": "近期的重大生活事件"
+    }
+  },
+  "basicInfoPage": {
+    "title": "基本信息",
+    "saveButton": "保存",
+    "noLoginAlert": "用户未登录，请先登录！",
+    "saveSuccessAlert": "保存成功！",
+    "saveErrorAlert": "保存过程中出错，请稍后重试！",
+    "saveFailedAlert": "保存失败，请重试！"
+  },
+  "ageSelector": {
+    "label": "年龄：",
+    "placeholder": "请选择",
+    "options": {
+      "under_18": "18以下",
+      "18_24": "18-24",
+      "25_34": "25-34",
+      "35_44": "35-44",
+      "45_54": "45-54",
+      "55_64": "55-64",
+      "over_65": "65以上"
+    }
+  },
+  "genderSelector": {
+    "label": "性别：",
+    "otherLabel": "请说明：",
+    "placeholder": "请输入具体描述",
+    "hint": "提示：分享你的性别帮助我们调整对话内容，以更贴近你的体验和需求。",
+    "options": {
+      "male": "男性",
+      "female": "女性",
+      "non_binary": "非二元性别",
+      "other": "其他（请说明）",
+      "prefer_not_to_say": "不愿分享",
+      "placeholder": "请选择"
+    }
+  },
+  "nameInput": {
+    "label": "姓名",
+    "hint": "你希望别人叫你什么名字？这可以是你的真名、昵称或任何你希望被称呼的名字。",
+    "placeholder": "请输入你的名字"
+  },
+  "occupationSelector": {
+    "title": "职业（或学生）",
+    "label": "你目前从事什么职业，或者你是学生吗？",
+    "otherLabel": "其他（请说明）：",
+    "placeholder": "请描述你的职业状态",
+    "hint": "提示：了解你的职业状态可以让我们更有效地讨论与工作或学习相关的心理健康问题。",
+    "options": {
+      "student": "学生",
+      "full_time": "全职工作",
+      "part_time": "兼职工作",
+      "freelancer": "自由职业者",
+      "retired": "退休",
+      "unemployed": "无工作/失业",
+      "other": "其他",
+      "placeholder": "请选择"
+    }
+  },
+  "lifeEnvironmentPage": {
+    "title": "生活环境与压力源",
+    "saveButton": "保存",
+    "savingButton": "保存中...",
+    "noLoginAlert": "未检测到用户登录，请先登录！",
+    "loadErrorAlert": "加载数据失败，请稍后重试！",
+    "saveSuccessAlert": "保存成功！",
+    "saveErrorAlert": "保存失败，请稍后重试！"
+  },
+  "additionalDetailsInput": {
+    "label": "其他：",
+    "placeholder": "如果你愿意，请简要描述你的压力源或健康问题..."
+  },
+  "financialStressSelector": {
+    "title": "经济压力",
+    "options": {
+      "no_stress": "无压力",
+      "moderate_stress": "有一定压力",
+      "high_stress": "压力很大"
+    }
+  },
+  "healthStatusSelector": {
+    "sleepQualityTitle": "睡眠质量",
+    "sleepOptions": {
+      "good": "很好",
+      "average": "一般",
+      "poor": "差"
+    }
+  },
+  "relationshipStressSelector": {
+    "title": "家庭关系或个人关系状况",
+    "types": {
+      "spouse": "配偶",
+      "parents": "父母",
+      "children": "子女",
+      "friends": "朋友"
+    },
+    "statusOptions": {
+      "harmonious": "和谐",
+      "tense": "紧张",
+      "conflicted": "冲突",
+      "distant": "疏远"
+    }
+  },
+  "stressLevelSelector": {
+    "title": "工作或学习压力",
+    "options": {
+      "low": "低",
+      "medium": "中",
+      "high": "高"
+    }
+  },
+  "healthConditionPage": {
+    "mentalHealthHistoryTitle": "心理健康历史",
+    "mentalHealthOptions": {
+      "depression": "抑郁",
+      "anxiety": "焦虑",
+      "bipolar": "双相情感障碍",
+      "ptsd": "PTSD",
+      "ocd": "OCD",
+      "other": "其他"
+    },
+    "otherSpecify": "其他（请指定）：",
+    "treatmentQuestion": "你目前是否在接受心理健康方面的治疗？",
+    "yes": "是",
+    "no": "否",
+    "saveButton": "保存",
+    "saveSuccessAlert": "保存成功！",
+    "saveErrorAlert": "保存失败，请稍后重试！",
+    "saveNetworkErrorAlert": "保存失败，请检查网络连接或稍后重试！"
+  },
+  "interestsPage": {
+    "loadingMessage": "加载中...",
+    "saveButton": "保存",
+    "savingButton": "保存中...",
+    "addInterestPlaceholder": "添加其他兴趣",
+    "saveSuccessAlert": "保存成功！",
+    "saveErrorAlert": "保存兴趣失败，请稍后重试！",
+    "saveNetworkErrorAlert": "保存失败，请检查网络连接或稍后重试！",
+    "categories": {
+      "arts_and_creativity": {
+        "title": "艺术与创意",
+        "options": {
+          "painting": "绘画",
+          "sculpture": "雕塑",
+          "photography": "摄影",
+          "music_composition": "音乐创作",
+          "playing_instruments": "演奏乐器",
+          "writing": "写作",
+          "filmmaking": "电影制作",
+          "theater_performance": "戏剧表演"
+        }
+      },
+      "sports_and_fitness": {
+        "title": "体育与健身",
+        "options": {
+          "running": "跑步",
+          "swimming": "游泳",
+          "gym_training": "健身房训练",
+          "yoga": "瑜伽",
+          "outdoor_sports": "户外运动（登山、徒步）",
+          "cycling": "自行车运动",
+          "team_sports": "团队运动（足球、篮球等）",
+          "martial_arts": "武术"
+        }
+      },
+      "social_and_entertainment": {
+        "title": "社交与娱乐",
+        "options": {
+          "gathering": "聚会",
+          "traveling": "旅行",
+          "cooking": "烹饪",
+          "bar_cafe_experience": "酒吧/咖啡馆体验",
+          "esports_gaming": "电子竞技/游戏",
+          "watching_sports": "看体育赛事",
+          "entertainment_events": "娱乐活动（音乐会、展览）",
+          "book_club": "读书俱乐部"
+        }
+      },
+      "tech_and_innovation": {
+        "title": "科技与创新",
+        "options": {
+          "programming": "编程",
+          "electronics": "电子产品爱好者",
+          "tech_blogs_podcasts": "技术博客/播客",
+          "robotics": "机器人技术",
+          "3d_printing": "3D打印",
+          "virtual_reality": "虚拟现实",
+          "augmented_reality": "增强现实",
+          "open_source": "开源项目参与"
+        }
+      },
+      "learning_and_knowledge": {
+        "title": "学习与知识",
+        "options": {
+          "online_education": "在线教育",
+          "academic_research": "学术研究",
+          "language_learning": "语言学习",
+          "scientific_experiments": "科学实验",
+          "history_research": "历史研究",
+          "philosophy_discussion": "哲学讨论",
+          "art_history": "艺术史",
+          "cultural_studies": "文化研究"
+        }
+      },
+      "crafts_and_hobbies": {
+        "title": "手工与工艺",
+        "options": {
+          "knitting": "编织",
+          "sewing": "缝纫",
+          "woodworking": "木工",
+          "gardening": "园艺",
+          "pottery": "陶艺",
+          "jewelry_making": "珠宝制作",
+          "diy_decor": "DIY家居装饰",
+          "model_making": "模型制作"
+        }
+      },
+      "wellness_and_health": {
+        "title": "身心健康",
+        "options": {
+          "meditation": "冥想",
+          "mental_health_practices": "心理健康实践",
+          "nutrition": "营养学",
+          "natural_therapies": "自然疗法",
+          "yoga": "瑜伽",
+          "tai_chi": "太极",
+          "health_management": "健康管理",
+          "stress_relief": "减压技巧"
+        }
+      },
+      "media_and_pop_culture": {
+        "title": "媒体与流行文化",
+        "options": {
+          "movies_series": "电影/电视剧",
+          "podcasts": "播客",
+          "music_listening": "音乐听赏",
+          "pop_culture_tracking": "流行文化追踪",
+          "anime_comics": "动漫/漫画",
+          "social_media_content": "社交媒体内容创作",
+          "streaming": "直播",
+          "pop_culture_discussion": "流行文化讨论"
+        }
+      }
+    }
+  },
+  "socialSupportPage": {
+    "socialNetworkSizeTitle": "社交网络规模",
+    "friendsLabel": "亲密朋友数量：",
+    "familyLabel": "经常联系的家庭成员数量：",
+    "socialContactFrequencyTitle": "社交联系频率",
+    "meetFrequencyLabel": "与朋友/家庭见面的频率：",
+    "selectOption": "请选择",
+    "numberOptions": {
+      "0": "0",
+      "1-3": "1-3",
+      "4-10": "4-10",
+      "10+": "10+"
+    },
+    "frequencyOptions": {
+      "daily": "每天",
+      "weekly": "每周",
+      "monthly": "每月",
+      "less": "更少"
+    },
+    "saveButton": "保存",
+    "savingButton": "保存中...",
+    "saveSuccessAlert": "保存成功！",
+    "saveErrorAlert": "保存社交支持失败，请稍后重试！",
+    "saveNetworkErrorAlert": "保存失败，请检查网络连接或稍后重试！"
+  },
+  "recentEventsPage": {
+    "loadingMessage": "加载中...",
+    "saveButton": "保存",
+    "savingButton": "保存中...",
+    "saveSuccessAlert": "保存成功！",
+    "saveErrorAlert": "保存近期生活事件失败，请稍后重试！",
+    "saveNetworkErrorAlert": "保存失败，请检查网络连接或稍后重试！",
+    "sections": {
+      "moving": {
+        "title": "搬家",
+        "label": "是否最近搬了新家？"
+      },
+      "careerAndEducation": {
+        "title": "工作或学业变化",
+        "jobChangeLabel": "失业或换工作？",
+        "promotionLabel": "升职或降职？",
+        "studyChangeLabel": "开始或结束学业？"
+      },
+      "relationships": {
+        "title": "人际关系",
+        "marriageLabel": "结婚或离婚？",
+        "newBabyLabel": "新生儿的到来或孩子离家？",
+        "relationshipChangeLabel": "新的亲密关系或关系结束？",
+        "bereavementLabel": "是否有亲人或非常亲近的朋友去世？"
+      },
+      "health": {
+        "title": "健康问题",
+        "healthIssueLabel": "是否自己或家人经历了重大健康问题或诊断？"
+      },
+      "finance": {
+        "title": "财务状况变化",
+        "financialChangeLabel": "重大财务问题或改善？"
+      },
+      "other": {
+        "title": "其他重大事件",
+        "placeholder": "请描述其他未列出的重大事件"
+      }
+    }
+  },
+  "chat": {
+    "input": {
+      "placeholder": "输入您的消息...",
+      "sendButton": "发送",
+      "sendingButton": "发送中..."
+    },
+    "loading": "加载中...",
+    "header": {
+      "clearChat": "清除聊天"
+    },
+    "confirmationModal": {
+      "confirmClear": "您确定要清除聊天记录吗？",
+      "cancel": "取消",
+      "confirm": "确认"
+    }
+  },
+  "prompts": {
+    "noPrompt": "无提示",
+    "none": "无",
+    "notProvided": "未填写",
+    "yes": "是",
+    "no": "否",
+    "user": "用户",
+    "basicInfo": "基本信息：",
+    "name": "名字：",
+    "ageGroup": "年龄范围：",
+    "gender": "性别：",
+    "occupation": "职业：",
+    "lifeEnvironment": "生活环境与压力源：",
+    "healthCondition": "健康状况：",
+    "interests": "兴趣与爱好：",
+    "socialSupportTitle": "社交支持系统：",
+    "socialSupport": {
+      "family": "经常联系的家庭成员数量：",
+      "friends": "好友数量：",
+      "meetFrequency": "与朋友/家人见面的频率："
+    },
+    "recentEvents": "近期经历的重大事件：",
+    "goalsPrefix": "希望达成如下目标：",
+    "environment": {
+      "stressLevel": "工作或学习压力：",
+      "relationshipStress": "家庭关系或个人关系状况：",
+      "financialStress": "经济压力：",
+      "sleepQuality": "睡眠质量：",
+      "additionalDetails": "其他详情："
+    },
+    "recentEventsDetails": {
+      "moving": "最近搬了新家",
+      "jobChange": "失业或换工作",
+      "promotion": "升职或降职",
+      "studyChange": "开始或结束学业",
+      "marriage": "结婚或离婚",
+      "newBaby": "新生儿的到来或孩子离家",
+      "relationshipChange": "新的亲密关系或关系结束",
+      "bereavement": "有亲人或非常亲近的朋友去世",
+      "healthIssue": "自己或家人经历了重大健康问题或诊断",
+      "financialChange": "重大财务问题或改善",
+      "other": "其他重大事件："
+    },
+    "stressLevels": {
+      "low": "低",
+      "medium": "中",
+      "high": "高"
+    },
+    "relationshipTypes": {
+      "spouse": "配偶",
+      "parents": "父母",
+      "children": "子女",
+      "friends": "朋友"
+    },
+    "relationshipStatuses": {
+      "harmonious": "和谐",
+      "tense": "紧张",
+      "conflicted": "冲突",
+      "distant": "疏远"
+    },
+    "financialStresses": {
+      "no_stress": "无压力",
+      "moderate_stress": "有一定压力",
+      "high_stress": "压力很大"
+    },
+    "sleepQualities": {
+      "good": "很好",
+      "average": "一般",
+      "poor": "差"
+    },
+    "healthConditionTitle": "健康状况：",
+    "mentalHealthHistory": "心理健康历史：",
+    "isReceivingTreatment": "是否在接受心理健康治疗：",
+    "mentalHealthOptions": {
+      "depression": "抑郁",
+      "anxiety": "焦虑",
+      "bipolar": "双相情感障碍",
+      "ptsd": "创伤后应激障碍",
+      "ocd": "强迫症",
+      "other": "其他"
+    },
+    "healthConditionPage": {
+      "mentalHealthHistoryTitle": "心理健康历史",
+      "mentalHealthOptions": {
+        "depression": "抑郁",
+        "anxiety": "焦虑",
+        "bipolar": "双相情感障碍",
+        "ptsd": "PTSD",
+        "ocd": "OCD",
+        "other": "其他"
+      },
+      "otherSpecify": "其他（请指定）：",
+      "treatmentQuestion": "你目前是否在接受心理健康方面的治疗？",
+      "yes": "是",
+      "no": "否",
+      "saveButton": "保存",
+      "saveSuccessAlert": "保存成功！",
+      "saveErrorAlert": "保存失败，请稍后重试！",
+      "saveNetworkErrorAlert": "保存失败，请检查网络连接或稍后重试！"
+    },
+    "interestsSection": "兴趣与爱好：",
+    "interestCategories": {
+      "arts_and_creativity": "艺术与创意",
+      "sports_and_fitness": "体育与健身",
+      "social_and_entertainment": "社交与娱乐",
+      "tech_and_innovation": "科技与创新",
+      "learning_and_knowledge": "学习与知识",
+      "crafts_and_hobbies": "手工与工艺",
+      "wellness_and_health": "身心健康",
+      "media_and_pop_culture": "媒体与流行文化"
+    },
+    "interestOptions": {
+      "arts_and_creativity": {
+        "painting": "绘画",
+        "sculpture": "雕塑",
+        "photography": "摄影",
+        "music_composition": "音乐创作",
+        "playing_instruments": "演奏乐器",
+        "writing": "写作",
+        "filmmaking": "电影制作",
+        "theater_performance": "戏剧表演"
+      },
+      "sports_and_fitness": {
+        "running": "跑步",
+        "swimming": "游泳",
+        "gym_training": "健身房训练",
+        "yoga": "瑜伽",
+        "outdoor_sports": "户外运动（登山、徒步）",
+        "cycling": "自行车运动",
+        "team_sports": "团队运动（足球、篮球等）",
+        "martial_arts": "武术"
+      },
+      "social_and_entertainment": {
+        "gathering": "聚会",
+        "traveling": "旅行",
+        "cooking": "烹饪",
+        "bar_cafe_experience": "酒吧/咖啡馆体验",
+        "esports_gaming": "电子竞技/游戏",
+        "watching_sports": "看体育赛事",
+        "entertainment_events": "娱乐活动（音乐会、展览）",
+        "book_club": "读书俱乐部"
+      },
+      "tech_and_innovation": {
+        "programming": "编程",
+        "electronics": "电子产品爱好者",
+        "tech_blogs_podcasts": "技术博客/播客",
+        "robotics": "机器人技术",
+        "3d_printing": "3D打印",
+        "virtual_reality": "虚拟现实",
+        "augmented_reality": "增强现实",
+        "open_source": "开源项目参与"
+      },
+      "learning_and_knowledge": {
+        "online_education": "在线教育",
+        "academic_research": "学术研究",
+        "language_learning": "语言学习",
+        "scientific_experiments": "科学实验",
+        "history_research": "历史研究",
+        "philosophy_discussion": "哲学讨论",
+        "art_history": "艺术史",
+        "cultural_studies": "文化研究"
+      },
+      "crafts_and_hobbies": {
+        "knitting": "编织",
+        "sewing": "缝纫",
+        "woodworking": "木工",
+        "gardening": "园艺",
+        "pottery": "陶艺",
+        "jewelry_making": "珠宝制作",
+        "diy_decor": "DIY家居装饰",
+        "model_making": "模型制作"
+      },
+      "wellness_and_health": {
+        "meditation": "冥想",
+        "mental_health_practices": "心理健康实践",
+        "nutrition": "营养学",
+        "natural_therapies": "自然疗法",
+        "yoga": "瑜伽",
+        "tai_chi": "太极",
+        "health_management": "健康管理",
+        "stress_relief": "减压技巧"
+      },
+      "media_and_pop_culture": {
+        "movies_series": "电影/电视剧",
+        "podcasts": "播客",
+        "music_listening": "音乐听赏",
+        "pop_culture_tracking": "流行文化追踪",
+        "anime_comics": "动漫/漫画",
+        "social_media_content": "社交媒体内容创作",
+        "streaming": "直播",
+        "pop_culture_discussion": "流行文化讨论"
+      },
+      "socialSupportTitle": "社交支持系统：",
+      "socialSupport": {
+        "family": "经常联系的家庭成员数量：",
+        "friends": "好友数量：",
+        "meetFrequency": "与朋友/家人见面的频率：",
+        "numberOptions": {
+          "0": "0",
+          "1-3": "1-3",
+          "4-10": "4-10",
+          "10+": "10+"
+        },
+        "frequencyOptions": {
+          "daily": "每天",
+          "weekly": "每周",
+          "monthly": "每月",
+          "less": "更少"
+        }
+      },
+      "socialSupportPage": {
+        "socialNetworkSizeTitle": "社交网络规模",
+        "friendsLabel": "亲密朋友数量：",
+        "familyLabel": "经常联系的家庭成员数量：",
+        "socialContactFrequencyTitle": "社交联系频率",
+        "meetFrequencyLabel": "与朋友/家人见面的频率：",
+        "selectOption": "请选择",
+        "numberOptions": {
+          "0": "0",
+          "1-3": "1-3",
+          "4-10": "4-10",
+          "10+": "10+"
+        },
+        "frequencyOptions": {
+          "daily": "每天",
+          "weekly": "每周",
+          "monthly": "每月",
+          "less": "更少"
+        }
+      }
+    }
+  }
+}

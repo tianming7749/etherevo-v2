@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from 'react-i18next';
 
 interface StressLevelSelectorProps {
   value: string;
@@ -9,21 +10,23 @@ const StressLevelSelector: React.FC<StressLevelSelectorProps> = ({
   value,
   onChange,
 }) => {
-  const options = ["低", "中", "高"];
+  const { t } = useTranslation();
+  const options = t('stressLevelSelector.options', { returnObjects: true }) as Record<string, string>;
+  const optionKeys = Object.keys(options);
 
   return (
     <div>
-      <h3>工作或学习压力</h3>
-      {options.map((option) => (
-        <label key={option} style={{ marginRight: "10px" }}>
+      <h3>{t('stressLevelSelector.title')}</h3>
+      {optionKeys.map((key) => (
+        <label key={key} style={{ marginRight: "10px" }}>
           <input
             type="radio"
             name="stress_level"
-            value={option}
-            checked={value === option}
+            value={key}
+            checked={value === key}
             onChange={(e) => onChange(e.target.value)}
           />
-          {option}
+          {options[key]}
         </label>
       ))}
     </div>

@@ -12,7 +12,7 @@ const useSessionManager = ({ userId }) => {
           .from('sessions')
           .select('session_id')
           .eq('user_id', userId)
-          .order('created_at', { ascending: false })
+          .order('start_time', { ascending: false })
           .limit(1)
           .single();
 

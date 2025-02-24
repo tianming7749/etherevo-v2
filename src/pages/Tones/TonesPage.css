@@ -3,7 +3,7 @@
 .tones-page {
   font-family: 'Arial', sans-serif;
   max-width: 800px;
-  margin: 0 auto;
+  margin: var(--navbar-height) auto 0; /* 从导航栏下方开始 */
   padding: 20px;
   background-color: #f9f9f9;
   border-radius: 8px;

@@ -1,53 +1,55 @@
 import React, { useState } from "react";
+import { useTranslation } from 'react-i18next';
 
 interface GenderSelectorProps {
   value: string;
+  otherValue: string; // 添加 otherValue 属性
   onChange: (field: string, value: string) => void;
+  onOtherChange: (value: string) => void; // 添加 onOtherChange 属性
 }
 
-const GenderSelector: React.FC<GenderSelectorProps> = ({ value, onChange }) => {
-  const [otherGender, setOtherGender] = useState<string>("");
+const GenderSelector: React.FC<GenderSelectorProps> = ({ value, otherValue, onChange, onOtherChange }) => {
+  const { t } = useTranslation();
+  const genderOptions = t('genderSelector.options', { returnObjects: true }) as Record<string, string>;
+  const optionKeys = Object.keys(genderOptions);
 
   const handleGenderChange = (selectedValue: string) => {
     onChange("gender", selectedValue);
-    if (selectedValue !== "其他") {
-      setOtherGender("");
-      onChange("gender_other", "");
+    if (selectedValue !== "other") {
+      onOtherChange("");
     }
   };
 
   const handleOtherGenderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value;
-    setOtherGender(inputValue);
-    onChange("gender_other", inputValue);
+    onOtherChange(inputValue);
   };
 
   return (
     <div>
-      <label>性别：</label>
+      <label>{t('genderSelector.label')}</label>
       <select value={value} onChange={(e) => handleGenderChange(e.target.value)}>
-        <option value="">请选择</option>
-        <option value="男性">男性</option>
-        <option value="女性">女性</option>
-        <option value="非二元性别">非二元性别</option>
-        <option value="其他">其他（请说明）</option>
-        <option value="不愿分享">不愿分享</option>
+        {optionKeys.map((key) => (
+          <option key={key} value={key}>
+            {genderOptions[key]}
+          </option>
+        ))}
       </select>
 
-      {value === "其他" && (
+      {value === "other" && (
         <div>
-          <label>请说明：</label>
+          <label>{t('genderSelector.otherLabel')}</label>
           <input
             type="text"
-            value={otherGender}
+            value={otherValue}
             onChange={handleOtherGenderChange}
-            placeholder="请输入具体描述"
+            placeholder={t('genderSelector.placeholder')}
           />
         </div>
       )}
 
       <p style={{ fontSize: "0.9em", color: "#555" }}>
-        提示：分享你的性别帮助我们调整对话内容，以更贴近你的体验和需求。
+        {t('genderSelector.hint')}
       </p>
     </div>
   );

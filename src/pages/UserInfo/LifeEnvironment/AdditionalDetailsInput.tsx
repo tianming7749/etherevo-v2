@@ -1,22 +1,24 @@
 import React from "react";
+import { useTranslation } from 'react-i18next';
 
 interface AdditionalDetailsInputProps {
   value: string;
-  onChange: (field: string, value: string) => void;
+  onChange: (value: string) => void; // 修改为直接接受 value 参数，与 LifeEnvironment 兼容
 }
 
 const AdditionalDetailsInput: React.FC<AdditionalDetailsInputProps> = ({
   value,
   onChange,
 }) => {
+  const { t } = useTranslation();
+
   return (
     <div>
-      <label>其他：</label>
+      <label>{t('additionalDetailsInput.label')}</label>
       <textarea
-        onChange={(e) => {
-          onChange(e.target.value); 
-        }}
-        placeholder="如果你愿意，请简要描述你的压力源或健康问题..."
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder={t('additionalDetailsInput.placeholder')}
         rows={4}
         style={{ width: "100%", padding: "10px" }}
       />

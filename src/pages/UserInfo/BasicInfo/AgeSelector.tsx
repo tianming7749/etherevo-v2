@@ -1,24 +1,29 @@
 import React from "react";
+import { useTranslation } from 'react-i18next';
 
 interface AgeSelectorProps {
   value: string;
   onChange: (value: string) => void;
 }
 
-const AgeSelector: React.FC<AgeSelectorProps> = ({ value, onChange }) => (
-  <div>
-    <label>年龄：</label>
-    <select value={value} onChange={(e) => onChange(e.target.value)}>
-      <option value="">请选择</option>
-      <option value="18以下">18以下</option>
-      <option value="18-24">18-24</option>
-      <option value="25-34">25-34</option>
-      <option value="35-44">35-44</option>
-      <option value="45-54">45-54</option>
-      <option value="55-64">55-64</option>
-      <option value="65以上">65以上</option>
-    </select>
-  </div>
-);
+const AgeSelector: React.FC<AgeSelectorProps> = ({ value, onChange }) => {
+  const { t } = useTranslation();
+  const ageOptions = t('ageSelector.options', { returnObjects: true }) as Record<string, string>;
+  const optionKeys = Object.keys(ageOptions);
+
+  return (
+    <div>
+      <label>{t('ageSelector.label')}</label>
+      <select value={value} onChange={(e) => onChange(e.target.value)}>
+        <option value="">{t('ageSelector.placeholder')}</option>
+        {optionKeys.map((key) => (
+          <option key={key} value={key}>
+            {ageOptions[key]}
+          </option>
+        ))}
+      </select>
+    </div>
+  );
+};
 
 export default AgeSelector;

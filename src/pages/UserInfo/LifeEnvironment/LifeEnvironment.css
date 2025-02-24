@@ -11,21 +11,22 @@
 }
 
 .life-environment h2 {
-  color: #333;
+  color: #333333;
   text-align: center;
   margin-bottom: 30px;
 }
 
 /* 选择器和输入框的统一样式 */
 .life-environment select,
-.life-environment input[type="text"] {
-  width: 100%;
-  max-width: 300px;
+.life-environment input[type="text"],
+.life-environment input[type="radio"] { /* 确保单选按钮也应用宽度和内边距 */
+  width: auto; /* 修改为 auto，让单选按钮根据内容自适应宽度 */
   padding: 10px;
   margin: 10px 0;
   border: 1px solid #ddd;
   border-radius: 4px;
   font-size: 16px;
+  vertical-align: middle; /*  垂直居中单选按钮和文本 */
 }
 
 /* 自定义选择器组件的样式 */
@@ -37,45 +38,35 @@
   margin-bottom: 20px;
 }
 
-/* 特别为睡眠质量和饮食习惯添加的样式 */
-.health-status-selector label {
-  display: block;
-  margin-top: 10px;
-  margin-bottom: 5px;
-}
-
-.button-group {
+/* 睡眠质量选项水平排列样式  */
+.health-status-selector .sleep-options-row {
   display: flex;
-  gap: 5px; /* 减少按钮间距以使其更为紧凑 */
+  flex-direction: row;
+  align-items: center; /* 垂直居中对齐 */
 }
 
-.sleep-quality-button,
-.diet-satisfaction-button {
-  padding: 5px 10px; /* 减小按钮padding以使其更小 */
-  border: 1px solid #405367;
-  border-radius: 3px; /* 减少圆角大小 */
-  cursor: pointer;
-  font-size: 15px; /* 减小字体大小 */
-  transition: background-color 0.3s;
+/* 睡眠质量选项 label 样式 */
+.health-status-selector .sleep-options-row label {
+  margin-right: 20px; /* 增加 label 之间的水平间距 */
+  display: flex; /* 使 label 成为 flex 容器，用于对齐 radio 和 text */
+  align-items: center; /* 垂直居中 label 内的 radio 和 text */
 }
 
-.sleep-quality-button {
-  background-color: #a3a3a3;
+/*  用户信息导航按钮容器样式 -  请将 .user-info-buttons 替换为您实际的容器类名 */
+.user-info-buttons {
+  display: flex; /* 启用 Flexbox 布局 */
+  flex-wrap: wrap; /* 允许按钮在空间不足时换行 */
+  justify-content: center; /* 水平方向居中对齐按钮 (可选) */
+  margin-bottom: 20px; /*  可以根据需要添加外边距，和其他内容隔开 */
 }
 
-.sleep-quality-selected {
-  background-color: #6c9aff;
-  color: white;
+/* 用户信息导航按钮样式 -  请将 .user-info-buttons button 替换为您实际的按钮选择器 */
+.user-info-buttons button {
+  margin: 5px; /* 按钮间距 */
+  padding: 10px 15px; /*  按钮内边距 */
+  font-size: 16px; /*  按钮字体大小 */
 }
 
-.diet-satisfaction-button {
-  background-color: #a3a3a3;
-}
-
-.diet-satisfaction-selected {
-  background-color: #6c9aff;
-  color: white;
-}
 
 /* 按钮样式 */
 .save-button {
@@ -92,7 +83,6 @@
 
 .save-button:hover {
   background-color: #0279f0;
-  
 }
 
 .save-button:disabled {
@@ -106,4 +96,29 @@
   padding: 20px;
   font-size: 18px;
   color: #666;
+}
+
+/* 媒体查询，针对小屏幕设备 (最大宽度 768px) */
+@media (max-width: 768px) {
+  /*  调整用户信息导航按钮容器在小屏幕下的对齐方式 */
+  .user-info-buttons {
+    justify-content: space-around; /*  例如： 分散对齐 */
+  }
+
+  /* 减小用户信息导航按钮在小屏幕下的字体和内边距 */
+  .user-info-buttons button {
+    font-size: 14px;
+    padding: 8px 12px;
+  }
+
+  /*  如果需要，您可以在小屏幕下调整 life-environment 组件自身的内边距和字体大小 */
+  .life-environment {
+    padding: 15px; /*  减小 padding */
+    font-size: 15px; /* 减小整体字体大小 */
+  }
+
+  .life-environment h2 {
+    margin-bottom: 20px; /*  减小标题下外边距 */
+    font-size: 24px; /*  减小标题字体大小 */
+  }
 }

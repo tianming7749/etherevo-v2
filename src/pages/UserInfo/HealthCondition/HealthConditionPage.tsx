@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { saveBasicInfo } from "../../../api/userInfo";
-import { generatePromptsForUser } from "../../../utils/generatePrompts";  // 引入生成提示词的功能
+import { generatePromptsForUser } from "../../../utils/generatePrompts";
 import { useUserContext } from "../../../context/UserContext";
 import { supabase } from "../../../supabaseClient";
 import "./HealthConditionPage.css";
+import { useTranslation } from 'react-i18next';
 
 const HealthConditionPage = () => {
   const { userId } = useUserContext();
@@ -13,12 +14,13 @@ const HealthConditionPage = () => {
   });
 
   const [loading, setLoading] = useState(false);
+  const { t } = useTranslation();
 
   const options = {
-    mentalHealthHistory: ["抑郁", "焦虑", "双相情感障碍", "PTSD", "OCD", "其他"],
+    mentalHealthHistory: t('healthConditionPage.mentalHealthOptions', { returnObjects: true }) as Record<string, string>,
   };
+  const mentalHealthKeys = Object.keys(options.mentalHealthHistory);
 
-  // 获取用户保存的数据
   useEffect(() => {
     const fetchHealthCondition = async () => {
       if (!userId) return;
@@ -29,7 +31,7 @@ const HealthConditionPage = () => {
         .eq("user_id", userId)
         .single();
 
-      if (data && data.health_condition) { // 确保 data 和 data.health_condition 存在
+      if (data && data.health_condition) {
         setHealthCondition({
           mentalHealthHistory: data.health_condition.mentalHealthHistory || [],
           isReceivingTreatment: data.health_condition.isReceivingTreatment || false,
@@ -43,19 +45,17 @@ const HealthConditionPage = () => {
     fetchHealthCondition();
   }, [userId]);
 
-  // 保存数据到数据库
   const saveHealthCondition = async () => {
     if (!userId) return;
 
     setLoading(true);
 
     try {
-      // Step 1: 保存健康状况数据到数据库
       const { error } = await supabase
         .from("user_health_condition")
         .upsert({
           user_id: userId,
-          health_condition: { //  <--  手动创建 health_condition 对象
+          health_condition: {
             mentalHealthHistory: healthCondition.mentalHealthHistory,
             isReceivingTreatment: healthCondition.isReceivingTreatment,
           },
@@ -63,110 +63,103 @@ const HealthConditionPage = () => {
 
       if (error) {
         console.error("Error saving health condition:", error);
-        alert("保存失败，请稍后重试！");
+        alert(t('healthConditionPage.saveErrorAlert'));
         return;
       }
 
-      alert("保存成功！");
+      const updatedPrompt = await generatePromptsForUser(userId);
 
-        const updatedPrompt = await generatePromptsForUser(userId);
+      const { error: savePromptError } = await supabase
+        .from("user_prompts_summary")
+        .upsert({
+          user_id: userId,
+          full_prompt: updatedPrompt,
+        }, { onConflict: ["user_id"] });
 
-        const { error: savePromptError } = await supabase
-            .from("user_prompts_summary")
-            .upsert({
-              user_id: userId,
-              full_prompt: updatedPrompt,
-            },
-            { onConflict: ["user_id"] }  // 确保只有相同 user_id 的记录才会被更新
-          );
-
-        if (savePromptError) {
-          console.error("保存提示词失败：", savePromptError.message);
-        } else {
-          console.log("提示词已成功保存");
-        }
-
-        // 提示用户保存成功
-        //alert("健康状况保存成功！提示词已更新并保存！");
-      } catch (error) {
-        console.error("保存过程中发生错误：", error);
-        alert("保存失败，请检查网络连接或稍后重试！");
-      } finally {
-        setLoading(false); // 重置保存状态
+      if (savePromptError) {
+        console.error("保存提示词失败：", savePromptError.message);
+      } else {
+        console.log("提示词已成功保存");
       }
+
+      alert(t('healthConditionPage.saveSuccessAlert'));
+    } catch (error) {
+      console.error("保存过程中发生错误：", error);
+      alert(t('healthConditionPage.saveNetworkErrorAlert'));
+    } finally {
+      setLoading(false);
+    }
   };
 
-  // 处理输入变化
   const handleChange = (field: string, value: any) => {
     setHealthCondition((prev) => ({ ...prev, [field]: value }));
   };
 
   return (
     <div className="health-condition-container">
-      <h2>健康状况</h2>
-        <form>
-          <h3>心理健康历史</h3>
+      <form>
+        <h3>{t('healthConditionPage.mentalHealthHistoryTitle')}</h3>
+        <div>
+          {mentalHealthKeys.map((key) => (
+            <label key={key}>
+              <input
+                type="checkbox"
+                checked={healthCondition.mentalHealthHistory.includes(key)}
+                onChange={(e) => {
+                  const updatedList = e.target.checked
+                    ? [...healthCondition.mentalHealthHistory, key]
+                    : healthCondition.mentalHealthHistory.filter((item) => item !== key);
+                  handleChange("mentalHealthHistory", updatedList);
+                }}
+              />
+              {options.mentalHealthHistory[key]}
+            </label>
+          ))}
           <div>
-            {options.mentalHealthHistory.map((option) => (
-              <label key={option}>
-                <input
-                  type="checkbox"
-                  checked={healthCondition.mentalHealthHistory.includes(option)}
-                  onChange={(e) => {
-                    const updatedList = e.target.checked
-                      ? [...healthCondition.mentalHealthHistory, option]
-                      : healthCondition.mentalHealthHistory.filter((item) => item !== option);
-                    handleChange("mentalHealthHistory", updatedList);
-                  }}
-                />
-                {option}
-              </label>
-            ))}
-            <div>
-              <label>
-                其他（请指定）:
-                <input
-                  type="text"
-                  value={
-                    healthCondition.mentalHealthHistory.find((item) =>
-                      item.startsWith("其他:")
-                    )?.replace("其他:", "") || ""
-                  }
-                  onChange={(e) => {
-                    const othersText = `其他:${e.target.value}`;
-                    const updatedList = healthCondition.mentalHealthHistory.filter(
-                      (item) => !item.startsWith("其他:")
-                    );
-                    if (e.target.value.trim()) updatedList.push(othersText);
-                    handleChange("mentalHealthHistory", updatedList);
-                  }}
-                />
-              </label>
-            </div>
+            <label>
+              {t('healthConditionPage.otherSpecify')}
+              <input
+                type="text"
+                value={
+                  healthCondition.mentalHealthHistory.find((item) =>
+                    item.startsWith("other:")
+                  )?.replace("other:", "") || ""
+                }
+                onChange={(e) => {
+                  const othersText = `other:${e.target.value}`;
+                  const updatedList = healthCondition.mentalHealthHistory.filter(
+                    (item) => !item.startsWith("other:")
+                  );
+                  if (e.target.value.trim()) updatedList.push(othersText);
+                  handleChange("mentalHealthHistory", updatedList);
+                }}
+              />
+            </label>
           </div>
+        </div>
 
-          <h3>你目前是否在接受心理健康方面的治疗？</h3>
-          <label>
-            <input
-              type="radio"
-              checked={healthCondition.isReceivingTreatment === true}
-              onChange={() => handleChange("isReceivingTreatment", true)}
-            />
-            是
-          </label>
-          <label>
-            <input
-              type="radio"
-              checked={healthCondition.isReceivingTreatment === false}
-              onChange={() => handleChange("isReceivingTreatment", false)}
-            />
-            否
-          </label>
+        <h3>{t('healthConditionPage.treatmentQuestion')}</h3>
+        <label>
+          <input
+            type="radio"
+            checked={healthCondition.isReceivingTreatment === true}
+            onChange={() => handleChange("isReceivingTreatment", true)}
+          />
+          {t('healthConditionPage.yes')}
+        </label>
+        <label>
+          <input
+            type="radio"
+            checked={healthCondition.isReceivingTreatment === false}
+            onChange={() => handleChange("isReceivingTreatment", false)}
+          />
+          {t('healthConditionPage.no')}
+        </label>
 
-          <button type="button" onClick={saveHealthCondition}>
-            保存
-          </button>
-        </form>
+        <button type="button" onClick={saveHealthCondition} disabled={loading}>
+          {t('healthConditionPage.saveButton')}
+        </button>
+      </form>
     </div>
   );
 };

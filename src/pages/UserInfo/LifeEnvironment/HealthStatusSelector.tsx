@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from 'react-i18next';
 
 interface HealthStatusSelectorProps {
   sleepQuality: string;
@@ -9,26 +10,26 @@ const HealthStatusSelector: React.FC<HealthStatusSelectorProps> = ({
   sleepQuality,
   onChange,
 }) => {
-  const sleepOptions = ["很好", "一般", "差"];
-
-  const getSleepQualityClass = (option: string) => {
-    return `sleep-quality-button ${sleepQuality === option ? 'sleep-quality-selected' : ''}`;
-  };
+  const { t } = useTranslation();
+  const sleepOptions = t('healthStatusSelector.sleepOptions', { returnObjects: true }) as Record<string, string>;
+  const optionKeys = Object.keys(sleepOptions);
 
   return (
     <div className="health-status-selector">
-      <label>健康状况：</label>
       <div>
-        <label>睡眠质量：</label>
-        <div className="button-group">
-          {sleepOptions.map((option) => (
-            <button
-              key={option}
-              className={getSleepQualityClass(option)}
-              onClick={() => onChange("sleep_quality", option)}
-            >
-              {option}
-            </button>
+        <h3>{t('healthStatusSelector.sleepQualityTitle')}</h3>
+        <div>
+          {optionKeys.map((key) => (
+            <label key={key} style={{ marginRight: "10px" }}>
+              <input
+                type="radio"
+                name="sleep_quality"
+                value={key}
+                checked={sleepQuality === key}
+                onChange={(e) => onChange("sleep_quality", e.target.value)}
+              />
+              {sleepOptions[key]}
+            </label>
           ))}
         </div>
       </div>

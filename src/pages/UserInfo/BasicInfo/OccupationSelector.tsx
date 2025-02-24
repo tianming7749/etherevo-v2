@@ -1,63 +1,67 @@
 import React from "react";
+import { useTranslation } from 'react-i18next';
 
 interface OccupationSelectorProps {
-  value: string; // 主职业字段的值
-  otherValue: string; // “其他”选项对应的说明值
-  onChange: (field: string, value: string) => void; // 更新父组件状态的回调函数
+  value: string;
+  otherValue: string;
+  onChange: (field: string, value: string) => void;
+  onOtherChange?: (value: string) => void; // 可选属性，与 BasicInfo 兼容
 }
-
-const occupationOptions = [
-  "学生",
-  "全职工作",
-  "兼职工作",
-  "自由职业者",
-  "退休",
-  "无工作/失业",
-  "其他",
-];
 
 const OccupationSelector: React.FC<OccupationSelectorProps> = ({
   value,
   otherValue,
   onChange,
+  onOtherChange,
 }) => {
+  const { t } = useTranslation();
+  const occupationOptions = t('occupationSelector.options', { returnObjects: true }) as Record<string, string>;
+  const optionKeys = Object.keys(occupationOptions);
+
   const handleOccupationChange = (selectedValue: string) => {
     onChange("occupation", selectedValue);
-    // 如果用户选择的不是“其他”，清空其他说明字段
-    if (selectedValue !== "其他") {
-      onChange("occupation_other", "");
+    if (selectedValue !== "other") {
+      if (onOtherChange) {
+        onOtherChange(""); // 如果有 onOtherChange，则调用
+      } else {
+        onChange("occupation_other", ""); // 否则直接通过 onChange 清空
+      }
     }
   };
 
-  const handleOtherChange = (text: string) => {
-    onChange("occupation_other", text);
+  const handleOtherChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const text = e.target.value;
+    if (onOtherChange) {
+      onOtherChange(text); // 如果有 onOtherChange，则调用
+    } else {
+      onChange("occupation_other", text); // 否则通过 onChange 更新
+    }
   };
 
   return (
     <div>
-      <h3>职业（或学生）</h3>
-      <label>你目前从事什么职业，或者你是学生吗？</label>
+      <h3>{t('occupationSelector.title')}</h3>
+      <label>{t('occupationSelector.label')}</label>
       <select value={value} onChange={(e) => handleOccupationChange(e.target.value)}>
-        <option value="">请选择</option>
-        {occupationOptions.map((option) => (
-          <option key={option} value={option}>
-            {option}
+        {optionKeys.map((key) => (
+          <option key={key} value={key}>
+            {occupationOptions[key]}
           </option>
         ))}
       </select>
-      {value === "其他" && (
+      {value === "other" && (
         <div>
-          <label>其他（请说明）：</label>
+          <label>{t('occupationSelector.otherLabel')}</label>
           <input
             type="text"
             value={otherValue}
-            onChange={(e) => handleOtherChange(e.target.value)}
-            placeholder="请描述你的职业状态"
+            onChange={handleOtherChange}
+            placeholder={t('occupationSelector.placeholder')}
           />
         </div>
       )}
       <p style={{ fontSize: "0.9em", color: "#555" }}>
-        提示：了解你的职业状态可以让我们更有效地讨论与工作或学习相关的心理健康问题。
+        {t('occupationSelector.hint')}
       </p>
     </div>
   );

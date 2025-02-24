@@ -2,6 +2,9 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import "./Navbar.css";
 import { supabase } from "../supabaseClient";
+import { useTranslation } from 'react-i18next';
+import i18n from '../i18n'; //  ✅ 导入 i18n 实例
+
 
 interface NavbarProps {
   activeButton: string;
@@ -9,6 +12,8 @@ interface NavbarProps {
 }
 
 const Navbar: React.FC<NavbarProps> = ({ activeButton, onButtonClick }) => {
+  const { t } = useTranslation(); //  获取 t 函数
+
   const handleLogout = async () => {
     const { error } = await supabase.auth.signOut();
     if (!error) {
@@ -21,77 +26,71 @@ const Navbar: React.FC<NavbarProps> = ({ activeButton, onButtonClick }) => {
 
   return (
     <nav
-      style={{
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        backgroundColor: "#4682B4",
-        padding: "10px 20px",
-        borderRadius: "8px",
-        color: "white",
-        width: "96vw",
-      }}
+      className="navbar" //  ✅  使用 className="navbar"，  样式定义在 Navbar.css 中
     >
       <div>
-        <h2 style={{ color: '#FFD700' }} className="etherevo-title">EtherEvo</h2>
+        <h2 style={{ color: '#FFD700' }} className="etherevo-title">{t('navbar.title')}</h2>
       </div>
       <div style={{ display: "flex", alignItems: "center", gap: "15px" }}>
         <NavLink
           to="/"
           end
           onClick={() => onButtonClick('Welcome')}
-          style={({ isActive }) => ({
-            textDecoration: "none",
-            color: activeButton === 'Welcome' ? "#FFD700" : "white",
-          })}
+          className="navbar-link" //  ✅  使用 className="navbar-link"，  样式定义在 Navbar.css 中
         >
-          Welcome
+          {t('navbar.welcome')}
         </NavLink>
         <NavLink
           to="/tones"
           end
           onClick={() => onButtonClick('Tones')}
-          style={({ isActive }) => ({
-            textDecoration: "none",
-            color: activeButton === 'Tones' ? "#FFD700" : "white",
-          })}
+          className="navbar-link" //  ✅  使用 className="navbar-link"，  样式定义在 Navbar.css 中
         >
-          Tones
+          {t('navbar.tones')}
         </NavLink>
         <NavLink
           to="/goals"
           end
           onClick={() => onButtonClick('Goals')}
-          style={({ isActive }) => ({
-            textDecoration: "none",
-            color: activeButton === 'Goals' ? "#FFD700" : "white",
-          })}
+          className="navbar-link" //  ✅  使用 className="navbar-link"，  样式定义在 Navbar.css 中
         >
-          Goals
+          {t('navbar.goals')}
         </NavLink>
         <NavLink
           to="/user-info"
           end
           onClick={() => onButtonClick('UserInfo')}
-          style={({ isActive }) => ({
-            textDecoration: "none",
-            color: activeButton === 'UserInfo' ? "#FFD700" : "white",
-          })}
+          className="navbar-link" //  ✅  使用 className="navbar-link"，  样式定义在 Navbar.css 中
         >
-          UserInfo
+          {t('navbar.userInfo')}
         </NavLink>
         <NavLink
           to="/chat"
           end
           onClick={() => onButtonClick('Chat')}
-          style={({ isActive }) => ({
-            textDecoration: "none",
-            color: activeButton === 'Chat' ? "#FFD700" : "white",
-          })}
+          className="navbar-link" //  ✅  使用 className="navbar-link"，  样式定义在 Navbar.css 中
         >
-          Chat
+          {t('navbar.chat')}
         </NavLink>
-        
+
+        {/*  ✅  语言选择器 (下拉菜单)  */}
+        <select
+          value={i18n.language}
+          onChange={(e) => i18n.changeLanguage(e.target.value)}
+          style={{
+            backgroundColor: "#f0f0f0",
+            color: "#333",
+            border: "none",
+            borderRadius: "5px",
+            padding: "5px 10px",
+            cursor: "pointer",
+            marginLeft: "15px",
+          }}
+        >
+          <option value="zh-CN">中文</option>
+          <option value="en-US">English</option>
+        </select>
+
         {/* Logout 按钮 */}
         <button
           onClick={handleLogout}
@@ -102,9 +101,10 @@ const Navbar: React.FC<NavbarProps> = ({ activeButton, onButtonClick }) => {
             borderRadius: "5px",
             padding: "5px 10px",
             cursor: "pointer",
+            marginLeft: "15px",
           }}
         >
-          Logout
+          {t('navbar.logout')}
         </button>
       </div>
     </nav>

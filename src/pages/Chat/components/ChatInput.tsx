@@ -5,9 +5,10 @@ interface ChatInputProps {
   onInputChange: (event: React.ChangeEvent<HTMLTextAreaElement>) => void;
   onSend: () => void;
   isSending: boolean; // 新增的 prop 用于显示发送状态
+  t: (key: string) => string; // 添加 t 函数 prop 用于多语言支持
 }
 
-const ChatInput: React.FC<ChatInputProps> = ({ input, onInputChange, onSend, isSending }) => {
+const ChatInput: React.FC<ChatInputProps> = ({ input, onInputChange, onSend, isSending, t }) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   // 动态调整高度
@@ -39,15 +40,15 @@ const ChatInput: React.FC<ChatInputProps> = ({ input, onInputChange, onSend, isS
         value={input}
         onChange={handleInputChange}
         onKeyDown={handleKeyDown}
-        placeholder="Type your message..."
-        //disabled={isSending} // 不要禁用输入框，保持它可以输入 // 禁用输入框在发送中
+        placeholder={t('chat.input.placeholder')} // 使用 t 函数获取占位符
+        // disabled={isSending} // 不要禁用输入框，保持它可以输入
       />
-      <button 
-        className="send-button" 
+      <button
+        className="send-button"
         onClick={onSend}
-        disabled={isSending} // 只禁用Send按钮在发送中
+        disabled={isSending} // 只禁用 Send 按钮在发送中
       >
-        {isSending ? 'Sending...' : 'Send'}
+        {isSending ? t('chat.input.sendingButton') : t('chat.input.sendButton')} {/* 使用 t 函数动态切换按钮文本 */}
       </button>
     </div>
   );

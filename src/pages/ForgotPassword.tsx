@@ -1,45 +1,50 @@
 import React, { useState } from "react";
 import { supabase } from "../supabaseClient";
 import { useNavigate } from "react-router-dom";
-import "./Auth.css"; // 假设您的 Auth.css 文件也适用于 ForgotPassword 页面，或者您可以创建单独的 CSS
+import { useTranslation } from 'react-i18next'; // 导入 useTranslation
+import "./Auth.css"; // 使用现有的 Auth.css
 
 const ForgotPassword: React.FC = () => {
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
+  const { t } = useTranslation(); // 获取 t 函数
 
   const handlePasswordReset = async () => {
     const { data, error } = await supabase.auth.resetPasswordForEmail(email);
 
     if (error) {
-      setMessage("Error sending reset email. Please try again.");
+      setMessage(t('forgotPassword.messages.error'));
     } else {
-      setMessage("Password reset email sent. Please check your email.");
-      // 可以设定一个定时器，过一段时间后跳转回登录页面 (保留原有的定时跳转逻辑)
+      setMessage(t('forgotPassword.messages.success'));
       setTimeout(() => navigate("/auth"), 5000); // 5秒后返回到认证页面
     }
   };
 
-  const handleBackToLogin = () => { // 新增返回登录页面的处理函数
+  const handleBackToLogin = () => {
     navigate("/auth");
   };
 
   return (
     <div className="auth-container">
-      <h2>Reset Your Password</h2>
+      <h2>{t('forgotPassword.title')}</h2>
       <input
         type="email"
-        placeholder="Enter your email"
+        placeholder={t('forgotPassword.input.emailPlaceholder')}
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         className="auth-input"
       />
       <button onClick={handlePasswordReset} className="auth-button">
-        Reset Password
+        {t('forgotPassword.buttons.resetPassword')}
       </button>
-      {message && <p className="auth-message">{message}</p>}
-      <button onClick={handleBackToLogin} className="auth-button auth-back-button"> {/* 新增返回登录按钮 */}
-        Back to Login
+      {message && (
+        <p className={`auth-message ${message.includes(t('forgotPassword.messages.success')) ? 'success' : 'error'}`}>
+          {message}
+        </p>
+      )}
+      <button onClick={handleBackToLogin} className="auth-button auth-back-button">
+        {t('forgotPassword.buttons.backToLogin')}
       </button>
     </div>
   );

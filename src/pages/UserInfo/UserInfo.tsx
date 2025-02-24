@@ -2,8 +2,11 @@
 import React from "react";
 import { NavLink, Outlet } from "react-router-dom";
 import "./UserInfo.css";
+import { useTranslation } from 'react-i18next';
 
 const UserInfo: React.FC = () => {
+  const { t } = useTranslation();
+
   const checkActive = (isActive: boolean, path: string) => {
     const isCurrentPath = window.location.pathname.includes(path);
     return isCurrentPath || isActive ? "nav-link nav-link-active" : "nav-link";
@@ -11,7 +14,7 @@ const UserInfo: React.FC = () => {
 
   return (
     <div className="user-info-container">
-      <h1>用户信息</h1>
+      <h1>{t('userInfoPage.title')}</h1>
       <nav className="user-info-nav">
         <ul className="user-info-nav-list">
           <li>
@@ -19,7 +22,7 @@ const UserInfo: React.FC = () => {
               to="basic-info" 
               className={({ isActive }) => checkActive(isActive, 'basic-info')}
             >
-              基本信息
+              {t('userInfoPage.nav.basicInfo')}
             </NavLink>
           </li>
           <li>
@@ -27,7 +30,7 @@ const UserInfo: React.FC = () => {
               to="environment" 
               className={({ isActive }) => checkActive(isActive, 'environment')}
             >
-              生活环境和压力源
+              {t('userInfoPage.nav.environment')}
             </NavLink>
           </li>
           <li>
@@ -35,7 +38,7 @@ const UserInfo: React.FC = () => {
               to="health-condition" 
               className={({ isActive }) => checkActive(isActive, 'health-condition')}
             >
-              健康状况
+              {t('userInfoPage.nav.healthCondition')}
             </NavLink>
           </li>
           <li>
@@ -43,7 +46,7 @@ const UserInfo: React.FC = () => {
               to="interests" 
               className={({ isActive }) => checkActive(isActive, 'interests')}
             >
-              兴趣与爱好
+              {t('userInfoPage.nav.interests')}
             </NavLink>
           </li>
           <li>
@@ -51,7 +54,7 @@ const UserInfo: React.FC = () => {
               to="social-support" 
               className={({ isActive }) => checkActive(isActive, 'social-support')}
             >
-              社交支持系统
+              {t('userInfoPage.nav.socialSupport')}
             </NavLink>
           </li>
           <li>
@@ -59,7 +62,7 @@ const UserInfo: React.FC = () => {
               to="recent-events" 
               className={({ isActive }) => checkActive(isActive, 'recent-events')}
             >
-              近期的重大生活事件
+              {t('userInfoPage.nav.recentEvents')}
             </NavLink>
           </li>
         </ul>

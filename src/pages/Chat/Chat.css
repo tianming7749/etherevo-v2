@@ -2,57 +2,67 @@
 .chat-container {
   display: flex;
   flex-direction: column;
-  height: 800px; /* 固定高度 */
-  max-height: 100%; /* 避免内容超出窗口 */
+  height: calc(100vh - var(--navbar-height));
+  margin-top: var(--navbar-height);
   width: 100%;
   background-color: #f9f9f9;
   font-family: Arial, sans-serif;
-  box-sizing: border-box; /* 确保内边距不影响整体布局 */
+  box-sizing: border-box;
 }
 
 .message-list {
-  flex-grow: 1; /* 使消息列表占据剩余空间 */
+  flex-grow: 1;
   padding: 10px;
-  overflow-y: auto; /* 启用垂直滚动条 */
+  overflow-y: auto;
   background-color: #f9f9f9;
+}
+
+/* 加载指示器样式 */
+.loading-indicator {
+  text-align: center;
+  padding: 10px;
+  color: #666;
+  font-size: 14px;
+  background-color: #e0e0e0;
+  animation: fadeIn 0.5s ease-in-out;
 }
 
 /* 聊天消息列表 */
 .chat-messages {
   flex: 1;
-  padding: 15px; /* 增加内边距，提升视觉效果 */
-  overflow-y: auto; /* 启用垂直滚动条 */
-  scrollbar-width: thin; /* Firefox 滚动条样式 */
-  scrollbar-color: #007bff #f9f9f9; /* 滚动条颜色 */
+  padding: 15px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #007bff #f9f9f9;
 }
 
 .chat-messages::-webkit-scrollbar {
-  width: 8px; /* 滚动条宽度 */
+  width: 8px;
 }
 
 .chat-messages::-webkit-scrollbar-track {
-  background: #f9f9f9; /* 滚动条轨道背景色 */
+  background: #f9f9f9;
 }
 
 .chat-messages::-webkit-scrollbar-thumb {
-  background-color: #007bff; /* 滚动条颜色 */
-  border-radius: 10px; /* 圆角效果 */
+  background-color: #007bff;
+  border-radius: 10px;
 }
 
 /* 单条消息的样式 */
 .chat-message {
-  animation: fadeIn 0.3s ease-in-out; /* 消息淡入效果 */
+  animation: fadeIn 0.3s ease-in-out;
   padding: 10px;
   margin: 5px 0;
   border-radius: 8px;
-  max-width: 70%; /* 限制消息宽度 */
-  word-wrap: break-word; /* 自动换行，防止溢出 */
-  line-height: 1.5; /* 增加行间距，提升可读性 */
+  max-width: 70%;
+  word-wrap: break-word;
+  line-height: 1.5;
 }
 
 /* 用户发送的消息样式 */
 .user-message {
-  align-self: flex-end; /* 消息靠右 */
+  align-self: flex-end;
   background-color: #d0e7ff;
   color: #004085;
   border: 1px solid #a3c8f0;
@@ -60,7 +70,7 @@
 
 /* AI 回复的消息样式 */
 .ai-message {
-  align-self: flex-start; /* 消息靠左 */
+  align-self: flex-start;
   background-color: #eaeaea;
   color: #333;
   border: 1px solid #ccc;
@@ -82,7 +92,7 @@
 .chat-input-container {
   display: flex;
   align-items: center;
-  padding: 15px; /* 调整内边距 */
+  padding: 15px;
   background-color: #fff;
   border-top: 1px solid #ccc;
 }
@@ -94,13 +104,13 @@
   font-size: 16px;
   border: 1px solid #ccc;
   border-radius: 5px;
-  margin-right: 10px; /* 添加与发送按钮的间距 */
+  margin-right: 10px;
   box-sizing: border-box;
-  resize: none; /* 禁用手动调整输入框大小 */
-  height: auto; /* 自动高度 */
-  min-height: 40px; /* 设置最小高度 */
-  max-height: 150px; /* 设置最大高度，避免过高 */
-  overflow-y: auto; /* 启用滚动条以防止超出内容 */
+  resize: none;
+  height: auto;
+  min-height: 40px;
+  max-height: 150px;
+  overflow-y: auto;
 }
 
 /* 发送按钮 */
@@ -113,10 +123,8 @@
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 200ms ease;
-  width: auto; /* 确保宽度由内容决定 */
+  width: auto;
 }
-
-
 
 .send-button:hover {
   background-color: #0056b3;
@@ -124,8 +132,8 @@
 
 /* 输入框聚焦状态样式 */
 .chat-input:focus {
-  border-color: #007bff; /* 聚焦时改变边框颜色 */
-  outline: none; /* 去掉默认的聚焦边框 */
+  border-color: #007bff;
+  outline: none;
 }
 
 /* 为移动设备优化输入栏 */
@@ -146,8 +154,8 @@
 
 /* 限制长文本滚动 */
 .chat-message.long-text {
-  max-height: 150px; /* 限制消息框最大高度 */
-  overflow-y: auto; /* 启用垂直滚动 */
+  max-height: 150px;
+  overflow-y: auto;
 }
 
 .chat-message.long-text::-webkit-scrollbar {

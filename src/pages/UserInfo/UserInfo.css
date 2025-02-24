@@ -1,3 +1,5 @@
+/* UserInfo.css */
+
 /* 导航栏样式 */
 .user-info-nav {
   margin-bottom: 20px;
@@ -7,11 +9,11 @@
 .user-info-nav-list {
   display: flex;
   flex-wrap: wrap; /* 内容超出一行时自动换行 */
-  gap: 10px; /* 每个导航项之间的水平间距 */
+  gap: 20px; /* 每个导航项之间的水平间距 */
   list-style: none; /* 移除前面的黑点 */
   padding: 0;
   margin: 0;
-  justify-content: center; /* 居中对齐，可根据需求修改 */
+  justify-content: center; /* 默认居中对齐 */
 }
 
 .user-info-container h1 {
@@ -29,14 +31,15 @@
 .nav-link {
   text-decoration: none;
   color: black;
-  padding: 10px 15px;
+  padding: 10px 15px; /* 默认内边距 */
   border-radius: 5px;
   background-color: #95bdddb2;
   transition: background-color 0.3s, color 0.3s;
-  font-size: 1rem;
+  font-size: 1rem; /* 默认字体大小 */
   font-weight: bold;
   white-space: nowrap; /* 防止链接内容换行 */
-  margin: 0 5px 5px 5px; /* 上 右 下 左 */
+  margin: 5px; /*  按钮外边距，用于在换行后提供间距 */
+  box-sizing: border-box; /*  保证 padding 和 border 不会增加按钮的整体尺寸 */
 }
 
 /* 悬停效果 */
@@ -53,4 +56,18 @@
   box-shadow: 0 0 10px rgba(1, 66, 110, 0.5); /* 增加阴影效果 */
   font-weight: bolder; /* 加粗文字 */
   transform: scale(1.05); /* 轻微放大效果 */
+}
+
+
+/*  媒体查询，针对小屏幕设备 (最大宽度 768px)  */
+@media (max-width: 768px) {
+  .user-info-nav-list {
+    justify-content: space-around; /*  小屏幕下改为分散对齐，左右两侧留出空间 */
+  }
+
+  .nav-link {
+    font-size: 0.9rem; /*  略微减小字体大小 */
+    padding: 8px 12px; /* 减小内边距，使按钮更紧凑 */
+    margin: 5px; /* 保持外边距 */
+  }
 }

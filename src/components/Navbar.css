@@ -4,15 +4,49 @@
   left: 0;
   width: 100%; /* 使用100%而不是auto确保宽度充满视口 */
   height: var(--navbar-height);
-  background-color: #ffffff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  z-index: 9999; /* 增大z-index值以确保在所有元素之上 */
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 20px;
-  box-sizing: border-box;
+  background-color: #4682B4; /*  ✅  从内联样式迁移过来 */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /*  ✅  从内联样式迁移过来 */
+  z-index: 1000; /* 增大z-index值以确保在所有元素之上 */
+  display: flex; /*  ✅  从内联样式迁移过来 */
+  align-items: center; /*  ✅  从内联样式迁移过来 */
+  justify-content: space-between; /*  ✅  从内联样式迁移过来 */
+  padding: 10px 20px; /*  ✅  从内联样式迁移过来 */
+  border-radius: 8px; /*  ✅  从内联样式迁移过来 */
+  color: white; /*  ✅  从内联样式迁移过来 */
+  box-sizing: border-box; /*  ✅  从内联样式迁移过来 */
 }
+
 .navbar .etherevo-title {
   color: #FFD700;
+}
+
+/*  ✅  导航栏主菜单项 (NavLink)  CSS 类样式  */
+.navbar-link {
+  text-decoration: none;
+  color: white;
+  writing-mode: horizontal-tb;
+  text-orientation: upright;
+  white-space: nowrap;
+}
+
+.navbar-link.active {
+  color: #FFD700;
+}
+
+/*  ✅  语言选择器 (下拉菜单) 样式调整  */
+select {
+  writing-mode: horizontal-tb;
+  text-orientation: upright;
+  backgroundColor: "#f0f0f0"; /*  ✅  从内联样式迁移过来 */
+  color: "#333";         /*  ✅  从内联样式迁移过来 */
+  border: "none";        /*  ✅  从内联样式迁移过来 */
+  borderRadius: "5px";     /*  ✅  从内联样式迁移过来 */
+  padding: "5px 10px";    /*  ✅  从内联样式迁移过来 */
+  cursor: "pointer";     /*  ✅  从内联样式迁移过来 */
+  marginLeft: "15px";     /*  ✅  从内联样式迁移过来 */
+}
+
+option {
+  writing-mode: horizontal-tb;
+  text-orientation: upright;
 }

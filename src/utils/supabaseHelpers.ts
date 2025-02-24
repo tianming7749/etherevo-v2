@@ -120,3 +120,30 @@ export const saveUserPrompt = async (userId: string, prompt: string) => {
     throw err;
   }
 };
+
+/**
+ * 获取用户选择的语气
+ * @param userId 用户 ID
+ * @returns Promise that resolves to user tone data or null if not found
+ */
+export const fetchUserTone = async (userId: string) => {
+  try {
+    const { data: userToneData, error: userToneError } = await supabase
+      .from("user_select_tones")
+      .select("prompt_template_key") // 明确指定 prompt_template_key
+      .eq("user_id", userId)
+      .single();
+
+    if (userToneError) {
+      if (userToneError.code === "PGRST116") {
+        return null; //  用户尚未选择 tone，返回 null
+      }
+      throw new Error(userToneError.message);
+    }
+
+    return userToneData;
+  } catch (error: any) {
+    console.error("Error fetching user tone:", error);
+    return null;
+  }
+};

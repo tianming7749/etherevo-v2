@@ -1,75 +1,102 @@
-.auth-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    width: 100vw;
-    background: #f0f8ff;
-  }
-  
-  .auth-title {
-    color: #4682B4;
-    margin-bottom: 10px;
-    font-size: 2.5em;
-  }
-  
-  .auth-subtitle {
-    color: #4682B4;
-  }
-  
-  .auth-form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-bottom: 10px;
-  }
-  
-  .auth-input {
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    width: 300px;
-  }
-  
-  .auth-button {
-    padding: 10px 20px;
-    background: #4682B4;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    width: 323px;
-  }
-  
-  .auth-toggle {
-    margin-top: 10px;
-    color: #6A8FBF;
-  }
-  
-  .auth-toggle span {
-    color: #4682B4;
-    cursor: pointer;
-    text-decoration: underline;
-  }
-  
-  .auth-message {
-    color: red;
-    margin-top: 10px;
-  }
+/* 重置 body 的默认样式，确保无空白 */
+body {
+  margin: 0;
+  padding: 0;
+}
 
-  .auth-forgot-password {
-    margin-top: 10px;
-    color: #6A8FBF;
-    cursor: pointer;
-    text-decoration: underline;
-  }
-  
-  .success {
-    color: green;
-  }
-  
-  .error {
-    color: red;
-  }
+/* 容器样式 */
+.auth-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  width: 100vw;
+  background: #f0f8ff;
+  padding: 0;
+  margin: 0;
+}
+
+/* 标题样式 */
+.auth-title {
+  color: #4682b4;
+  margin-bottom: 10px;
+  font-size: 2.5em;
+}
+
+/* 副标题样式 */
+.auth-subtitle {
+  color: #4682b4;
+}
+
+/* 表单样式 */
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+/* 输入框样式 */
+.auth-input {
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  width: 300px;
+}
+
+/* 登录/注册按钮样式 */
+.auth-button {
+  padding: 10px 20px;
+  background: #4682b4;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  width: 323px;
+  transition: background 0.3s ease;
+}
+
+.auth-button:hover {
+  background: #366b99;
+}
+
+/* 切换提示样式 */
+.auth-toggle {
+  margin-top: 10px;
+  color: #6a8fbf;
+}
+
+.auth-toggle span {
+  color: #4682b4;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+/* 消息样式 */
+.auth-message {
+  margin-top: 10px;
+}
+
+/* 忘记密码和语言切换共用样式 */
+.auth-forgot-password {
+  margin-top: 10px;
+  color: #6a8fbf;
+  cursor: pointer;
+  text-decoration: underline;
+  font-size: 0.9em; /* 稍微小一点，与页面协调 */
+}
+
+.auth-forgot-password:hover {
+  color: #4682b4; /* 悬停时颜色变深 */
+}
+
+/* 成功和错误消息颜色 */
+.success {
+  color: green;
+}
+
+.error {
+  color: red;
+}

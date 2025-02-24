@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { supabase } from '../supabaseClient'; // 假设你有这个文件导入Supabase客户端
+import { supabase } from '../supabaseClient';
+import { useTranslation } from 'react-i18next'; // 导入 useTranslation
+import './Auth.css'; // 使用 Auth.css 保持样式一致
 
 const ResetPassword: React.FC = () => {
   const [password, setPassword] = useState('');
@@ -9,6 +11,7 @@ const ResetPassword: React.FC = () => {
   const [success, setSuccess] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+  const { t } = useTranslation(); // 获取 t 函数
   const queryParams = new URLSearchParams(location.search);
   const token = queryParams.get('token');
 
@@ -16,64 +19,63 @@ const ResetPassword: React.FC = () => {
     event.preventDefault();
 
     if (password !== confirmPassword) {
-      setError("Passwords do not match");
+      setError(t('resetPassword.messages.passwordMismatch'));
       return;
     }
 
     try {
-      const { error } = await supabase.auth.updateUser({
-        password: password
-      }, { 
-        // 使用token来验证这个请求是合法的
-        accessToken: token 
-      });
+      const { error } = await supabase.auth.updateUser(
+        { password },
+        { accessToken: token } // 使用 token 验证请求
+      );
 
       if (error) {
-        setError(error.message);
+        setError(error.message); // Supabase 返回的错误消息可能需要额外翻译
       } else {
         setSuccess(true);
-        // 可选：在成功重置后跳转到登录页面
         setTimeout(() => {
-          navigate('/auth'); // 假设你有一个登录页面
-        }, 3000); // 3秒后重定向，给用户时间看到成功消息
+          navigate('/auth');
+        }, 3000); // 3秒后重定向
       }
     } catch (err) {
-      setError("An unexpected error occurred.");
+      setError(t('resetPassword.messages.unexpectedError'));
     }
   };
 
   if (!token) {
-    return <div>Invalid or missing token.</div>;
+    return <div className="auth-container">{t('resetPassword.messages.invalidToken')}</div>;
   }
 
   if (success) {
-    return <div>Password has been successfully reset. You will be redirected to the login page shortly.</div>;
+    return <div className="auth-container">{t('resetPassword.messages.success')}</div>;
   }
 
   return (
-    <div>
-      <h2>Reset Your Password</h2>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
+    <div className="auth-container">
+      <h2>{t('resetPassword.title')}</h2>
+      {error && <p className="auth-message error">{error}</p>}
       <form onSubmit={handlePasswordReset}>
-        <label htmlFor="newPassword">New Password:</label>
-        <input 
-          id="newPassword" 
-          type="password" 
-          value={password} 
-          onChange={(e) => setPassword(e.target.value)} 
-          required 
+        <label htmlFor="newPassword">{t('resetPassword.labels.newPassword')}</label>
+        <input
+          id="newPassword"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+          className="auth-input"
         />
-        <br />
-        <label htmlFor="confirmNewPassword">Confirm New Password:</label>
-        <input 
-          id="confirmNewPassword" 
-          type="password" 
-          value={confirmPassword} 
-          onChange={(e) => setConfirmPassword(e.target.value)} 
-          required 
+        <label htmlFor="confirmNewPassword">{t('resetPassword.labels.confirmNewPassword')}</label>
+        <input
+          id="confirmNewPassword"
+          type="password"
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
+          required
+          className="auth-input"
         />
-        <br />
-        <button type="submit">Reset Password</button>
+        <button type="submit" className="auth-button">
+          {t('resetPassword.buttons.resetPassword')}
+        </button>
       </form>
     </div>
   );

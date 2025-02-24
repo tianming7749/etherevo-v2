@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useUserContext } from "./context/UserContext"; // 注意: 只引入 useUserContext, 不再引入 UserProvider
+import { useUserContext } from "./context/UserContext";
 import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from "react-router-dom";
 import { supabase } from "./supabaseClient";
 import Navbar from "./components/Navbar";
@@ -17,11 +17,13 @@ import LifeEnvironment from "./pages/UserInfo/LifeEnvironment/LifeEnvironment";
 import GoalsPage from "./pages/Goals/GoalsPage";
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
+import i18n from './i18n'; //  ✅ 导入 i18n 配置文件
+import { I18nextProvider } from 'react-i18next'; //  ✅ 导入 I18nextProvider
 
 
 const App: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("supabase.auth.token"));
-  const { userId, setUserId } = useUserContext(); // 只使用 useUserContext Hook, 不再引入 UserProvider 组件
+  const { userId, setUserId } = useUserContext();
   const [activeButton, setActiveButton] = useState('Welcome');
 
   useEffect(() => {
@@ -39,12 +41,9 @@ const App: React.FC = () => {
     };
   }, [setUserId]);
 
-  // RedirectBasedOnSetup 组件已完全移除 !!! (RedirectBasedOnSetup Component is completely removed !!!)
-  // const RedirectBasedOnSetup = () => { ... }  <--  删除整个组件定义 !!! (Delete the entire component definition !!!)
-
 
   return (
-
+    <I18nextProvider i18n={i18n}> {/* ✅ 使用 I18nextProvider 包裹 Router 组件，并传入 i18n 实例 */}
       <Router>
         {isLoggedIn && <Navbar activeButton={activeButton} onButtonClick={setActiveButton} />}
         <Routes>
@@ -83,7 +82,7 @@ const App: React.FC = () => {
           </Route>
         </Routes>
       </Router>
-
+    </I18nextProvider> 
   );
 };
 

@@ -1,0 +1,695 @@
+{
+  "auth": {
+    "title": "Welcome to EtherEvo!",
+    "loginTitle": "Login",
+    "signUpTitle": "Sign Up",
+    "inputs": {
+      "emailPlaceholder": "Email",
+      "passwordPlaceholder": "Password",
+      "confirmPasswordPlaceholder": "Confirm Password"
+    },
+    "buttons": {
+      "loading": "Loading...",
+      "login": "Login",
+      "signUp": "Sign Up"
+    },
+    "toggle": {
+      "noAccount": "Don't have an account?",
+      "hasAccount": "Already have an account?",
+      "signUpLink": "Sign Up",
+      "loginLink": "Login"
+    },
+    "links": {
+      "forgotPassword": "Forgot Password?"
+    },
+    "messages": {
+      "invalidEmail": "Please enter a valid email address.",
+      "shortPassword": "Password must be at least 8 characters long.",
+      "passwordMismatch": "Passwords do not match.",
+      "loginSuccess": "Login successful!",
+      "signUpSuccess": "Sign-up successful! Please check your email.",
+      "unexpectedError": "An unexpected error occurred."
+    },
+    "languageSwitch": {
+      "toChinese": "Switch to Chinese",
+      "toEnglish": "Switch to English"
+    }
+  },
+  "forgotPassword": {
+    "title": "Reset Your Password",
+    "input": {
+      "emailPlaceholder": "Enter your email"
+    },
+    "buttons": {
+      "resetPassword": "Reset Password",
+      "backToLogin": "Back to Login"
+    },
+    "messages": {
+      "error": "Error sending reset email. Please try again.",
+      "success": "Password reset email sent. Please check your email."
+    }
+  },
+  "resetPassword": {
+    "title": "Reset Your Password",
+    "labels": {
+      "newPassword": "New Password:",
+      "confirmNewPassword": "Confirm New Password:"
+    },
+    "buttons": {
+      "resetPassword": "Reset Password"
+    },
+    "messages": {
+      "passwordMismatch": "Passwords do not match",
+      "unexpectedError": "An unexpected error occurred.",
+      "invalidToken": "Invalid or missing token.",
+      "success": "Password has been successfully reset. You will be redirected to the login page shortly."
+    }
+  },
+  "navbar": {
+    "title": "EtherEvo",
+    "welcome": "Welcome",
+    "tones": "Tones",
+    "goals": "Goals",
+    "userInfo": "User Info",
+    "chat": "Chat",
+    "logout": "Logout"
+  },
+  "tonesPage": {
+    "title": "Choose Your Tone",
+    "descriptionLine1": "Select dialogue tone to customize your conversation experience",
+    "descriptionLine2": "Based on your current status and conversation needs, EtherEvo will interact with you in the style you choose, offering a more considerate and personalized communication experience.",
+    "noTonesMessage": " ",
+    "toneSelectionAlert": "Please select a Tone first!",
+    "saveSuccessAlert": "Saved successfully!",
+    "saveErrorLog": "Error saving tone:",
+    "saveErrorAlert": "Save failed, please try again later!",
+    "errorMessagePrefix": "Error: ",
+    "savingButton": "Saving...",
+    "saveButton": "Save",
+    "tone_motivational": "Motivational",
+    "tone_motivational_description": "Lacking motivation for a task or goal, needing encouragement or guidance. Feeling lost and hoping to find direction through action. Recovering from failure or procrastination, needing to reignite confidence and energy.",
+    "prompt_motivational": "Role:\nYou are a vibrant and inspiring motivational coach, focused on helping users overcome procrastination and confusion by breaking down goals, sparking action, and igniting their passion and confidence for gradual success.\nCommunication Style:\nYou are enthusiastic and encouraging, offering sincere support like a friend while providing clear guidance like a mentor. Through positive feedback and actionable advice, you help users build confidence and sustain action.\nConversation Guidelines:\n1. Boost Confidence: Highlight users' potential and past achievements.\n2. Guide Goals: Help users define their next steps.\n3. Break Down Tasks: Simplify goals into manageable actions for ease.\n4. Reinforce Achievements: Praise every step of progress promptly.\n5. Gentle Intervention: Offer proactive solutions when users procrastinate to break the deadlock.\nKey Traits:\nEnthusiasm (sparking action with energy), Encouragement (constant positivity), Goal-Oriented (finding direction), Action-Driven (focusing on execution), Support (offering ongoing feedback and guidance).",
+    "tone_relaxed": "Relaxed & Entertaining",
+    "tone_relaxed_description": "Bored or stressed, wanting a light-hearted conversation. Seeking humor and interaction for mental relaxation. Not in the mood for serious topics, just looking to unwind.",
+    "prompt_relaxed": "Role:\nYou are a witty and humorous friend, skilled at easing boredom and stress with engaging conversations and interactions. Armed with jokes, trivia, or light topics, you make every chat enjoyable.\nCommunication Style:\nYou’re infectious and funny, occasionally playful yet warm. Your conversations are轻松愉快, and you’re highly perceptive, quickly adapting to users’ emotional states.\nConversation Guidelines:\n1. Witty Humor: Use jokes, quips, or fun interactions to create a relaxed vibe.\n2. High Engagement: Pose intriguing questions or mini-games to involve users.\n3. Suggest Fun Content: Recommend entertaining ideas like movies or trivia based on the chat.\n4. Light Teasing: Add playful, friendly jabs to liven things up.\n5. Avoid Negativity: Steer clear of serious or mood-dampening topics.\nKey Traits:\nHumor (delivering cheerful chats), Ease (helping users unwind), Interactivity (encouraging participation), Playfulness (adding fun through wit), Entertainment (suggesting engaging content), Warmth (sensitivity to users’ emotions).",
+    "tone_problem_solving": "Problem-Solving",
+    "tone_problem_solving_description": "Focused on finding practical solutions to problems. Willing to discuss details and seek specific methods to improve the situation.",
+    "prompt_problem_solving": "Role:\nYou are a calm, insightful, and logical problem-solving expert, adept at pinpointing issues and offering practical, efficient solutions to help users tackle challenges and change their circumstances swiftly.\nCommunication Style:\nYou are structured and to-the-point, with a calm and firm tone, emphasizing facts and feasibility. Using concise language and organized advice, you guide users to methodically address issues and act.\nConversation Guidelines:\n1. Analyze Issues: Ask targeted questions (e.g., “What bothers you most about this?”) to clarify root causes and details.\n2. Break Down Steps: Divide complex problems into manageable chunks for step-by-step resolution.\n3. Offer Solutions: Provide specific, actionable suggestions based on the user’s context (e.g., “We could start with this approach: ...”).\n4. Drive Action: Encourage users to set clear goals or next steps to implement solutions.\n5. Stay Objective: Focus on the issue itself, avoiding excessive emotional input, offering rational support.\nKey Traits:\nLogic (analyzing problems clearly), Practicality (delivering workable advice), Efficiency (quickly targeting solutions), Calmness (maintaining rational clarity), Guidance (leading users to act proactively).",
+    "tone_deeply_empathetic": "Deeply Empathetic",
+    "tone_deeply_empathetic_description": "Experiencing complex emotional or intellectual struggles, seeking deep understanding and empathy. Hoping to better understand oneself or resolve inner emotional and cognitive conflicts through dialogue. Open to exploring personal issues or perspectives in depth.",
+    "prompt_deeply_empathetic": "Role:\nYou are an insightful and deeply empathetic conversational partner, skilled at guiding users to uncover their innermost feelings and thoughts through keen observation and profound questions. You maintain a sincere demeanor, offering a safe and open space to help users better understand themselves.\nCommunication Style:\nYour tone is gentle and earnest, excelling at thought-provoking questions to spark reflection. While listening, you provide apt feedback and summaries to help users express their emotions and ideas clearly.\nConversation Guidelines:\nDeep Questions: Pose open-ended questions to inspire thorough reflection.\nEmotional Feedback: Respond with understanding language to validate users’ feelings.\nOffer Insights: Guide users to new connections or unnoticed patterns at the right moment.\nAvoid Imposing Views: Refrain from giving direct answers, letting users find their own through dialogue.\nStay Patient: Respect users’ pace, avoiding pressure to resolve issues quickly.\nKey Traits:\nDepth (guiding deep emotional exploration), Empathy (genuine understanding of feelings), Insight (offering fresh perspectives), Sincerity (consistent warmth and authenticity), Openness (creating a safe expression space), Inspiration (sparking new awareness and insights).",
+    "tone_emotionally_supportive": "Emotionally Supportive",
+    "tone_emotionally_supportive_description": "Feeling low and needing emotional support and comfort. Not looking for deep analysis, just wanting to feel acknowledged and accepted.",
+    "prompt_emotionally_supportive": "Role:\nA wise, empathetic, and adaptable emotional companion.\nGoal:\nProvide emotional support and life guidance through warm conversations, helping users ease stress, release emotions, and foster a positive mindset.\nStyle:\nOptimistic and humorous, creating a light and pleasant atmosphere, blending critical thinking with practical tips, listening empathetically, user-focused, infusing humor into advice, pacing conversations gradually with a slower tempo, moderate info density, emphasizing interaction, and using casual, everyday language.\nConversation Guidelines:\n- Empathetic Support: Express genuine understanding and care.\n- Light Atmosphere: Use humor to relieve stress and encourage positivity.\n- Inspire Reflection: Ask open questions and offer positive suggestions to explore perspectives.\n- Practical Tips: Provide effective emotional support strategies.\n- Avoid Preaching: Keep tone flexible and light, suggestions not directives.\n- Interactive Guidance: Slow the pace and rhythm, unfolding info gradually, avoiding overload. Pause thoughtfully with space for reflection, encouraging participation and checking if users understand or need more.\n- Casual Tone: Use everyday, conversational language, steering clear of formal or stiff phrasing.\nKey Traits:\nOptimism, Humor, Encouragement, Critical Thinking, Empathy, Flexibility."
+  },
+  "goalsPage": {
+    "title": "Set Your Goals",
+    "description": "Tip: Setting your goals helps us tailor mental health support for you. You can select up to 3 goals to keep us focused on what matters most. Feel free to adjust them anytime as your needs evolve.",
+    "noLoginMessage": "Please log in to view and set your goals.",
+    "errorMessage": "An error occurred while loading goals, please try again later.",
+    "saveSuccessAlert": "Goals saved successfully!",
+    "saveErrorAlert": "Error saving goals or updating prompt, please try again later.",
+    "maxGoalsAlert": "You can only select up to 3 goals!",
+    "saveButton": "Save Goals",
+    "predefinedGoals": {
+      "reduce_anxiety": "Reduce anxiety",
+      "improve_depression": "Improve depressive mood",
+      "enhance_social_skills": "Enhance social skills",
+      "increase_self_awareness": "Increase self-awareness",
+      "learn_stress_management": "Learn stress management techniques",
+      "improve_sleep_quality": "Improve sleep quality",
+      "boost_life_satisfaction": "Boost life satisfaction",
+      "strengthen_emotion_regulation": "Strengthen emotional regulation",
+      "build_relationships": "Build or improve relationships",
+      "increase_confidence": "Increase confidence",
+      "cultivate_positive_mindset": "Cultivate a positive mindset",
+      "manage_negative_emotions": "Manage anger or other negative emotions"
+    }
+  },
+  "userInfoPage": {
+    "title": "User Information",
+    "nav": {
+      "basicInfo": "Basic Information",
+      "environment": "Life Environment and Stressors",
+      "healthCondition": "Health Condition",
+      "interests": "Interests and Hobbies",
+      "socialSupport": "Social Support System",
+      "recentEvents": "Recent Major Life Events"
+    }
+  },
+  "basicInfoPage": {
+    "title": "Basic Information",
+    "saveButton": "Save",
+    "noLoginAlert": "User not logged in, please log in first!",
+    "saveSuccessAlert": "Saved successfully!",
+    "saveErrorAlert": "An error occurred during saving, please try again later!",
+    "saveFailedAlert": "Save failed, please try again!"
+  },
+  "ageSelector": {
+    "label": "Age:",
+    "placeholder": "Please select",
+    "options": {
+      "under_18": "Under 18",
+      "18_24": "18-24",
+      "25_34": "25-34",
+      "35_44": "35-44",
+      "45_54": "45-54",
+      "55_64": "55-64",
+      "over_65": "Over 65"
+    }
+  },
+  "genderSelector": {
+    "label": "Gender:",
+    "otherLabel": "Please specify:",
+    "placeholder": "Please enter a description",
+    "hint": "Tip: Sharing your gender helps us tailor conversation content to better suit your experiences and needs.",
+    "options": {
+      "male": "Male",
+      "female": "Female",
+      "non_binary": "Non-binary",
+      "other": "Other (please specify)",
+      "prefer_not_to_say": "Prefer not to say",
+      "placeholder": "Please select"
+    }
+  },
+  "nameInput": {
+    "label": "Name",
+    "hint": "What would you like to be called? This can be your real name, nickname, or any name you prefer.",
+    "placeholder": "Please enter your name"
+  },
+  "occupationSelector": {
+    "title": "Occupation (or Student)",
+    "label": "What is your current occupation, or are you a student?",
+    "otherLabel": "Other (please specify):",
+    "placeholder": "Please describe your occupation status",
+    "hint": "Tip: Knowing your occupation status helps us better address mental health topics related to work or study.",
+    "options": {
+      "student": "Student",
+      "full_time": "Full-time job",
+      "part_time": "Part-time job",
+      "freelancer": "Freelancer",
+      "retired": "Retired",
+      "unemployed": "Unemployed/No job",
+      "other": "Other",
+      "placeholder": "Please select"
+    }
+  },
+  "lifeEnvironmentPage": {
+    "title": "Life Environment and Stressors",
+    "saveButton": "Save",
+    "savingButton": "Saving...",
+    "noLoginAlert": "No user login detected, please log in first!",
+    "loadErrorAlert": "Failed to load data, please try again later!",
+    "saveSuccessAlert": "Saved successfully!",
+    "saveErrorAlert": "Save failed, please try again later!"
+  },
+  "additionalDetailsInput": {
+    "label": "Other:",
+    "placeholder": "If you wish, please briefly describe your stressors or health issues..."
+  },
+  "financialStressSelector": {
+    "title": "Financial Stress",
+    "options": {
+      "no_stress": "No stress",
+      "moderate_stress": "Moderate stress",
+      "high_stress": "High stress"
+    }
+  },
+  "healthStatusSelector": {
+    "sleepQualityTitle": "Sleep Quality",
+    "sleepOptions": {
+      "good": "Good",
+      "average": "Average",
+      "poor": "Poor"
+    }
+  },
+  "relationshipStressSelector": {
+    "title": "Family or Personal Relationship Status",
+    "types": {
+      "spouse": "Spouse",
+      "parents": "Parents",
+      "children": "Children",
+      "friends": "Friends"
+    },
+    "statusOptions": {
+      "harmonious": "Harmonious",
+      "tense": "Tense",
+      "conflicted": "Conflicted",
+      "distant": "Distant"
+    }
+  },
+  "stressLevelSelector": {
+    "title": "Work or Study Stress",
+    "options": {
+      "low": "Low",
+      "medium": "Medium",
+      "high": "High"
+    }
+  },
+  "healthConditionPage": {
+    "mentalHealthHistoryTitle": "Mental Health History",
+    "mentalHealthOptions": {
+      "depression": "Depression",
+      "anxiety": "Anxiety",
+      "bipolar": "Bipolar Disorder",
+      "ptsd": "PTSD",
+      "ocd": "OCD",
+      "other": "Other"
+    },
+    "otherSpecify": "Other (please specify):",
+    "treatmentQuestion": "Are you currently receiving treatment for mental health?",
+    "yes": "Yes",
+    "no": "No",
+    "saveButton": "Save",
+    "saveSuccessAlert": "Saved successfully!",
+    "saveErrorAlert": "Save failed, please try again later!",
+    "saveNetworkErrorAlert": "Save failed, please check your network connection or try again later!"
+  },
+  "interestsPage": {
+    "loadingMessage": "Loading...",
+    "saveButton": "Save",
+    "savingButton": "Saving...",
+    "addInterestPlaceholder": "Add other interests",
+    "saveSuccessAlert": "Saved successfully!",
+    "saveErrorAlert": "Failed to save interests, please try again later!",
+    "saveNetworkErrorAlert": "Save failed, please check your network connection or try again later!",
+    "categories": {
+      "arts_and_creativity": {
+        "title": "Arts and Creativity",
+        "options": {
+          "painting": "Painting",
+          "sculpture": "Sculpture",
+          "photography": "Photography",
+          "music_composition": "Music Composition",
+          "playing_instruments": "Playing Instruments",
+          "writing": "Writing",
+          "filmmaking": "Filmmaking",
+          "theater_performance": "Theater Performance"
+        }
+      },
+      "sports_and_fitness": {
+        "title": "Sports and Fitness",
+        "options": {
+          "running": "Running",
+          "swimming": "Swimming",
+          "gym_training": "Gym Training",
+          "yoga": "Yoga",
+          "outdoor_sports": "Outdoor Sports (Hiking, Climbing)",
+          "cycling": "Cycling",
+          "team_sports": "Team Sports (Soccer, Basketball, etc.)",
+          "martial_arts": "Martial Arts"
+        }
+      },
+      "social_and_entertainment": {
+        "title": "Social and Entertainment",
+        "options": {
+          "gathering": "Gathering",
+          "traveling": "Traveling",
+          "cooking": "Cooking",
+          "bar_cafe_experience": "Bar/Café Experience",
+          "esports_gaming": "Esports/Gaming",
+          "watching_sports": "Watching Sports Events",
+          "entertainment_events": "Entertainment Events (Concerts, Exhibitions)",
+          "book_club": "Book Club"
+        }
+      },
+      "tech_and_innovation": {
+        "title": "Tech and Innovation",
+        "options": {
+          "programming": "Programming",
+          "electronics": "Electronics Enthusiast",
+          "tech_blogs_podcasts": "Tech Blogs/Podcasts",
+          "robotics": "Robotics",
+          "3d_printing": "3D Printing",
+          "virtual_reality": "Virtual Reality",
+          "augmented_reality": "Augmented Reality",
+          "open_source": "Open Source Projects"
+        }
+      },
+      "learning_and_knowledge": {
+        "title": "Learning and Knowledge",
+        "options": {
+          "online_education": "Online Education",
+          "academic_research": "Academic Research",
+          "language_learning": "Language Learning",
+          "scientific_experiments": "Scientific Experiments",
+          "history_research": "History Research",
+          "philosophy_discussion": "Philosophy Discussion",
+          "art_history": "Art History",
+          "cultural_studies": "Cultural Studies"
+        }
+      },
+      "crafts_and_hobbies": {
+        "title": "Crafts and Hobbies",
+        "options": {
+          "knitting": "Knitting",
+          "sewing": "Sewing",
+          "woodworking": "Woodworking",
+          "gardening": "Gardening",
+          "pottery": "Pottery",
+          "jewelry_making": "Jewelry Making",
+          "diy_decor": "DIY Home Decor",
+          "model_making": "Model Making"
+        }
+      },
+      "wellness_and_health": {
+        "title": "Wellness and Health",
+        "options": {
+          "meditation": "Meditation",
+          "mental_health_practices": "Mental Health Practices",
+          "nutrition": "Nutrition",
+          "natural_therapies": "Natural Therapies",
+          "yoga": "Yoga",
+          "tai_chi": "Tai Chi",
+          "health_management": "Health Management",
+          "stress_relief": "Stress Relief Techniques"
+        }
+      },
+      "media_and_pop_culture": {
+        "title": "Media and Pop Culture",
+        "options": {
+          "movies_series": "Movies/Series",
+          "podcasts": "Podcasts",
+          "music_listening": "Music Listening",
+          "pop_culture_tracking": "Pop Culture Tracking",
+          "anime_comics": "Anime/Comics",
+          "social_media_content": "Social Media Content Creation",
+          "streaming": "Streaming",
+          "pop_culture_discussion": "Pop Culture Discussion"
+        }
+      }
+    }
+  },
+  "socialSupportPage": {
+    "socialNetworkSizeTitle": "Social Network Size",
+    "friendsLabel": "Number of close friends:",
+    "familyLabel": "Number of family members regularly in contact:",
+    "socialContactFrequencyTitle": "Social Contact Frequency",
+    "meetFrequencyLabel": "Frequency of meeting friends/family:",
+    "selectOption": "Select",
+    "numberOptions": {
+      "0": "0",
+      "1-3": "1-3",
+      "4-10": "4-10",
+      "10+": "10+"
+    },
+    "frequencyOptions": {
+      "daily": "Daily",
+      "weekly": "Weekly",
+      "monthly": "Monthly",
+      "less": "Less"
+    },
+    "saveButton": "Save",
+    "savingButton": "Saving...",
+    "saveSuccessAlert": "Saved successfully!",
+    "saveErrorAlert": "Failed to save social support, please try again later!",
+    "saveNetworkErrorAlert": "Save failed, please check your network connection or try again later!"
+  },
+  "recentEventsPage": {
+    "loadingMessage": "Loading...",
+    "saveButton": "Save",
+    "savingButton": "Saving...",
+    "saveSuccessAlert": "Saved successfully!",
+    "saveErrorAlert": "Failed to save recent events, please try again later!",
+    "saveNetworkErrorAlert": "Save failed, please check your network connection or try again later!",
+    "sections": {
+      "moving": {
+        "title": "Moving",
+        "label": "Have you recently moved to a new home?"
+      },
+      "careerAndEducation": {
+        "title": "Career or Education Changes",
+        "jobChangeLabel": "Lost a job or changed jobs?",
+        "promotionLabel": "Received a promotion or demotion?",
+        "studyChangeLabel": "Started or ended studies?"
+      },
+      "relationships": {
+        "title": "Relationships",
+        "marriageLabel": "Got married or divorced?",
+        "newBabyLabel": "Arrival of a new baby or child leaving home?",
+        "relationshipChangeLabel": "Started a new relationship or ended one?",
+        "bereavementLabel": "Lost a loved one or very close friend?"
+      },
+      "health": {
+        "title": "Health Issues",
+        "healthIssueLabel": "Have you or a family member experienced a significant health issue or diagnosis?"
+      },
+      "finance": {
+        "title": "Financial Changes",
+        "financialChangeLabel": "Major financial difficulties or improvements?"
+      },
+      "other": {
+        "title": "Other Major Events",
+        "placeholder": "Please describe other significant events not listed above"
+      }
+     }
+    },
+    "chat": {
+      "input": {
+      "placeholder": "Type your message...",
+      "sendButton": "Send",
+      "sendingButton": "Sending..."
+    },
+      "loading": "Loading...",
+      "header": {
+        "clearChat": "Clear Chat"
+      },
+      "confirmationModal": {
+        "confirmClear": "Are you sure you want to clear the chat?",
+        "cancel": "Cancel",
+        "confirm": "Confirm"
+      }
+    },
+      "prompts": {
+      "noPrompt": "No prompt",
+      "none": "None",
+      "notProvided": "Not provided",
+      "yes": "Yes",
+      "no": "No",
+      "user": "User",
+      "basicInfo": "Basic Information:",
+      "name": "Name:",
+      "ageGroup": "Age Group:",
+      "gender": "Gender:",
+      "occupation": "Occupation:",
+      "lifeEnvironment": "Life Environment and Stressors:",
+      "healthCondition": "Health Condition:",
+      "interests": "Interests and Hobbies:",
+      "socialSupportTitle": "Social Support System:",
+      "socialSupport": {
+        "family": "Number of family members regularly in contact:",
+        "friends": "Number of close friends:",
+        "meetFrequency": "Frequency of meeting friends/family:"
+      },
+      "recentEvents": "Recent Major Life Events:",
+      "goalsPrefix": "Goals to Achieve:",
+      "environment": {
+        "stressLevel": "Work or Study Stress:",
+        "relationshipStress": "Family or Personal Relationship Status:",
+        "financialStress": "Financial Stress:",
+        "sleepQuality": "Sleep Quality:",
+        "additionalDetails": "Additional Details:"
+      },
+      "recentEventsDetails": {
+        "moving": "Recently moved to a new home",
+        "jobChange": "Lost a job or changed jobs",
+        "promotion": "Received a promotion or demotion",
+        "studyChange": "Started or ended studies",
+        "marriage": "Got married or divorced",
+        "newBaby": "Arrival of a new baby or child leaving home",
+        "relationshipChange": "Started a new relationship or ended one",
+        "bereavement": "Lost a loved one or very close friend",
+        "healthIssue": "Experienced a significant health issue or diagnosis (self or family)",
+        "financialChange": "Major financial difficulties or improvements",
+        "other": "Other Major Events:"
+      },
+      "stressLevels": {
+        "low": "Low",
+        "medium": "Medium",
+        "high": "High"
+      },
+      "relationshipTypes": {
+        "spouse": "Spouse",
+        "parents": "Parents",
+        "children": "Children",
+        "friends": "Friends"
+      },
+      "relationshipStatuses": {
+        "harmonious": "Harmonious",
+        "tense": "Tense",
+        "conflicted": "Conflicted",
+        "distant": "Distant"
+      },
+      "financialStresses": {
+        "no_stress": "No Stress",
+        "moderate_stress": "Moderate Stress",
+        "high_stress": "High Stress"
+      },
+      "sleepQualities": {
+        "good": "Good",
+        "average": "Average",
+        "poor": "Poor"
+      },
+      "healthConditionTitle": "Health Condition:",
+    "mentalHealthHistory": "Mental Health History:",
+    "isReceivingTreatment": "Currently Receiving Mental Health Treatment:",
+    "mentalHealthOptions": {
+      "depression": "Depression",
+      "anxiety": "Anxiety",
+      "bipolar": "Bipolar Disorder",
+      "ptsd": "PTSD",
+      "ocd": "OCD",
+      "other": "Other"
+    },
+    "healthConditionPage": {
+      "mentalHealthHistoryTitle": "Mental Health History",
+      "mentalHealthOptions": {
+        "depression": "Depression",
+        "anxiety": "Anxiety",
+        "bipolar": "Bipolar Disorder",
+        "ptsd": "PTSD",
+        "ocd": "OCD",
+        "other": "Other"
+      },
+      "otherSpecify": "Other (please specify):",
+      "treatmentQuestion": "Are you currently receiving treatment for mental health?",
+      "yes": "Yes",
+      "no": "No",
+      "saveButton": "Save",
+      "saveSuccessAlert": "Saved successfully!",
+      "saveErrorAlert": "Save failed, please try again later!",
+      "saveNetworkErrorAlert": "Save failed, please check your network connection or try again later!"
+    },
+    "interestsSection": "Interests and Hobbies:",
+    "interestCategories": {
+      "arts_and_creativity": "Arts and Creativity",
+      "sports_and_fitness": "Sports and Fitness",
+      "social_and_entertainment": "Social and Entertainment",
+      "tech_and_innovation": "Tech and Innovation",
+      "learning_and_knowledge": "Learning and Knowledge",
+      "crafts_and_hobbies": "Crafts and Hobbies",
+      "wellness_and_health": "Wellness and Health",
+      "media_and_pop_culture": "Media and Pop Culture"
+    },
+    "interestOptions": {
+      "arts_and_creativity": {
+        "painting": "Painting",
+        "sculpture": "Sculpture",
+        "photography": "Photography",
+        "music_composition": "Music Composition",
+        "playing_instruments": "Playing Instruments",
+        "writing": "Writing",
+        "filmmaking": "Filmmaking",
+        "theater_performance": "Theater Performance"
+      },
+      "sports_and_fitness": {
+        "running": "Running",
+        "swimming": "Swimming",
+        "gym_training": "Gym Training",
+        "yoga": "Yoga",
+        "outdoor_sports": "Outdoor Sports (Hiking, Climbing)",
+        "cycling": "Cycling",
+        "team_sports": "Team Sports (Soccer, Basketball, etc.)",
+        "martial_arts": "Martial Arts"
+      },
+      "social_and_entertainment": {
+        "gathering": "Gathering",
+        "traveling": "Traveling",
+        "cooking": "Cooking",
+        "bar_cafe_experience": "Bar/Café Experience",
+        "esports_gaming": "Esports/Gaming",
+        "watching_sports": "Watching Sports Events",
+        "entertainment_events": "Entertainment Events (Concerts, Exhibitions)",
+        "book_club": "Book Club"
+      },
+      "tech_and_innovation": {
+        "programming": "Programming",
+        "electronics": "Electronics Enthusiast",
+        "tech_blogs_podcasts": "Tech Blogs/Podcasts",
+        "robotics": "Robotics",
+        "3d_printing": "3D Printing",
+        "virtual_reality": "Virtual Reality",
+        "augmented_reality": "Augmented Reality",
+        "open_source": "Open Source Projects"
+      },
+      "learning_and_knowledge": {
+        "online_education": "Online Education",
+        "academic_research": "Academic Research",
+        "language_learning": "Language Learning",
+        "scientific_experiments": "Scientific Experiments",
+        "history_research": "History Research",
+        "philosophy_discussion": "Philosophy Discussion",
+        "art_history": "Art History",
+        "cultural_studies": "Cultural Studies"
+      },
+      "crafts_and_hobbies": {
+        "knitting": "Knitting",
+        "sewing": "Sewing",
+        "woodworking": "Woodworking",
+        "gardening": "Gardening",
+        "pottery": "Pottery",
+        "jewelry_making": "Jewelry Making",
+        "diy_decor": "DIY Home Decor",
+        "model_making": "Model Making"
+      },
+      "wellness_and_health": {
+        "meditation": "Meditation",
+        "mental_health_practices": "Mental Health Practices",
+        "nutrition": "Nutrition",
+        "natural_therapies": "Natural Therapies",
+        "yoga": "Yoga",
+        "tai_chi": "Tai Chi",
+        "health_management": "Health Management",
+        "stress_relief": "Stress Relief Techniques"
+      },
+      "media_and_pop_culture": {
+        "movies_series": "Movies/Series",
+        "podcasts": "Podcasts",
+        "music_listening": "Music Listening",
+        "pop_culture_tracking": "Pop Culture Tracking",
+        "anime_comics": "Anime/Comics",
+        "social_media_content": "Social Media Content Creation",
+        "streaming": "Streaming",
+        "pop_culture_discussion": "Pop Culture Discussion"
+      },
+      "socialSupportTitle": "Social Support System:",
+      "socialSupport": {
+        "family": "Number of family members regularly in contact:",
+        "friends": "Number of close friends:",
+        "meetFrequency": "Frequency of meeting friends/family:",
+        "numberOptions": {
+          "0": "0",
+          "1-3": "1-3",
+          "4-10": "4-10",
+          "10+": "10+"
+        },
+        "frequencyOptions": {
+          "daily": "Daily",
+          "weekly": "Weekly",
+          "monthly": "Monthly",
+          "less": "Less"
+        }
+      },
+      "socialSupportPage": {
+        "socialNetworkSizeTitle": "Social Network Size",
+        "friendsLabel": "Number of close friends:",
+        "familyLabel": "Number of family members regularly in contact:",
+        "socialContactFrequencyTitle": "Social Contact Frequency",
+        "meetFrequencyLabel": "Frequency of meeting friends/family:",
+        "selectOption": "Select",
+        "numberOptions": {
+          "0": "0",
+          "1-3": "1-3",
+          "4-10": "4-10",
+          "10+": "10+"
+        },
+        "frequencyOptions": {
+          "daily": "Daily",
+          "weekly": "Weekly",
+          "monthly": "Monthly",
+          "less": "Less"
+        }
+      } 
+    }
+  }
+}

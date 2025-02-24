@@ -1,16 +1,18 @@
 import React, { useState } from "react";
 import { supabase } from "../supabaseClient";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from 'react-i18next';
 import "./Auth.css";
 
 const Auth: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState(""); // 新增确认密码 state
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [isLogin, setIsLogin] = useState(true);
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { t, i18n } = useTranslation();
 
   const validateEmail = (email: string) => /\S+@\S+\.\S+/.test(email);
   const validatePassword = (password: string) => password.length >= 8;
@@ -20,18 +22,18 @@ const Auth: React.FC = () => {
     setMessage("");
 
     if (!validateEmail(email)) {
-      setMessage("Please enter a valid email address.");
+      setMessage(t('auth.messages.invalidEmail'));
       setLoading(false);
       return;
     }
     if (!validatePassword(password)) {
-      setMessage("Password must be at least 8 characters long.");
+      setMessage(t('auth.messages.shortPassword'));
       setLoading(false);
       return;
     }
 
-    if (!isLogin && password !== confirmPassword) { // 注册时检查确认密码
-      setMessage("Passwords do not match.");
+    if (!isLogin && password !== confirmPassword) {
+      setMessage(t('auth.messages.passwordMismatch'));
       setLoading(false);
       return;
     }
@@ -47,12 +49,11 @@ const Auth: React.FC = () => {
       if (result.error) {
         setMessage(result.error.message);
       } else {
-        setMessage(isLogin ? "Login successful!" : "Sign-up successful! Please check your email.");
+        setMessage(isLogin ? t('auth.messages.loginSuccess') : t('auth.messages.signUpSuccess'));
 
         if (isLogin) {
           const userId = result.data.user.id;
 
-          // 检查用户设置状态
           const { data: settings, error: settingsError } = await supabase
             .from('user_settings')
             .select('setup_completed')
@@ -61,70 +62,71 @@ const Auth: React.FC = () => {
 
           if (settingsError) {
             console.error("Error checking user setup:", settingsError);
-            // 如果无法检查用户设置，默认跳转到欢迎页面
             navigate("/");
           } else if (settings?.setup_completed) {
-            // 老用户直接跳转到聊天页面
             navigate("/chat");
           } else {
-            // 新用户或未完成设置，跳转到欢迎页面
             navigate("/");
           }
 
-          // 确保用户在user_settings中有记录
           await supabase
             .from('user_settings')
-            .upsert({
-              user_id: userId,
-              setup_completed: settings?.setup_completed ?? false,
-              privacy_confirmed: false
-            },
-            { onConflict: 'user_id' });
+            .upsert(
+              {
+                user_id: userId,
+                setup_completed: settings?.setup_completed ?? false,
+                privacy_confirmed: false,
+              },
+              { onConflict: 'user_id' }
+            );
 
           localStorage.setItem("supabase.auth.token", JSON.stringify(result.data));
         } else {
-          // 新注册的用户直接跳转到欢迎页面
           await supabase
             .from('user_settings')
             .insert({
               user_id: result.data.user.id,
               setup_completed: false,
-              privacy_confirmed: false
+              privacy_confirmed: false,
             });
           navigate("/");
         }
       }
     } catch (error) {
-      setMessage("An unexpected error occurred.");
+      setMessage(t('auth.messages.unexpectedError'));
     } finally {
       setLoading(false);
     }
   };
 
+  const toggleLanguage = () => {
+    const newLang = i18n.language === 'zh' ? 'en' : 'zh';
+    i18n.changeLanguage(newLang);
+  };
+
   return (
     <div className="auth-container">
-      <h2 className="auth-title">Welcome to EtherEvo!</h2>
-      <h1 className="auth-subtitle">{isLogin ? "Login" : "Sign Up"}</h1>
+      <h2 className="auth-title">{t('auth.title')}</h2>
+      <h1 className="auth-subtitle">{isLogin ? t('auth.loginTitle') : t('auth.signUpTitle')}</h1>
       <div className="auth-form">
         <input
           type="email"
-          placeholder="Email"
+          placeholder={t('auth.inputs.emailPlaceholder')}
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           className="auth-input"
         />
         <input
           type="password"
-          placeholder="Password"
+          placeholder={t('auth.inputs.passwordPlaceholder')}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           className="auth-input"
         />
-        {/* 注册时显示确认密码输入框 */}
         {!isLogin && (
           <input
             type="password"
-            placeholder="Confirm Password"
+            placeholder={t('auth.inputs.confirmPasswordPlaceholder')}
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             className="auth-input"
@@ -136,14 +138,27 @@ const Auth: React.FC = () => {
         className="auth-button"
         disabled={loading}
       >
-        {loading ? "Loading..." : (isLogin ? "Login" : "Sign Up")}
+        {loading ? t('auth.buttons.loading') : (isLogin ? t('auth.buttons.login') : t('auth.buttons.signUp'))}
       </button>
       <p className="auth-toggle">
-        {isLogin ? "Don't have an account?" : "Already have an account?"}
-        <span onClick={() => setIsLogin(!isLogin)}> {isLogin ? "Sign Up" : "Login"}</span>
+        {isLogin ? t('auth.toggle.noAccount') : t('auth.toggle.hasAccount')}
+        <span onClick={() => setIsLogin(!isLogin)}>
+          {" "}{isLogin ? t('auth.toggle.signUpLink') : t('auth.toggle.loginLink')}
+        </span>
       </p>
-      <a href="/forgot-password" className="auth-forgot-password">Forgot Password?</a>
-      {message && <p className={`auth-message ${message.includes('success') ? 'success' : 'error'}`}>{message}</p>}
+      <a href="/forgot-password" className="auth-forgot-password">{t('auth.links.forgotPassword')}</a>
+      {/* 语言切换改为文本链接 */}
+      <span
+        onClick={toggleLanguage}
+        className="auth-forgot-password"
+      >
+        {i18n.language === 'zh' ? t('auth.languageSwitch.toEnglish') : t('auth.languageSwitch.toChinese')}
+      </span>
+      {message && (
+        <p className={`auth-message ${message.includes(t('auth.messages.loginSuccess')) || message.includes(t('auth.messages.signUpSuccess')) ? 'success' : 'error'}`}>
+          {message}
+        </p>
+      )}
     </div>
   );
 };

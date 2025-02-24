@@ -7,6 +7,7 @@ import FinancialStressSelector from "./FinancialStressSelector";
 import HealthStatusSelector from "./HealthStatusSelector";
 import AdditionalDetailsInput from "./AdditionalDetailsInput";
 import "./LifeEnvironment.css";
+import { useTranslation } from 'react-i18next';
 
 interface LifeEnvironmentData {
   stress_level: string;
@@ -37,12 +38,13 @@ const LifeEnvironment: React.FC = () => {
   const [formData, setFormData] = useState<LifeEnvironmentData>(defaultData);
   const [isSaving, setIsSaving] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const { t } = useTranslation();
 
   useEffect(() => {
     const fetchLatestData = async () => {
       const user = await getCurrentUser();
       if (!user) {
-        alert("未检测到用户登录，请先登录！");
+        alert(t('lifeEnvironmentPage.noLoginAlert'));
         setIsLoading(false);
         return;
       }
@@ -56,7 +58,7 @@ const LifeEnvironment: React.FC = () => {
 
       if (error) {
         console.error("获取生活环境数据时出错：", error);
-        alert("加载数据失败，请稍后重试！");
+        alert(t('lifeEnvironmentPage.loadErrorAlert'));
       } else if (data && data.length > 0) {
         setFormData({
           stress_level: data[0].stress_level || "",
@@ -71,7 +73,7 @@ const LifeEnvironment: React.FC = () => {
     };
 
     fetchLatestData();
-  }, []);
+  }, [t]);
 
   const handleChange = (field: keyof LifeEnvironmentData, value: any) => {
     setFormData((prevData) => ({
@@ -85,11 +87,10 @@ const LifeEnvironment: React.FC = () => {
       setIsSaving(true);
       const user = await getCurrentUser();
       if (!user) {
-        alert("未检测到用户登录，请先登录！");
+        alert(t('lifeEnvironmentPage.noLoginAlert'));
         return;
       }
 
-      // 保存数据到数据库
       const { error } = await supabase.from("life_environment").upsert([
         {
           user_id: user.id,
@@ -105,14 +106,12 @@ const LifeEnvironment: React.FC = () => {
 
       if (error) {
         console.error("保存数据时出错：", error);
-        alert("保存失败，请稍后重试！");
+        alert(t('lifeEnvironmentPage.saveErrorAlert'));
         return;
       }
 
-      // 更新提示词
       const updatedPrompt = await generatePromptsForUser(user.id);
 
-      // 保存提示词到数据库
       const { error: savePromptError } = await supabase
         .from("user_prompts_summary")
         .upsert({
@@ -126,10 +125,10 @@ const LifeEnvironment: React.FC = () => {
         console.log("提示词已成功保存");
       }
 
-      alert("保存成功！");
+      alert(t('lifeEnvironmentPage.saveSuccessAlert'));
     } catch (error) {
       console.error("保存过程中发生错误：", error);
-      alert("保存失败，请稍后重试！");
+      alert(t('lifeEnvironmentPage.saveErrorAlert'));
     } finally {
       setIsSaving(false);
     }
@@ -137,7 +136,6 @@ const LifeEnvironment: React.FC = () => {
 
   return (
     <div className="life-environment">
-      <h2>生活环境与压力源</h2>
       <StressLevelSelector
         value={formData.stress_level}
         onChange={(value) => handleChange("stress_level", value)}
@@ -163,7 +161,7 @@ const LifeEnvironment: React.FC = () => {
         disabled={isSaving}
         className="save-button"
       >
-        {isSaving ? "保存中..." : "保存"}
+        {isSaving ? t('lifeEnvironmentPage.savingButton') : t('lifeEnvironmentPage.saveButton')}
       </button>
     </div>
   );
