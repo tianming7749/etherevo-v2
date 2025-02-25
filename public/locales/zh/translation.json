@@ -67,12 +67,14 @@
   },
   "navbar": {
     "title": "EtherEvo",
-    "welcome": "欢迎",
+    "chat": "聊天",
+    "settings": "设置",
+    "logout": "退出"
+  },
+  "settings": {
     "tones": "语气",
     "goals": "目标",
-    "userInfo": "信息",
-    "chat": "聊天",
-    "logout": "退出"
+    "userInfo": "信息"
   },
   "tonesPage": {
     "title": "选择对话语气",
@@ -110,7 +112,8 @@
     "saveSuccessAlert": "目标已保存！",
     "saveErrorAlert": "保存目标或更新提示词时发生错误，请稍后再试。",
     "maxGoalsAlert": "最多只能选择 3 个目标！",
-    "saveButton": "保存目标",
+    "savingButton": "保存中...",
+    "saveButton": "保存",
     "predefinedGoals": {
       "reduce_anxiety": "减轻焦虑",
       "improve_depression": "改善抑郁情绪",
@@ -139,6 +142,7 @@
   },
   "basicInfoPage": {
     "title": "基本信息",
+    "savingButton": "保存中...",
     "saveButton": "保存",
     "noLoginAlert": "用户未登录，请先登录！",
     "saveSuccessAlert": "保存成功！",
@@ -261,6 +265,7 @@
     "yes": "是",
     "no": "否",
     "saveButton": "保存",
+    "savingButton": "保存中...",
     "saveSuccessAlert": "保存成功！",
     "saveErrorAlert": "保存失败，请稍后重试！",
     "saveNetworkErrorAlert": "保存失败，请检查网络连接或稍后重试！"
@@ -444,21 +449,23 @@
       }
     }
   },
-  "chat": {
-    "input": {
-      "placeholder": "输入您的消息...",
-      "sendButton": "发送",
-      "sendingButton": "发送中..."
-    },
-    "loading": "加载中...",
-    "header": {
-      "clearChat": "清除聊天"
-    },
-    "confirmationModal": {
-      "confirmClear": "您确定要清除聊天记录吗？",
-      "cancel": "取消",
-      "confirm": "确认"
-    }
+      "chat": {
+      "input": {
+        "placeholder": "输入您的消息...",
+        "sendButton": "发送",
+        "sendingButton": "发送中..."
+      },
+      "loading": "加载中...",
+      "header": {
+        "clearChat": "清除聊天"
+      },
+      "confirmationModal": {
+        "confirmClear": "您确定要清除聊天记录吗？",
+        "cancel": "取消",
+        "confirm": "确认"
+      },
+      "clearWarning": "此操作将清空所有历史记录，请谨慎操作" 
+  
   },
   "prompts": {
     "noPrompt": "无提示",

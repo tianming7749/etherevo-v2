@@ -5,13 +5,15 @@ import { generatePromptsForUser } from "../../utils/generatePrompts";
 import { supabase } from "../../supabaseClient";
 import "./GoalsPage.css";
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom'; // 导入 useNavigate
 
 const GoalsPage: React.FC = () => {
   const { userId } = useUserContext();
   const [goals, setGoals] = useState<string[]>([]); // 保存 key（如 "reduce_anxiety"）
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>(true); // 添加加载状态
   const [error, setError] = useState<string | null>(null);
   const { t } = useTranslation();
+  const navigate = useNavigate(); // 使用 useNavigate 钩子
 
   const predefinedGoals = t('goalsPage.predefinedGoals', { returnObjects: true }) as Record<string, string>;
   const goalKeys = Object.keys(predefinedGoals); // 获取所有目标的 key
@@ -59,27 +61,36 @@ const GoalsPage: React.FC = () => {
       } else if (prevGoals.length < 3) {
         return [...prevGoals, goalKey];
       } else {
-        alert(t('goalsPage.maxGoalsAlert'));
+        alert(t('goalsPage.maxGoalsAlert')); // 保持验证失败的提示，类似 TonesPage
         return prevGoals;
       }
     });
   };
 
   const handleSaveGoals = async () => {
+    if (goals.length === 0) { // 验证是否选择了目标，类似 TonesPage 的 !selectedToneId
+      alert(t('goalsPage.noGoalsSelectionAlert')); // 添加新的翻译键或复用现有键（如 t('goalsPage.toneSelectionAlert')）
+      return;
+    }
+
+    setIsLoading(true); // 开始保存时设置加载状态
     try {
       await saveUserGoals(userId, JSON.stringify(goals)); // 保存 key 数组
-      alert(t('goalsPage.saveSuccessAlert'));
-
       const updatedPrompt = await generatePromptsForUser(userId);
       if (updatedPrompt) {
         await saveUserPrompt(userId, updatedPrompt);
         console.log("提示词已更新并保存。");
       } else {
-        console.warn("未能生成或保存新的提示词。");
+        throw new Error("未能生成或保存新的提示词。");
       }
+
+      alert(t('goalsPage.saveSuccessAlert')); // 保持成功提示
+      navigate('/settings/user-info'); // 保存成功后跳转到 UserInfo 页面
     } catch (err) {
       console.error("保存目标或更新提示词时出错：", err);
-      alert(t('goalsPage.saveErrorAlert'));
+      alert(t('goalsPage.saveErrorAlert')); // 保持失败提示
+    } finally {
+      setIsLoading(false); // 保存完成（无论成功或失败）重置加载状态
     }
   };
 
@@ -98,7 +109,7 @@ const GoalsPage: React.FC = () => {
                 type="checkbox"
                 checked={goals.includes(goalKey)}
                 onChange={() => handleGoalSelection(goalKey)}
-                disabled={isLoading}
+                disabled={isLoading} // 禁用输入框以匹配加载状态
               />
               {predefinedGoals[goalKey]} {/* 显示翻译后的文本 */}
             </label>
@@ -107,9 +118,9 @@ const GoalsPage: React.FC = () => {
       </div>
       <button
         onClick={handleSaveGoals}
-        disabled={goals.length === 0}
+        disabled={isLoading || goals.length === 0} // 根据加载状态和目标数量禁用按钮
       >
-        {t('goalsPage.saveButton')}
+        {isLoading ? t('goalsPage.savingButton') : t('goalsPage.saveButton')} 
       </button>
     </div>
   );

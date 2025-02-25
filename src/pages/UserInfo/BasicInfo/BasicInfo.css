@@ -43,10 +43,16 @@
     cursor: pointer;
     font-size: 16px;
     transition: background-color 0.3s;
+    margin-top: 20px;
   }
   
   .basic-info-container button:hover {
     background-color: #0279f0;
+  }
+
+  .basic-info-container button:disabled {
+    background-color: #888;
+    cursor: not-allowed;
   }
   
   /* 针对自定义组件的样式调整 */

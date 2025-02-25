@@ -5,6 +5,7 @@ import { fetchUserTone, saveUserPrompt } from "../../utils/supabaseHelpers";
 import { supabase } from "../../supabaseClient";
 import { generatePromptsForUser } from "../../utils/generatePrompts"; // 导入外部版本
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom'; // 导入 useNavigate
 import "./TonesPage.css";
 
 interface Tone {
@@ -22,6 +23,7 @@ const TonesPage: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const { t } = useTranslation();
+  const navigate = useNavigate(); // 使用 useNavigate 钩子
 
   useEffect(() => {
     const fetchTonesAndUserSelection = async () => {
@@ -116,6 +118,7 @@ const TonesPage: React.FC = () => {
       if (settingsError) throw new Error(`Settings update error: ${settingsError.message}`);
 
       alert(t('tonesPage.saveSuccessAlert'));
+      navigate('/settings/goals'); // 保存成功后跳转到 Goals 页面
     } catch (error: any) {
       console.error(t('tonesPage.saveErrorLog'), error.message);
       alert(t('tonesPage.saveErrorAlert'));

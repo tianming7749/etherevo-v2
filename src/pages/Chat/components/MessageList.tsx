@@ -19,7 +19,7 @@ const MessageList: React.FC<MessageListProps> = ({ messages, messagesEndRef }) =
         overflowY: "auto",
         margin: "10px 0",
         padding: "10px",
-        background: "#E6E6FA",
+        background: "transparent",
         borderRadius: "8px",
         display: "flex",
         flexDirection: "column",

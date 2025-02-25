@@ -1,53 +1,74 @@
+// UserContext.tsx
 import React, { createContext, useContext, useState, useEffect } from "react";
 import { supabase } from "../supabaseClient";
 
 interface UserContextProps {
-  userId: string | null; // 用户 ID
-  setUserId: (id: string | null) => void; // 设置用户 ID
-  loading: boolean; // 是否正在加载
+  userId: string | null;
+  userName: string | null;
+  setUserId: (id: string | null) => void;
+  loading: boolean;
 }
 
 const UserContext = createContext<UserContextProps | undefined>(undefined);
 
 export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [userId, setUserId] = useState<string | null>(null);
+  const [userName, setUserName] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // 首次获取用户信息
     const fetchUser = async () => {
-      const { data, error } = await supabase.auth.getSession();
-      if (error || !data?.session) {
-        console.log("用户未登录");
+      try {
+        console.log("Fetching user session...");
+        const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+        console.log("Session data:", sessionData, "Session error:", sessionError);
+        if (sessionError) {
+          console.error("Error fetching session:", sessionError);
+          setUserId(null);
+          setUserName(null);
+        } else if (!sessionData?.session) {
+          console.log("User not logged in");
+          setUserId(null);
+          setUserName(null);
+        } else {
+          const user = sessionData.session.user;
+          console.log("User session data:", user);
+          setUserId(user.id || null); // 确保 user.id 存在
+          setUserName(user.email || user.user_metadata?.display_name || "User");
+        }
+      } catch (error) {
+        console.error("Error in fetchUser:", error);
         setUserId(null);
-      } else {
-        setUserId(data.session.user.id);
+        setUserName(null);
+      } finally {
+        setLoading(false);
+        console.log("Loading state set to false, userId:", userId, "userName:", userName);
       }
-      setLoading(false);
     };
 
     fetchUser();
 
-    // 监听认证状态的变化
     const { data: authListener } = supabase.auth.onAuthStateChange((event, session) => {
+      console.log("Auth state changed:", event, session);
       if (event === "SIGNED_IN" || event === "USER_UPDATED") {
-        // 如果用户登录或更新了信息
         setUserId(session?.user.id || null);
+        setUserName(session?.user.email || session?.user.user_metadata?.display_name || "User");
+        console.log("User signed in, userId:", session?.user.id, "userName:", session?.user.email);
       } else if (event === "SIGNED_OUT") {
-        // 用户登出
         setUserId(null);
+        setUserName(null);
+        console.log("User signed out");
       }
       setLoading(false);
     });
 
-    // 清理监听器
     return () => {
       authListener?.subscription.unsubscribe();
     };
   }, []);
 
   return (
-    <UserContext.Provider value={{ userId, setUserId, loading }}>
+    <UserContext.Provider value={{ userId, userName, setUserId, loading }}>
       {loading ? <div>Loading...</div> : children}
     </UserContext.Provider>
   );

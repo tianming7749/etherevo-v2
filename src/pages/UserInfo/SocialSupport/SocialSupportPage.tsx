@@ -4,6 +4,7 @@ import { useUserContext } from "../../../context/UserContext";
 import { supabase } from "../../../supabaseClient";
 import "./SocialSupportPage.css";
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom'; // 导入 useNavigate
 
 const SocialSupportPage: React.FC = () => {
   const { userId } = useUserContext();
@@ -14,6 +15,7 @@ const SocialSupportPage: React.FC = () => {
   });
   const [isSaving, setIsSaving] = useState(false);
   const { t } = useTranslation();
+  const navigate = useNavigate(); // 使用 useNavigate 钩子
 
   useEffect(() => {
     const fetchSocialSupport = async () => {
@@ -93,6 +95,7 @@ const SocialSupportPage: React.FC = () => {
       }
 
       alert(t('socialSupportPage.saveSuccessAlert'));
+      navigate('/settings/user-info/recent-events'); // 保存成功后跳转到 RecentEventsPage 页面
     } catch (error) {
       console.error("保存过程中发生错误：", error);
       alert(t('socialSupportPage.saveNetworkErrorAlert'));

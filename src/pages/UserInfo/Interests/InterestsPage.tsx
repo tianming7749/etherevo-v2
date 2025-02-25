@@ -4,6 +4,7 @@ import { generatePromptsForUser } from "../../../utils/generatePrompts";
 import { useUserContext } from "../../../context/UserContext";
 import "./InterestsPage.css";
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom'; // 导入 useNavigate
 
 const InterestsPage: React.FC = () => {
   const { userId, loading } = useUserContext();
@@ -11,6 +12,7 @@ const InterestsPage: React.FC = () => {
   const [isSaving, setIsSaving] = useState(false);
   const inputRefs = useRef<Record<string, HTMLInputElement>>({});
   const { t } = useTranslation();
+  const navigate = useNavigate(); // 使用 useNavigate 钩子
 
   const interestsData = t('interestsPage.categories', { returnObjects: true }) as Record<string, { title: string; options: Record<string, string> }>;
   const categoryKeys = Object.keys(interestsData);
@@ -133,6 +135,7 @@ const InterestsPage: React.FC = () => {
         }
 
         alert(t('interestsPage.saveSuccessAlert'));
+        navigate('/settings/user-info/social-support'); // 保存成功后跳转到 SocialSupportPage 页面
       } catch (error) {
         console.error("Error during save process:", error);
         alert(t('interestsPage.saveNetworkErrorAlert'));

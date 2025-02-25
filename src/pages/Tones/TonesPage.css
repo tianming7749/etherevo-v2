@@ -3,7 +3,7 @@
 .tones-page {
   font-family: 'Arial', sans-serif;
   max-width: 800px;
-  margin: var(--navbar-height) auto 0; /* 从导航栏下方开始 */
+  margin: 0px; /* 减少顶部间距为 60px，保持底部间距 */
   padding: 20px;
   background-color: #f9f9f9;
   border-radius: 8px;
@@ -73,10 +73,10 @@ button {
 }
 
 button:hover {
-  background-color: #0056b3;
+  background-color: #4169E1; /* 匹配 GoalsPage 的悬停效果 */
 }
 
 button:disabled {
-  background-color: #ccc;
+  background-color: #B0C4DE; /* 匹配 GoalsPage 的禁用状态颜色 */
   cursor: not-allowed;
 }

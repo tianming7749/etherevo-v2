@@ -3,7 +3,7 @@
 .goals-page {
     font-family: 'Arial', sans-serif;
     max-width: 800px;
-    margin: var(--navbar-height) auto 0; /* 从导航栏下方开始 */
+    margin: 0px; 
     padding: 20px;
     background-color: #f9f9f9;
     border-radius: 8px;
@@ -38,14 +38,14 @@
   }
   
   .goals-page button {
-    margin-top: 20px;
-    padding: 10px 20px;
-    background-color: #4682B4; /* 匹配之前的背景颜色 */
+    background-color: #007bff;
     color: white;
     border: none;
     border-radius: 5px;
-    cursor: pointer;
+    padding: 12px 20px;
     font-size: 16px;
+    cursor: pointer;
+    width: 100%;
     transition: background-color 0.3s;
   }
   

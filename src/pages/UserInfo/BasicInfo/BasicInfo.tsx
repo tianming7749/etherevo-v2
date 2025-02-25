@@ -8,6 +8,7 @@ import GenderSelector from "./GenderSelector";
 import OccupationSelector from "./OccupationSelector";
 import "./BasicInfo.css";
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom'; // 导入 useNavigate
 
 const BasicInfo: React.FC = () => {
   const [basicInfo, setBasicInfo] = useState({
@@ -20,8 +21,9 @@ const BasicInfo: React.FC = () => {
   });
 
   const [userId, setUserId] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [loading, setLoading] = useState(false); // 更名为 loading，与 HealthConditionPage 一致
   const { t } = useTranslation();
+  const navigate = useNavigate(); // 使用 useNavigate 钩子
 
   useEffect(() => {
     const fetchUserId = async () => {
@@ -40,7 +42,7 @@ const BasicInfo: React.FC = () => {
     const fetchBasicInfo = async () => {
       if (!userId) return;
 
-      setIsLoading(true);
+      setLoading(true); // 使用 loading 状态
       try {
         const { data, error } = await supabase
           .from("user_basic_info")
@@ -63,7 +65,7 @@ const BasicInfo: React.FC = () => {
       } catch (err) {
         console.error("Error loading basic info:", err);
       } finally {
-        setIsLoading(false);
+        setLoading(false); // 确保加载状态在完成时重置
       }
     };
 
@@ -75,16 +77,15 @@ const BasicInfo: React.FC = () => {
   };
 
   const handleSave = async () => {
-    if (!userId) {
-      alert(t('basicInfoPage.noLoginAlert'));
-      return;
-    }
+    if (!userId) return; // 直接返回，无需弹出提示，与 HealthConditionPage 一致
+
+    setLoading(true); // 开始保存时设置加载状态
 
     try {
       // 保存到 user_basic_info 表（使用键）
       const result = await saveBasicInfo({ ...basicInfo, user_id: userId });
       if (!result.success) {
-        alert(t('basicInfoPage.saveFailedAlert'));
+        alert(t('basicInfoPage.saveFailedAlert')); // 保持失败提示
         return;
       }
 
@@ -123,10 +124,13 @@ const BasicInfo: React.FC = () => {
         console.log("提示词已成功保存");
       }
 
-      alert(t('basicInfoPage.saveSuccessAlert'));
+      alert(t('basicInfoPage.saveSuccessAlert')); // 保持成功提示
+      navigate('/settings/user-info/environment'); // 保存成功后跳转到 LifeEnvironment 页面
     } catch (error) {
       console.error("保存失败：", error);
-      alert(t('basicInfoPage.saveErrorAlert'));
+      alert(t('basicInfoPage.saveErrorAlert')); // 保持网络错误提示
+    } finally {
+      setLoading(false); // 保存完成（无论成功或失败）重置加载状态
     }
   };
 
@@ -146,7 +150,9 @@ const BasicInfo: React.FC = () => {
         onChange={(field, value) => handleFieldChange(field, value)}
         onOtherChange={(value) => handleFieldChange("occupation_other", value)}
       />
-      <button onClick={handleSave}>{t('basicInfoPage.saveButton')}</button>
+      <button onClick={handleSave} disabled={loading}> {/* 使用 loading 控制禁用状态 */}
+        {loading ? t('basicInfoPage.savingButton') : t('basicInfoPage.saveButton')} {/* 动态显示保存文本 */}
+      </button>
     </div>
   );
 };

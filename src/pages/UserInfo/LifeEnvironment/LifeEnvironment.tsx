@@ -8,6 +8,7 @@ import HealthStatusSelector from "./HealthStatusSelector";
 import AdditionalDetailsInput from "./AdditionalDetailsInput";
 import "./LifeEnvironment.css";
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom'; // 导入 useNavigate
 
 interface LifeEnvironmentData {
   stress_level: string;
@@ -39,6 +40,7 @@ const LifeEnvironment: React.FC = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const { t } = useTranslation();
+  const navigate = useNavigate(); // 使用 useNavigate 钩子
 
   useEffect(() => {
     const fetchLatestData = async () => {
@@ -126,6 +128,7 @@ const LifeEnvironment: React.FC = () => {
       }
 
       alert(t('lifeEnvironmentPage.saveSuccessAlert'));
+      navigate('/settings/user-info/health-condition'); // 保存成功后跳转到 HealthCondition 页面
     } catch (error) {
       console.error("保存过程中发生错误：", error);
       alert(t('lifeEnvironmentPage.saveErrorAlert'));

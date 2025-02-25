@@ -4,6 +4,7 @@ import { generatePromptsForUser } from "../../../utils/generatePrompts";
 import { useUserContext } from "../../../context/UserContext";
 import "./RecentEventsPage.css";
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom'; // 导入 useNavigate
 
 const RecentEventsPage: React.FC = () => {
   const { userId, loading } = useUserContext();
@@ -22,6 +23,7 @@ const RecentEventsPage: React.FC = () => {
   });
   const [isSaving, setIsSaving] = useState(false);
   const { t } = useTranslation();
+  const navigate = useNavigate(); // 使用 useNavigate 钩子
 
   useEffect(() => {
     const fetchRecentEvents = async () => {
@@ -109,6 +111,7 @@ const RecentEventsPage: React.FC = () => {
       }
 
       alert(t('recentEventsPage.saveSuccessAlert'));
+      navigate('/chat'); // 保存成功后跳转到 Chat 页面
     } catch (error) {
       console.error("保存过程中发生错误：", error);
       alert(t('recentEventsPage.saveNetworkErrorAlert'));
@@ -123,7 +126,7 @@ const RecentEventsPage: React.FC = () => {
     <div className="recent-events-page">
       <div className="form-section">
         <h3>{t('recentEventsPage.sections.moving.title')}</h3>
-        <label className="checkbox-label"> {/* 添加 className */}
+        <label className="checkbox-label">
           <input
             type="checkbox"
             checked={recentEvents.moving}
@@ -131,13 +134,13 @@ const RecentEventsPage: React.FC = () => {
               setRecentEvents((prev) => ({ ...prev, moving: e.target.checked }))
             }
           />
-          <span>{t('recentEventsPage.sections.moving.label')}</span> {/* 使用 span 包裹文本 */}
+          <span>{t('recentEventsPage.sections.moving.label')}</span>
         </label>
       </div>
 
       <div className="form-section">
         <h3>{t('recentEventsPage.sections.careerAndEducation.title')}</h3>
-        <label className="checkbox-label"> {/* 添加 className */}
+        <label className="checkbox-label">
           <input
             type="checkbox"
             checked={recentEvents.jobChange}
@@ -148,9 +151,9 @@ const RecentEventsPage: React.FC = () => {
               }))
             }
           />
-          <span>{t('recentEventsPage.sections.careerAndEducation.jobChangeLabel')}</span> {/* 使用 span 包裹文本 */}
+          <span>{t('recentEventsPage.sections.careerAndEducation.jobChangeLabel')}</span>
         </label>
-        <label className="checkbox-label"> {/* 添加 className */}
+        <label className="checkbox-label">
           <input
             type="checkbox"
             checked={recentEvents.promotion}
@@ -161,9 +164,9 @@ const RecentEventsPage: React.FC = () => {
               }))
             }
           />
-          <span>{t('recentEventsPage.sections.careerAndEducation.promotionLabel')}</span> {/* 使用 span 包裹文本 */}
+          <span>{t('recentEventsPage.sections.careerAndEducation.promotionLabel')}</span>
         </label>
-        <label className="checkbox-label"> {/* 添加 className */}
+        <label className="checkbox-label">
           <input
             type="checkbox"
             checked={recentEvents.studyChange}
@@ -174,13 +177,13 @@ const RecentEventsPage: React.FC = () => {
               }))
             }
           />
-          <span>{t('recentEventsPage.sections.careerAndEducation.studyChangeLabel')}</span> {/* 使用 span 包裹文本 */}
+          <span>{t('recentEventsPage.sections.careerAndEducation.studyChangeLabel')}</span>
         </label>
       </div>
 
       <div className="form-section">
         <h3>{t('recentEventsPage.sections.relationships.title')}</h3>
-        <label className="checkbox-label"> {/* 添加 className */}
+        <label className="checkbox-label">
           <input
             type="checkbox"
             checked={recentEvents.marriage}
@@ -191,9 +194,9 @@ const RecentEventsPage: React.FC = () => {
               }))
             }
           />
-          <span>{t('recentEventsPage.sections.relationships.marriageLabel')}</span> {/* 使用 span 包裹文本 */}
+          <span>{t('recentEventsPage.sections.relationships.marriageLabel')}</span>
         </label>
-        <label className="checkbox-label"> {/* 添加 className */}
+        <label className="checkbox-label">
           <input
             type="checkbox"
             checked={recentEvents.newBaby}
@@ -204,9 +207,9 @@ const RecentEventsPage: React.FC = () => {
               }))
             }
           />
-          <span>{t('recentEventsPage.sections.relationships.newBabyLabel')}</span> {/* 使用 span 包裹文本 */}
+          <span>{t('recentEventsPage.sections.relationships.newBabyLabel')}</span>
         </label>
-        <label className="checkbox-label"> {/* 添加 className */}
+        <label className="checkbox-label">
           <input
             type="checkbox"
             checked={recentEvents.relationshipChange}
@@ -217,9 +220,9 @@ const RecentEventsPage: React.FC = () => {
               }))
             }
           />
-          <span>{t('recentEventsPage.sections.relationships.relationshipChangeLabel')}</span> {/* 使用 span 包裹文本 */}
+          <span>{t('recentEventsPage.sections.relationships.relationshipChangeLabel')}</span>
         </label>
-        <label className="checkbox-label"> {/* 添加 className */}
+        <label className="checkbox-label">
           <input
             type="checkbox"
             checked={recentEvents.bereavement}
@@ -230,13 +233,13 @@ const RecentEventsPage: React.FC = () => {
               }))
             }
           />
-          <span>{t('recentEventsPage.sections.relationships.bereavementLabel')}</span> {/* 使用 span 包裹文本 */}
+          <span>{t('recentEventsPage.sections.relationships.bereavementLabel')}</span>
         </label>
       </div>
 
       <div className="form-section">
         <h3>{t('recentEventsPage.sections.health.title')}</h3>
-        <label className="checkbox-label"> {/* 添加 className */}
+        <label className="checkbox-label">
           <input
             type="checkbox"
             checked={recentEvents.healthIssue}
@@ -247,13 +250,13 @@ const RecentEventsPage: React.FC = () => {
               }))
             }
           />
-          <span>{t('recentEventsPage.sections.health.healthIssueLabel')}</span> {/* 使用 span 包裹文本 */}
+          <span>{t('recentEventsPage.sections.health.healthIssueLabel')}</span>
         </label>
       </div>
 
       <div className="form-section">
         <h3>{t('recentEventsPage.sections.finance.title')}</h3>
-        <label className="checkbox-label"> {/* 添加 className */}
+        <label className="checkbox-label">
           <input
             type="checkbox"
             checked={recentEvents.financialChange}
@@ -264,7 +267,7 @@ const RecentEventsPage: React.FC = () => {
               }))
             }
           />
-          <span>{t('recentEventsPage.sections.finance.financialChangeLabel')}</span> {/* 使用 span 包裹文本 */}
+          <span>{t('recentEventsPage.sections.finance.financialChangeLabel')}</span>
         </label>
       </div>
 

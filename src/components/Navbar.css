@@ -1,52 +1,104 @@
 .navbar {
-  position: fixed;
+  position: fixed; /* 保持固定导航栏 */
   top: 0;
   left: 0;
-  width: 100%; /* 使用100%而不是auto确保宽度充满视口 */
-  height: var(--navbar-height);
-  background-color: #4682B4; /*  ✅  从内联样式迁移过来 */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /*  ✅  从内联样式迁移过来 */
-  z-index: 1000; /* 增大z-index值以确保在所有元素之上 */
-  display: flex; /*  ✅  从内联样式迁移过来 */
-  align-items: center; /*  ✅  从内联样式迁移过来 */
-  justify-content: space-between; /*  ✅  从内联样式迁移过来 */
-  padding: 10px 20px; /*  ✅  从内联样式迁移过来 */
-  border-radius: 8px; /*  ✅  从内联样式迁移过来 */
-  color: white; /*  ✅  从内联样式迁移过来 */
-  box-sizing: border-box; /*  ✅  从内联样式迁移过来 */
+  width: 100%; /* 确保宽度充满视口 */
+  height: var(--navbar-height); /* 保持动态高度 */
+  background-color: #4682B4; /* 蓝色背景 */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 阴影效果 */
+  z-index: 100; /* 降低 z-index，使内容能覆盖导航栏（如果需要） */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+  border-radius: 8px;
+  color: white;
+  box-sizing: border-box;
+}
+
+.navbar-left {
+  /* 左侧标题区域，无需额外样式，保持默认 */
+}
+
+.navbar-right {
+  display: flex; /* 保持 flex 布局 */
+  align-items: center; /* 垂直居中 */
+  gap: 15px; /* 间距 */
 }
 
 .navbar .etherevo-title {
-  color: #FFD700;
+  color: #FFD700; /* 黄色标题 */
+  font-size: 24px; /* 保持标题字体大小 */
+  font-weight: 600; /* 保持字体权重 */
+  margin: 0; /* 移除默认外边距 */
 }
 
-/*  ✅  导航栏主菜单项 (NavLink)  CSS 类样式  */
+/* 导航栏主菜单项 (NavLink)  CSS 类样式 */
 .navbar-link {
   text-decoration: none;
   color: white;
   writing-mode: horizontal-tb;
   text-orientation: upright;
   white-space: nowrap;
+  font-size: 16px; /* 保持字体大小 */
+  font-weight: 500; /* 保持字体权重 */
+  padding: 8px 12px; /* 保持内边距 */
+  border-radius: 4px; /* 保持圆角 */
+  transition: background-color 0.3s ease, color 0.3s ease; /* 保持过渡 */
 }
 
 .navbar-link.active {
-  color: #FFD700;
+  background-color: #335881; /* 保持激活状态的深蓝色 */
+  color: #FFD700; /* 保持激活状态的黄色 */
 }
 
-/*  ✅  语言选择器 (下拉菜单) 样式调整  */
-select {
+.navbar-link:hover {
+  background-color: #57a3f5; /* 保持悬停效果 */
+  color: #FFD700; /* 保持悬停效果 */
+}
+
+/* 语言选择器 (下拉菜单) 样式调整 */
+.language-selector {
   writing-mode: horizontal-tb;
   text-orientation: upright;
-  backgroundColor: "#f0f0f0"; /*  ✅  从内联样式迁移过来 */
-  color: "#333";         /*  ✅  从内联样式迁移过来 */
-  border: "none";        /*  ✅  从内联样式迁移过来 */
-  borderRadius: "5px";     /*  ✅  从内联样式迁移过来 */
-  padding: "5px 10px";    /*  ✅  从内联样式迁移过来 */
-  cursor: "pointer";     /*  ✅  从内联样式迁移过来 */
-  marginLeft: "15px";     /*  ✅  从内联样式迁移过来 */
+  background-color: #f0f0f0;
+  color: #333;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  font-size: 14px; /* 保持字体大小 */
+  cursor: pointer;
+  margin-left: 15px; /* 保持外边距 */
 }
 
+/* 下拉选项样式 */
 option {
   writing-mode: horizontal-tb;
   text-orientation: upright;
+  font-size: 14px; /* 保持字体大小 */
+}
+
+/* 登出按钮样式 */
+.logout-button {
+  background-color: #5c015e; /* 红色背景 */
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px; /* 保持内边距 */
+  font-size: 14px; /* 保持字体大小 */
+  cursor: pointer;
+  transition: background-color 0.3s ease; /* 保持过渡 */
+  margin-left: 15px; /* 保持外边距 */
+}
+
+.logout-button:hover {
+  background-color: #cc0000; /* 悬停效果 */
+}
+
+/* 用户名称样式 */
+.navbar .user-name {
+  color: #6fb8b8; /* 保持用户名称颜色 */
+  font-weight: 600; /* 保持字体权重 */
+  margin-right: 10px; /* 保持外边距 */
+  font-size: 16px; /* 保持字体大小 */
 }

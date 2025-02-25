@@ -67,12 +67,14 @@
   },
   "navbar": {
     "title": "EtherEvo",
-    "welcome": "Welcome",
+    "chat": "Chat",
+    "settings": "Settings",
+    "logout": "Logout"
+  },
+  "settings": {
     "tones": "Tones",
     "goals": "Goals",
-    "userInfo": "User Info",
-    "chat": "Chat",
-    "logout": "Logout"
+    "userInfo": "User Info"
   },
   "tonesPage": {
     "title": "Choose Your Tone",
@@ -110,7 +112,8 @@
     "saveSuccessAlert": "Goals saved successfully!",
     "saveErrorAlert": "Error saving goals or updating prompt, please try again later.",
     "maxGoalsAlert": "You can only select up to 3 goals!",
-    "saveButton": "Save Goals",
+    "savingButton": "Saving...",
+    "saveButton": "Save",
     "predefinedGoals": {
       "reduce_anxiety": "Reduce anxiety",
       "improve_depression": "Improve depressive mood",
@@ -139,6 +142,7 @@
   },
   "basicInfoPage": {
     "title": "Basic Information",
+    "savingButton": "Saving...",
     "saveButton": "Save",
     "noLoginAlert": "User not logged in, please log in first!",
     "saveSuccessAlert": "Saved successfully!",
@@ -261,6 +265,7 @@
     "yes": "Yes",
     "no": "No",
     "saveButton": "Save",
+    "savingButton": "Saving...",
     "saveSuccessAlert": "Saved successfully!",
     "saveErrorAlert": "Save failed, please try again later!",
     "saveNetworkErrorAlert": "Save failed, please check your network connection or try again later!"
@@ -444,21 +449,23 @@
       }
      }
     },
-    "chat": {
+      "chat": {
       "input": {
-      "placeholder": "Type your message...",
-      "sendButton": "Send",
-      "sendingButton": "Sending..."
-    },
+        "placeholder": "Type your message...",
+        "sendButton": "Send",
+        "sendingButton": "Sending..."
+      },
       "loading": "Loading...",
       "header": {
         "clearChat": "Clear Chat"
       },
       "confirmationModal": {
-        "confirmClear": "Are you sure you want to clear the chat?",
+        "confirmClear": "Are you sure you want to clear the chat history?",
         "cancel": "Cancel",
         "confirm": "Confirm"
-      }
+      },
+      "clearWarning": "This operation will clear all history records, please proceed with caution"
+    
     },
       "prompts": {
       "noPrompt": "No prompt",

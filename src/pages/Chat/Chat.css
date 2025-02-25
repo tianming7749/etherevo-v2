@@ -15,6 +15,7 @@
   padding: 10px;
   overflow-y: auto;
   background-color: #f9f9f9;
+  flex-direction: column-reverse; /* 将新消息放在底部 */
 }
 
 /* 加载指示器样式 */
@@ -165,4 +166,57 @@
 .chat-message.long-text::-webkit-scrollbar-thumb {
   background-color: #aaa;
   border-radius: 5px;
+}
+/* 最终确认提示弹窗 */
+.final-confirmation-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* 半透明背景 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.final-confirmation-modal .modal-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.final-confirmation-modal .modal-content p {
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.final-confirmation-modal .modal-content button {
+  padding: 8px 16px;
+  margin: 0 5px;
+  font-size: 14px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.final-confirmation-modal .modal-content button:first-child {
+  background-color: #dc3545; /* 确认按钮使用红色 */
+  color: white;
+}
+
+.final-confirmation-modal .modal-content button:first-child:hover {
+  background-color: #c82333;
+}
+
+.final-confirmation-modal .modal-content button:last-child {
+  background-color: #6c757d; /* 取消按钮使用灰色 */
+  color: white;
+}
+
+.final-confirmation-modal .modal-content button:last-child:hover {
+  background-color: #5a6268;
 }

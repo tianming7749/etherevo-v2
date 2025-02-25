@@ -5,16 +5,18 @@ import { useUserContext } from "../../../context/UserContext";
 import { supabase } from "../../../supabaseClient";
 import "./HealthConditionPage.css";
 import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom'; // 导入 useNavigate
 
 const HealthConditionPage = () => {
   const { userId } = useUserContext();
   const [healthCondition, setHealthCondition] = useState({
-    mentalHealthHistory: [],
+    mentalHealthHistory: [] as string[],
     isReceivingTreatment: false,
   });
 
-  const [loading, setLoading] = useState(false);
+  const [isSaving, setIsSaving] = useState(false); // 替换 loading 为 isSaving
   const { t } = useTranslation();
+  const navigate = useNavigate(); // 使用 useNavigate 钩子
 
   const options = {
     mentalHealthHistory: t('healthConditionPage.mentalHealthOptions', { returnObjects: true }) as Record<string, string>,
@@ -24,7 +26,7 @@ const HealthConditionPage = () => {
   useEffect(() => {
     const fetchHealthCondition = async () => {
       if (!userId) return;
-      setLoading(true);
+      setIsSaving(true); // 使用 isSaving 代替 loading
       const { data, error } = await supabase
         .from("user_health_condition")
         .select("health_condition")
@@ -39,7 +41,7 @@ const HealthConditionPage = () => {
       } else if (error) {
         console.error("Error fetching health condition:", error);
       }
-      setLoading(false);
+      setIsSaving(false); // 使用 isSaving 代替 loading
     };
 
     fetchHealthCondition();
@@ -48,7 +50,7 @@ const HealthConditionPage = () => {
   const saveHealthCondition = async () => {
     if (!userId) return;
 
-    setLoading(true);
+    setIsSaving(true); // 开始保存时设置 isSaving
 
     try {
       const { error } = await supabase
@@ -83,11 +85,12 @@ const HealthConditionPage = () => {
       }
 
       alert(t('healthConditionPage.saveSuccessAlert'));
+      navigate('/settings/user-info/interests'); // 保存成功后跳转到 Interests 页面
     } catch (error) {
       console.error("保存过程中发生错误：", error);
       alert(t('healthConditionPage.saveNetworkErrorAlert'));
     } finally {
-      setLoading(false);
+      setIsSaving(false); // 保存完成（无论成功或失败）重置 isSaving
     }
   };
 
@@ -111,6 +114,7 @@ const HealthConditionPage = () => {
                     : healthCondition.mentalHealthHistory.filter((item) => item !== key);
                   handleChange("mentalHealthHistory", updatedList);
                 }}
+                disabled={isSaving} // 使用 isSaving 禁用输入框
               />
               {options.mentalHealthHistory[key]}
             </label>
@@ -133,6 +137,7 @@ const HealthConditionPage = () => {
                   if (e.target.value.trim()) updatedList.push(othersText);
                   handleChange("mentalHealthHistory", updatedList);
                 }}
+                disabled={isSaving} // 使用 isSaving 禁用输入框
               />
             </label>
           </div>
@@ -144,6 +149,7 @@ const HealthConditionPage = () => {
             type="radio"
             checked={healthCondition.isReceivingTreatment === true}
             onChange={() => handleChange("isReceivingTreatment", true)}
+            disabled={isSaving} // 使用 isSaving 禁用输入框
           />
           {t('healthConditionPage.yes')}
         </label>
@@ -152,12 +158,13 @@ const HealthConditionPage = () => {
             type="radio"
             checked={healthCondition.isReceivingTreatment === false}
             onChange={() => handleChange("isReceivingTreatment", false)}
+            disabled={isSaving} // 使用 isSaving 禁用输入框
           />
           {t('healthConditionPage.no')}
         </label>
 
-        <button type="button" onClick={saveHealthCondition} disabled={loading}>
-          {t('healthConditionPage.saveButton')}
+        <button type="button" onClick={saveHealthCondition} disabled={isSaving}>
+          {isSaving ? t('healthConditionPage.savingButton') : t('healthConditionPage.saveButton')} {/* 动态显示保存文本 */}
         </button>
       </form>
     </div>

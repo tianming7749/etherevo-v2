@@ -1,0 +1,52 @@
+.settings-container {
+    max-width: 900px; /* 保持宽度 */
+    margin: 40px auto 20px; /* 减少顶部间距为 60px，保持底部间距 */
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 12px; /* 保持圆角 */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* 保持阴影效果 */
+    position: relative;
+    z-index: 90; /* 保持低于导航栏 */
+  }
+  
+  .settings-nav {
+    display: flex;
+    gap: 30px; /* 保持间距 */
+    margin-bottom: 30px; /* 保持底部间距 */
+    border-bottom: 2px solid #e0e0e0; /* 保持底部边框 */
+  }
+  
+  .settings-link {
+    text-decoration: none;
+    color: #007bff;
+    padding: 10px 15px; /* 保持内边距 */
+    font-size: 16px; /* 保持字体大小 */
+    font-weight: 500; /* 保持字体权重 */
+    border-bottom: 2px solid transparent;
+    transition: color 0.3s ease, border-color 0.3s ease; /* 保持过渡 */
+  }
+  
+  .settings-link.active {
+    border-bottom: 2px solid #007bff;
+    font-weight: 600; /* 保持高亮 */
+    color: #0056b3; /* 保持颜色 */
+  }
+  
+  .settings-link:hover {
+    color: #0056b3;
+    border-bottom: 2px solid #0056b3; /* 保持悬停效果 */
+  }
+  
+  .settings-content {
+    padding: 30px; /* 保持内边距 */
+    min-height: 400px; /* 保持最小高度 */
+    background-color: #ffffff; /* 保持纯白背景 */
+    border-radius: 8px; /* 保持微调圆角 */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); /* 保持轻微阴影 */
+    position: relative; /* 保持层级正确 */
+  }
+  
+  /* 调试类 - 如果需要移除 */
+  .debug-visible {
+    outline: 2px solid red !important; /* 临时高亮 */
+  }

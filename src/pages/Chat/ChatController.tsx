@@ -237,18 +237,25 @@ const useChatController = ({ userId, sessionId }) => {
 
   const clearChat = async () => {
     try {
-      await supabase
+      console.log("开始清除聊天记录，userId:", userId); // 调试日志
+      // 删除该用户的所有聊天历史记录
+      const { error } = await supabase
         .from("chat_history")
         .delete()
-        .eq("user_id", userId)
-        .eq("session_id", sessionId);
-
+        .eq("user_id", userId);
+  
+      if (error) {
+        console.error("删除数据库记录时出错:", error);
+        throw error;
+      }
+  
+      // 清除本地状态
       setMessages([]);
       setContext([]);
       setTurnCount(0);
       setPage(1);
-      setHasMore(true);
-      console.log("聊天历史清除成功");
+      setHasMore(false);
+      console.log("用户所有聊天历史已从数据库清除成功");
     } catch (error) {
       console.error("从数据库清除聊天历史时出错:", error);
     }

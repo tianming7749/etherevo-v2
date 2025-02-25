@@ -21,7 +21,8 @@ const debounce = (func: (...args: any[]) => void, wait: number) => {
 const Chat: React.FC = () => {
   const { userId, loading } = useUserContext();
   const navigate = useNavigate();
-  const [showConfirmation, setShowConfirmation] = useState(false);
+  const [showConfirmation, setShowConfirmation] = useState(false); // 控制初始确认弹窗
+  const [showFinalConfirmation, setShowFinalConfirmation] = useState(false); // 控制最终确认提示
   const [isInitialLoad, setIsInitialLoad] = useState(true);
   const [isSendingMessage, setIsSendingMessage] = useState(false);
   const { sessionId } = SessionManager({ userId });
@@ -50,13 +51,26 @@ const Chat: React.FC = () => {
     });
   };
 
+  const handleClearChat = () => {
+    // 初次点击显示最终确认提示
+    if (!showFinalConfirmation) {
+      setShowFinalConfirmation(true);
+      return;
+    }
+    // 再次确认后执行清除
+    clearChat().then(() => {
+      setShowConfirmation(false); // 关闭初始确认弹窗
+      setShowFinalConfirmation(false); // 关闭最终确认提示
+    });
+  };
+
   const { MessageListComponent, ChatInputComponent, ConfirmationModal } = ChatDisplay({
     messages,
     isSending,
     showConfirmation,
     setShowConfirmation,
     handleSendMessage,
-    clearChat,
+    clearChat: handleClearChat, // 使用新的清除函数
     messagesEndRef,
     input,
     setInput,
@@ -75,6 +89,15 @@ const Chat: React.FC = () => {
       console.log("初次加载完成 - scrollTop:", messageListRef.current.scrollTop, "scrollHeight:", messageListRef.current.scrollHeight);
     }
   }, [isInitialLoad, messages]);
+
+  // 发送新消息时滚动到底部
+  useEffect(() => {
+    if (isSendingMessage && messages.length > 0 && messageListRef.current) {
+      messageListRef.current.scrollTop = messageListRef.current.scrollHeight;
+      setIsInitialLoad(false);
+      console.log("发送消息后 - scrollTop:", messageListRef.current.scrollTop, "scrollHeight:", messageListRef.current.scrollHeight);
+    }
+  }, [isSendingMessage, messages]);
 
   // 发送新消息时滚动到底部
   useEffect(() => {
@@ -105,7 +128,6 @@ const Chat: React.FC = () => {
             }
           };
 
-          // 多次恢复滚动位置，确保不被覆盖
           requestAnimationFrame(() => {
             restoreScrollPosition();
             setTimeout(() => {
@@ -149,6 +171,16 @@ const Chat: React.FC = () => {
       </div>
       {ChatInputComponent}
       {ConfirmationModal}
+      {/* 最终确认提示弹窗 */}
+      {showFinalConfirmation && (
+        <div className="final-confirmation-modal">
+          <div className="modal-content">
+            <p>{t('chat.clearWarning')}</p> {/* 假设翻译文件中添加 'chat.clearWarning': '此操作将清空所有历史记录，请谨慎操作' */}
+            <button onClick={handleClearChat}>{t('chat.confirmationModal.confirm')}</button>
+            <button onClick={() => { console.log("取消按钮点击"); setShowFinalConfirmation(false); }}>{t('chat.confirmationModal.cancel')}</button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
