@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
 import { useTranslation } from 'react-i18next'; // 导入 useTranslation
-import './Auth.css'; // 使用 Auth.css 保持样式一致
+import './ResetPassword.css'; // 创建或使用独立的 CSS 文件
 
 const ResetPassword: React.FC = () => {
   const [password, setPassword] = useState('');
@@ -15,6 +15,31 @@ const ResetPassword: React.FC = () => {
   const queryParams = new URLSearchParams(location.search);
   const token = queryParams.get('token');
 
+  useEffect(() => {
+    const verifyToken = async () => {
+      if (!token) {
+        setError(t('resetPassword.messages.invalidToken'));
+        return;
+      }
+
+      try {
+        const { data, error } = await supabase.auth.verifyOtp({
+          token,
+          type: 'recovery',
+        });
+
+        if (error) {
+          setError(t('resetPassword.messages.invalidToken'));
+          return;
+        }
+      } catch (err) {
+        setError(t('resetPassword.messages.unexpectedError'));
+      }
+    };
+
+    verifyToken();
+  }, [token]);
+
   const handlePasswordReset = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -24,18 +49,16 @@ const ResetPassword: React.FC = () => {
     }
 
     try {
-      const { error } = await supabase.auth.updateUser(
-        { password },
-        { accessToken: token } // 使用 token 验证请求
-      );
+      const { error } = await supabase.auth.verifyOtp({
+        token,
+        type: 'recovery',
+        newPassword: password, // 直接更新新密码
+      });
 
       if (error) {
-        setError(error.message); // Supabase 返回的错误消息可能需要额外翻译
+        setError(error.message || t('resetPassword.messages.unexpectedError'));
       } else {
         setSuccess(true);
-        setTimeout(() => {
-          navigate('/auth');
-        }, 3000); // 3秒后重定向
       }
     } catch (err) {
       setError(t('resetPassword.messages.unexpectedError'));
@@ -43,17 +66,27 @@ const ResetPassword: React.FC = () => {
   };
 
   if (!token) {
-    return <div className="auth-container">{t('resetPassword.messages.invalidToken')}</div>;
+    return <div className="reset-password-container">{t('resetPassword.messages.invalidToken')}</div>;
   }
 
   if (success) {
-    return <div className="auth-container">{t('resetPassword.messages.success')}</div>;
+    return (
+      <div className="reset-password-container">
+        <p>{t('resetPassword.messages.success')}</p>
+        <button
+          onClick={() => navigate('/auth')}
+          className="reset-password-button"
+        >
+          {t('resetPassword.buttons.backToLogin')}
+        </button>
+      </div>
+    );
   }
 
   return (
-    <div className="auth-container">
+    <div className="reset-password-container">
       <h2>{t('resetPassword.title')}</h2>
-      {error && <p className="auth-message error">{error}</p>}
+      {error && <p className="reset-password-error">{error}</p>}
       <form onSubmit={handlePasswordReset}>
         <label htmlFor="newPassword">{t('resetPassword.labels.newPassword')}</label>
         <input
@@ -62,7 +95,8 @@ const ResetPassword: React.FC = () => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
-          className="auth-input"
+          className="reset-password-input"
+          disabled={!token || !!error} // 根据 token 和 error 禁用
         />
         <label htmlFor="confirmNewPassword">{t('resetPassword.labels.confirmNewPassword')}</label>
         <input
@@ -71,9 +105,10 @@ const ResetPassword: React.FC = () => {
           value={confirmPassword}
           onChange={(e) => setConfirmPassword(e.target.value)}
           required
-          className="auth-input"
+          className="reset-password-input"
+          disabled={!token || !!error} // 根据 token 和 error 禁用
         />
-        <button type="submit" className="auth-button">
+        <button type="submit" className="reset-password-button" disabled={!token || !!error}>
           {t('resetPassword.buttons.resetPassword')}
         </button>
       </form>

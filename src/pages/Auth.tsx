@@ -152,7 +152,7 @@ const Auth: React.FC = () => {
         onClick={toggleLanguage}
         className="auth-forgot-password"
       >
-        {i18n.language === 'zh' ? t('auth.languageSwitch.toEnglish') : t('auth.languageSwitch.toChinese')}
+        {i18n.language === 'zh-CN' ? t('auth.languageSwitch.toEnglish') : t('auth.languageSwitch.toChinese')}
       </span>
       {message && (
         <p className={`auth-message ${message.includes(t('auth.messages.loginSuccess')) || message.includes(t('auth.messages.signUpSuccess')) ? 'success' : 'error'}`}>

@@ -15,7 +15,7 @@ i18n
   // for all options read: https://www.i18next.com/initialization-options
   .init({
     debug: true, //  ✅ 开启 debug 模式，方便调试
-    fallbackLng: 'zh-CN', //  ✅ 设置默认语言为 简体中文 (如果用户语言检测失败，或者没有设置语言)
+    fallbackLng: 'zh', //  ✅ 设置默认语言为 简体中文 (如果用户语言检测失败，或者没有设置语言)
     interpolation: {
       escapeValue: false, // not needed for react as it escapes by default
     },

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useUserContext } from "./context/UserContext";
-import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import { supabase } from "./supabaseClient";
 import Navbar from "./components/Navbar";
 import Chat from "./pages/Chat/Chat";
@@ -104,7 +104,7 @@ const App: React.FC = () => {
             <Navigate to="/auth" replace />
           } />
           <Route
-            path="/settings"
+            path="/settings/*"
             element={isLoggedIn ? <Settings /> : <Navigate to="/auth" replace />}
           >
             <Route path="tones" element={<TonesPage setActiveButton={() => setActiveButton('Tones')} />} />

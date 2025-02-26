@@ -36,33 +36,34 @@
     }
   },
   "forgotPassword": {
-    "title": "重置您的密码",
+    "title": "忘记密码",
     "input": {
-      "emailPlaceholder": "输入您的邮箱"
-    },
-    "buttons": {
-      "resetPassword": "重置密码",
-      "backToLogin": "返回登录"
+      "emailPlaceholder": "请输入您的邮箱"
     },
     "messages": {
-      "error": "发送重置邮件时出错，请重试。",
-      "success": "密码重置邮件已发送，请检查您的邮箱。"
+      "error": "发送重置密码邮件失败，请重试。",
+      "success": "已发送重置密码邮件！3秒后将返回登录页面..."
+    },
+    "buttons": {
+      "resetPassword": "发送重置链接",
+      "backToLogin": "返回登录"
     }
   },
   "resetPassword": {
     "title": "重置您的密码",
+    "messages": {
+      "invalidToken": "无效或已过期的密码重置链接。",
+      "passwordMismatch": "密码不匹配，请确认。",
+      "unexpectedError": "发生意外错误，请稍后重试。",
+      "success": "密码重置成功！将跳转到登录页面..."
+    },
     "labels": {
-      "newPassword": "新密码：",
-      "confirmNewPassword": "确认新密码："
+      "newPassword": "新密码",
+      "confirmNewPassword": "确认新密码"
     },
     "buttons": {
-      "resetPassword": "重置密码"
-    },
-    "messages": {
-      "passwordMismatch": "密码不匹配",
-      "unexpectedError": "发生意外错误。",
-      "invalidToken": "无效或缺少令牌。",
-      "success": "密码已成功重置。您将很快被重定向到登录页面。"
+      "resetPassword": "重置密码",
+      "backToLogin": "返回登录"
     }
   },
   "welcome": {
