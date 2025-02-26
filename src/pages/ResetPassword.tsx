@@ -14,7 +14,7 @@ const ResetPassword: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { t } = useTranslation();
-  const { isAuthenticated, isPasswordRecovery, userId } = useUserContext(); // 增加 userId
+  const { isAuthenticated, isPasswordRecovery } = useUserContext(); // 只使用必要的状态，移除 userId
   const queryParams = new URLSearchParams(location.search);
   const token = queryParams.get('token');
   const redirectTo = queryParams.get('redirect_to');
@@ -48,8 +48,8 @@ const ResetPassword: React.FC = () => {
             setError(t('resetPassword.messages.invalidToken'));
           } else {
             setError(t('resetPassword.messages.unexpectedError'));
+            console.error('Detailed token verification error:', error.message, error);
           }
-          console.error('Token verification error:', error);
         } else {
           setError(null); // 令牌有效，清空任何错误
         }
@@ -62,7 +62,7 @@ const ResetPassword: React.FC = () => {
     };
 
     verifyToken();
-  }, [token, t, isAuthenticated, isPasswordRecovery]); // 移除 userId，因为它不是必需的依赖
+  }, [token, t, isAuthenticated, isPasswordRecovery]);
 
   const handlePasswordReset = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -103,8 +103,8 @@ const ResetPassword: React.FC = () => {
           setError(t('resetPassword.messages.invalidToken'));
         } else {
           setError(error.message || t('resetPassword.messages.unexpectedError'));
+          console.error('Detailed password reset error:', error.message, error);
         }
-        console.error('Password reset error:', error);
       } else {
         setSuccess(true);
         setError(null);

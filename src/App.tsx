@@ -32,14 +32,12 @@ const ErrorBoundaryFallback = () => {
 };
 
 const App: React.FC = () => {
-  const { userId, setUserId } = useUserContext();
-  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("supabase.auth.token"));
+  const { isAuthenticated, isPasswordRecovery, userId, setUserId } = useUserContext(); // 使用 UserContext 的状态
   const [activeButton, setActiveButton] = useState('Chat');
   const [setupCompleted, setSetupCompleted] = useState<boolean | null>(null);
 
   useEffect(() => {
     const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
-      setIsLoggedIn(!!session);
       if (session?.user) {
         setUserId(session.user.id);
       } else {
@@ -51,7 +49,7 @@ const App: React.FC = () => {
       (authListener as any)?.unsubscribe?.();
     };
   }, [setUserId]);
-  
+
   useEffect(() => {
     const checkSetupStatus = async () => {
       if (!userId) {
@@ -76,37 +74,58 @@ const App: React.FC = () => {
     checkSetupStatus();
   }, [userId]);
 
-  // 如果加载中或设置状态未确定，显示加载指示器
-  if (!userId && isLoggedIn) {
+  // 仅在 loading 状态为 true 时显示加载指示器
+  if (isAuthenticated === undefined || isPasswordRecovery === undefined) {
     return <div>Loading...</div>;
   }
 
   return (
     <I18nextProvider i18n={i18n}> {/* ✅ 使用 I18nextProvider 包裹 Router 组件，并传入 i18n 实例 */}
       <Router>
-        {isLoggedIn && <Navbar activeButton={activeButton} onButtonClick={setActiveButton} />}
+        {/* 仅在完全登录（非密码重置流程）时显示 Navbar */}
+        {isAuthenticated && !isPasswordRecovery && <Navbar activeButton={activeButton} onButtonClick={setActiveButton} />}
         <Routes>
-          <Route path="/auth" element={isLoggedIn ? <Navigate to="/" replace /> : <Auth />} />
+          <Route path="/auth" element={<Auth />} /> {/* 移除 isAuthenticated 条件，确保未登录时始终渲染 Auth */}
           <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/reset-password" element={<ResetPassword />} /> {/* 显式添加 reset-password 路由 */}
-          <Route path="/auth/v1/verify" element={<ResetPassword />} />
-          <Route path="/"
-            element={isLoggedIn ?
-              <Welcome setActiveButton={() => setActiveButton('Welcome')} /> :
+          <Route 
+            path="/reset-password" 
+            element={
+              (isAuthenticated && !isPasswordRecovery) ? 
+              <Navigate to="/" replace /> : 
+              <ResetPassword />
+            } 
+          />
+          <Route
+            path="/"
+            element={
+              (isAuthenticated && !isPasswordRecovery) ? 
+              <Welcome setActiveButton={() => setActiveButton('Welcome')} /> : 
               <Navigate to="/auth" replace />
             }
           />
-          <Route path="/tones" element={isLoggedIn ?
-            <TonesPage setActiveButton={() => setActiveButton('Tones')} /> :
-            <Navigate to="/auth" replace />
-          } />
-          <Route path="/chat" element={isLoggedIn ?
-            <Chat setActiveButton={() => setActiveButton('Chat')} /> :
-            <Navigate to="/auth" replace />
-          } />
+          <Route
+            path="/tones"
+            element={
+              (isAuthenticated && !isPasswordRecovery) ? 
+              <TonesPage setActiveButton={() => setActiveButton('Tones')} /> : 
+              <Navigate to="/auth" replace />
+            }
+          />
+          <Route
+            path="/chat"
+            element={
+              (isAuthenticated && !isPasswordRecovery) ? 
+              <Chat setActiveButton={() => setActiveButton('Chat')} /> : 
+              <Navigate to="/auth" replace />
+            }
+          />
           <Route
             path="/settings/*"
-            element={isLoggedIn ? <Settings /> : <Navigate to="/auth" replace />}
+            element={
+              (isAuthenticated && !isPasswordRecovery) ? 
+              <Settings /> : 
+              <Navigate to="/auth" replace />
+            }
           >
             <Route path="tones" element={<TonesPage setActiveButton={() => setActiveButton('Tones')} />} />
             <Route path="goals" element={<GoalsPage setActiveButton={() => setActiveButton('Goals')} />} />

@@ -31,8 +31,8 @@
       "unexpectedError": "发生意外错误。"
     },
     "languageSwitch": {
-      "toChinese": "切换到中文",
-      "toEnglish": "切换到英文"
+      "toChinese": "切换到英文",
+      "toEnglish": "切换到中文"
     }
   },
   "forgotPassword": {
