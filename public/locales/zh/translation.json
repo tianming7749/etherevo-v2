@@ -65,6 +65,25 @@
       "success": "密码已成功重置。您将很快被重定向到登录页面。"
     }
   },
+  "welcome": {
+    "title": "欢迎使用 EtherEvo",
+    "loading": "正在加载...",
+    "featuresTitle": "功能介绍",
+    "featuresDescription": "感谢您加入 EtherEvo！我们是一个专注于心理健康支持的智能助手平台，帮助您：",
+    "feature1": "个性化对话：通过设置您的对话语气和目标，享受定制化的交流体验。",
+    "feature2": "健康管理：记录并分析您的生活环境、健康状况、兴趣和社交支持，获取专业的建议。",
+    "feature3": "隐私保护：您的个人信息将严格保密，我们承诺不与第三方分享您的敏感数据。",
+    "feature4": "便捷使用：随时随地通过聊天功能与我们的智能助手互动，获取实时支持。",
+    "privacyTitle": "EtherEvo 隐私协议",
+    "privacyDescription": "欢迎使用 EtherEvo 平台。在使用我们的服务前，请仔细阅读并同意以下隐私条款：",
+    "privacyPoint1": "信息收集：我们仅收集必要的个人信息（如姓名、年龄、健康数据等），用于提供个性化服务。",
+    "privacyPoint2": "数据使用：您的信息仅用于改善服务体验，不得用于任何商业目的，且不会与第三方共享。",
+    "privacyPoint3": "数据存储：您的个人信息将通过加密技术存储在安全的服务器上，符合相关法律法规。",
+    "privacyPoint4": "权利与撤回：您有权查看、修改或删除您的个人信息，并可随时撤回同意。",
+    "privacyAgreement": "我已阅读并同意 EtherEvo 隐私协议",
+    "privacyRequired": "请同意隐私协议才能继续。",
+    "startSetup": "开始设置"
+  },
   "navbar": {
     "title": "EtherEvo",
     "chat": "聊天",

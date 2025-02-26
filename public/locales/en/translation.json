@@ -65,6 +65,25 @@
       "success": "Password has been successfully reset. You will be redirected to the login page shortly."
     }
   },
+  "welcome": {
+    "title": "Welcome to EtherEvo",
+    "loading": "Loading...",
+    "featuresTitle": "Features Overview",
+    "featuresDescription": "Thank you for joining EtherEvo! We are a smart assistant platform focused on mental health support, helping you:",
+    "feature1": "Personalized Conversations: Customize your interaction experience by setting your conversation tone and goals.",
+    "feature2": "Health Management: Track and analyze your life environment, health conditions, interests, and social support to receive professional advice.",
+    "feature3": "Privacy Protection: Your personal information is strictly confidential, and we promise not to share your sensitive data with third parties.",
+    "feature4": "Convenient Usage: Interact with our smart assistant anytime, anywhere through the chat feature for real-time support.",
+    "privacyTitle": "EtherEvo Privacy Policy",
+    "privacyDescription": "Welcome to the EtherEvo platform. Please carefully read and agree to the following privacy terms before using our services:",
+    "privacyPoint1": "Information Collection: We only collect necessary personal information (e.g., name, age, health data) to provide personalized services.",
+    "privacyPoint2": "Data Usage: Your information is used solely to enhance your service experience, not for any commercial purposes, and will not be shared with third parties.",
+    "privacyPoint3": "Data Storage: Your personal information will be stored on secure servers using encryption, in compliance with relevant laws and regulations.",
+    "privacyPoint4": "Rights and Withdrawal: You have the right to view, modify, or delete your personal information and can withdraw your consent at any time.",
+    "privacyAgreement": "I have read and agree to the EtherEvo Privacy Policy",
+    "privacyRequired": "Please agree to the privacy policy to continue.",
+    "startSetup": "Start Setup"
+  },
   "navbar": {
     "title": "EtherEvo",
     "chat": "Chat",

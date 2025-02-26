@@ -3,7 +3,7 @@
   top: 0;
   left: 0;
   width: 100%; /* 确保宽度充满视口 */
-  height: var(--navbar-height); /* 保持动态高度 */
+  height: var(--navbar-height, 70px); /* 保持动态高度 */
   background-color: #4682B4; /* 蓝色背景 */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 阴影效果 */
   z-index: 100; /* 降低 z-index，使内容能覆盖导航栏（如果需要） */
@@ -11,13 +11,14 @@
   align-items: center;
   justify-content: space-between;
   padding: 10px 20px;
-  border-radius: 8px;
+  border-radius: 0; /* 移除圆角，避免与内容冲突 */
   color: white;
   box-sizing: border-box;
 }
 
 .navbar-left {
-  /* 左侧标题区域，无需额外样式，保持默认 */
+  display: flex; /* 确保水平排列 */
+  align-items: center; /* 垂直居中 */
 }
 
 .navbar-right {
@@ -101,4 +102,7 @@ option {
   font-weight: 600; /* 保持字体权重 */
   margin-right: 10px; /* 保持外边距 */
   font-size: 16px; /* 保持字体大小 */
+  max-width: 150px; /* 限制名称宽度，避免过长 */
+  white-space: nowrap; /* 确保单行显示 */
+  text-orientation: mixed; /* 确保正常文本方向 */
 }
