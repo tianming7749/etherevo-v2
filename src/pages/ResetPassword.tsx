@@ -9,6 +9,7 @@ const ResetPassword: React.FC = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
+  const [isLoading, setIsLoading] = useState(true); // 添加加载状态
   const navigate = useNavigate();
   const location = useLocation();
   const { t } = useTranslation();
@@ -19,6 +20,7 @@ const ResetPassword: React.FC = () => {
   useEffect(() => {
     if (!token) {
       setError(t('resetPassword.messages.invalidToken'));
+      setIsLoading(false);
       return;
     }
 
@@ -31,9 +33,13 @@ const ResetPassword: React.FC = () => {
 
         if (error) {
           setError(t('resetPassword.messages.invalidToken'));
+        } else {
+          setError(null); // 令牌有效，清空任何错误
         }
       } catch (err) {
         setError(t('resetPassword.messages.unexpectedError'));
+      } finally {
+        setIsLoading(false); // 验证完成后停止加载
       }
     };
 
@@ -48,6 +54,7 @@ const ResetPassword: React.FC = () => {
       return;
     }
 
+    setIsLoading(true);
     try {
       const { error } = await supabase.auth.verifyOtp({
         token,
@@ -59,11 +66,18 @@ const ResetPassword: React.FC = () => {
         setError(error.message || t('resetPassword.messages.unexpectedError'));
       } else {
         setSuccess(true);
+        setError(null);
       }
     } catch (err) {
       setError(t('resetPassword.messages.unexpectedError'));
+    } finally {
+      setIsLoading(false);
     }
   };
+
+  if (isLoading) {
+    return <div className="reset-password-container">{t('resetPassword.messages.loading')}</div>; // 显示加载提示
+  }
 
   if (!token) {
     return <div className="reset-password-container">{t('resetPassword.messages.invalidToken')}</div>;
@@ -96,7 +110,7 @@ const ResetPassword: React.FC = () => {
           onChange={(e) => setPassword(e.target.value)}
           required
           className="reset-password-input"
-          disabled={!token || !!error}
+          disabled={isLoading || !!error}
         />
         <label htmlFor="confirmNewPassword">{t('resetPassword.labels.confirmNewPassword')}</label>
         <input
@@ -106,9 +120,9 @@ const ResetPassword: React.FC = () => {
           onChange={(e) => setConfirmPassword(e.target.value)}
           required
           className="reset-password-input"
-          disabled={!token || !!error}
+          disabled={isLoading || !!error}
         />
-        <button type="submit" className="reset-password-button" disabled={!token || !!error}>
+        <button type="submit" className="reset-password-button" disabled={isLoading || !!error}>
           {t('resetPassword.buttons.resetPassword')}
         </button>
       </form>
