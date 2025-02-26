@@ -22,13 +22,13 @@ const Settings: React.FC = () => {
     return (
       <div className="settings-container">
         <nav className="settings-nav">
-          <NavLink to="tones" className={({ isActive }) => isActive ? "settings-link active" : "settings-link"}>
+          <NavLink to="/settings/tones" className={({ isActive }) => isActive ? "settings-link active" : "settings-link"}>
             {t('settings.tones', 'Tones')} {/* 提供默认值以防翻译失败 */}
           </NavLink>
-          <NavLink to="goals" className={({ isActive }) => isActive ? "settings-link active" : "settings-link"}>
+          <NavLink to="/settings/goals" className={({ isActive }) => isActive ? "settings-link active" : "settings-link"}>
             {t('settings.goals', 'Goals')}
           </NavLink>
-          <NavLink to="user-info" className={({ isActive }) => isActive ? "settings-link active" : "settings-link"}>
+          <NavLink to="/settings/user-info" className={({ isActive }) => isActive ? "settings-link active" : "settings-link"}>
             {t('settings.userInfo', 'User Info')}
           </NavLink>
         </nav>

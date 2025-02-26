@@ -88,6 +88,7 @@ const App: React.FC = () => {
         <Routes>
           <Route path="/auth" element={isLoggedIn ? <Navigate to="/" replace /> : <Auth />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password" element={<ResetPassword />} /> {/* 显式添加 reset-password 路由 */}
           <Route path="/auth/v1/verify" element={<ResetPassword />} />
           <Route path="/"
             element={isLoggedIn ?
@@ -118,22 +119,6 @@ const App: React.FC = () => {
               <Route path="recent-events" element={<RecentEventsPage />} />
               <Route path="social-support" element={<SocialSupportPage />} />
             </Route>
-          </Route>
-          <Route path="/goals" element={isLoggedIn ?
-            <GoalsPage setActiveButton={() => setActiveButton('Goals')} /> :
-            <Navigate to="/auth" replace />
-          } />
-          <Route path="/user-info" element={isLoggedIn ?
-            <UserInfo setActiveButton={() => setActiveButton('UserInfo')} /> :
-            <Navigate to="/auth" replace />
-          }>
-            <Route index element={<BasicInfo />} />
-            <Route path="basic-info" element={<BasicInfo />} />
-            <Route path="environment" element={<LifeEnvironment />} />
-            <Route path="health-condition" element={<HealthConditionPage />} />
-            <Route path="interests" element={<InterestsPage />} />
-            <Route path="recent-events" element={<RecentEventsPage />} />
-            <Route path="social-support" element={<SocialSupportPage />} />
           </Route>
         </Routes>
       </Router>

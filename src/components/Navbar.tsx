@@ -60,7 +60,7 @@ const Navbar: React.FC<NavbarProps> = ({ activeButton, onButtonClick }) => {
           to="/chat"
           end
           onClick={() => onButtonClick('Chat')}
-          className="navbar-link"
+          className={`navbar-link ${activeButton === 'Chat' ? 'active' : ''}`}
         >
           {t('navbar.chat')}
         </NavLink>
@@ -68,7 +68,7 @@ const Navbar: React.FC<NavbarProps> = ({ activeButton, onButtonClick }) => {
           to="/settings"
           end
           onClick={() => onButtonClick('Settings')}
-          className="navbar-link"
+          className={`navbar-link ${activeButton === 'Settings' ? 'active' : ''}`}
         >
           {t('navbar.settings')}
         </NavLink>

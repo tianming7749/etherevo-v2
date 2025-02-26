@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
-import { useTranslation } from 'react-i18next'; // 导入 useTranslation
-import './ResetPassword.css'; // 创建或使用独立的 CSS 文件
+import { useTranslation } from 'react-i18next';
+import './ResetPassword.css';
 
 const ResetPassword: React.FC = () => {
   const [password, setPassword] = useState('');
@@ -11,17 +11,18 @@ const ResetPassword: React.FC = () => {
   const [success, setSuccess] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-  const { t } = useTranslation(); // 获取 t 函数
+  const { t } = useTranslation();
   const queryParams = new URLSearchParams(location.search);
   const token = queryParams.get('token');
+  const redirectTo = queryParams.get('redirect_to');
 
   useEffect(() => {
-    const verifyToken = async () => {
-      if (!token) {
-        setError(t('resetPassword.messages.invalidToken'));
-        return;
-      }
+    if (!token) {
+      setError(t('resetPassword.messages.invalidToken'));
+      return;
+    }
 
+    const verifyToken = async () => {
       try {
         const { data, error } = await supabase.auth.verifyOtp({
           token,
@@ -30,7 +31,6 @@ const ResetPassword: React.FC = () => {
 
         if (error) {
           setError(t('resetPassword.messages.invalidToken'));
-          return;
         }
       } catch (err) {
         setError(t('resetPassword.messages.unexpectedError'));
@@ -52,7 +52,7 @@ const ResetPassword: React.FC = () => {
       const { error } = await supabase.auth.verifyOtp({
         token,
         type: 'recovery',
-        newPassword: password, // 直接更新新密码
+        newPassword: password,
       });
 
       if (error) {
@@ -74,7 +74,7 @@ const ResetPassword: React.FC = () => {
       <div className="reset-password-container">
         <p>{t('resetPassword.messages.success')}</p>
         <button
-          onClick={() => navigate('/auth')}
+          onClick={() => redirectTo ? window.location.href = redirectTo : navigate('/auth')}
           className="reset-password-button"
         >
           {t('resetPassword.buttons.backToLogin')}
@@ -96,7 +96,7 @@ const ResetPassword: React.FC = () => {
           onChange={(e) => setPassword(e.target.value)}
           required
           className="reset-password-input"
-          disabled={!token || !!error} // 根据 token 和 error 禁用
+          disabled={!token || !!error}
         />
         <label htmlFor="confirmNewPassword">{t('resetPassword.labels.confirmNewPassword')}</label>
         <input
@@ -106,7 +106,7 @@ const ResetPassword: React.FC = () => {
           onChange={(e) => setConfirmPassword(e.target.value)}
           required
           className="reset-password-input"
-          disabled={!token || !!error} // 根据 token 和 error 禁用
+          disabled={!token || !!error}
         />
         <button type="submit" className="reset-password-button" disabled={!token || !!error}>
           {t('resetPassword.buttons.resetPassword')}
