@@ -23,37 +23,55 @@ const ResetPassword: React.FC = () => {
       setIsLoading(false);
       return;
     }
-
+  
     const verifyToken = async () => {
       try {
         const { data, error } = await supabase.auth.verifyOtp({
           token,
           type: 'recovery',
         });
-
+  
         if (error) {
-          setError(t('resetPassword.messages.invalidToken'));
+          if (error.message.includes('expired')) {
+            setError(t('resetPassword.messages.expiredToken'));
+          } else if (error.message.includes('invalid')) {
+            setError(t('resetPassword.messages.invalidToken'));
+          } else {
+            setError(t('resetPassword.messages.unexpectedError'));
+          }
+          console.error('Token verification error:', error);
         } else {
           setError(null); // 令牌有效，清空任何错误
         }
       } catch (err) {
+        console.error('Unexpected error during token verification:', err);
         setError(t('resetPassword.messages.unexpectedError'));
       } finally {
         setIsLoading(false); // 验证完成后停止加载
       }
     };
-
+  
     verifyToken();
-  }, [token]);
+  }, [token, t]);
 
   const handlePasswordReset = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
+  
+    if (!password || !confirmPassword) {
+      setError(t('resetPassword.messages.requiredFields'));
+      return;
+    }
+  
     if (password !== confirmPassword) {
       setError(t('resetPassword.messages.passwordMismatch'));
       return;
     }
-
+  
+    if (password.length < 8) {
+      setError(t('resetPassword.messages.passwordRequirements'));
+      return;
+    }
+  
     setIsLoading(true);
     try {
       const { error } = await supabase.auth.verifyOtp({
@@ -61,14 +79,22 @@ const ResetPassword: React.FC = () => {
         type: 'recovery',
         newPassword: password,
       });
-
+  
       if (error) {
-        setError(error.message || t('resetPassword.messages.unexpectedError'));
+        if (error.message.includes('expired')) {
+          setError(t('resetPassword.messages.expiredToken'));
+        } else if (error.message.includes('invalid')) {
+          setError(t('resetPassword.messages.invalidToken'));
+        } else {
+          setError(error.message || t('resetPassword.messages.unexpectedError'));
+        }
+        console.error('Password reset error:', error);
       } else {
         setSuccess(true);
         setError(null);
       }
     } catch (err) {
+      console.error('Unexpected error during password reset:', err);
       setError(t('resetPassword.messages.unexpectedError'));
     } finally {
       setIsLoading(false);

@@ -50,13 +50,17 @@
     }
   },
   "resetPassword": {
-    "title": "Reset Your Password",
     "messages": {
       "invalidToken": "Invalid or expired password reset link.",
+      "expiredToken": "The password reset link has expired. Please request a new one.",
+      "unexpectedError": "An unexpected error occurred. Please try again.",
       "passwordMismatch": "Passwords do not match.",
-      "unexpectedError": "An unexpected error occurred. Please try again later.",
-      "success": "Password reset successfully! Redirecting to login..."
+      "passwordRequirements": "Password must be at least 8 characters long.",
+      "requiredFields": "All fields are required.",
+      "loading": "Loading...",
+      "success": "Your password has been successfully reset."
     },
+    "title": "Reset Password",
     "labels": {
       "newPassword": "New Password",
       "confirmNewPassword": "Confirm New Password"

@@ -50,13 +50,17 @@
     }
   },
   "resetPassword": {
-    "title": "重置您的密码",
     "messages": {
       "invalidToken": "无效或已过期的密码重置链接。",
-      "passwordMismatch": "密码不匹配，请确认。",
-      "unexpectedError": "发生意外错误，请稍后重试。",
-      "success": "密码重置成功！将跳转到登录页面..."
+      "expiredToken": "密码重置链接已过期。请重新请求一个新链接。",
+      "unexpectedError": "发生意外错误。请重试。",
+      "passwordMismatch": "密码不匹配。",
+      "passwordRequirements": "密码必须至少为8个字符长。",
+      "requiredFields": "所有字段均为必填。",
+      "loading": "加载中...",
+      "success": "您的密码已成功重置。"
     },
+    "title": "重置密码",
     "labels": {
       "newPassword": "新密码",
       "confirmNewPassword": "确认新密码"
