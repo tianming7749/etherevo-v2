@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, useSearchParams } from 'react-router-dom'; // 导入 useSearchParams
 import { supabase } from '../supabaseClient';
 import { useTranslation } from 'react-i18next';
 import { useUserContext } from '../context/UserContext'; 
@@ -14,10 +14,13 @@ const ResetPassword: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { t } = useTranslation();
-  const { isAuthenticated, isPasswordRecovery } = useUserContext(); // 只使用必要的状态
+  const { isAuthenticated, isPasswordRecovery, setIsPasswordRecovery } = useUserContext(); // 确保包含 setIsPasswordRecovery
   const queryParams = new URLSearchParams(location.search);
-  const token = queryParams.get('token');
-  const redirectTo = queryParams.get('redirect_to');
+  const [searchParams] = useSearchParams(); // 使用 useSearchParams 获取查询参数
+
+  // 从路由状态或查询参数中获取 token
+  const token = location.state?.token || queryParams.get('token');
+  const redirectTo = location.state?.redirectTo || queryParams.get('redirect_to');
 
   useEffect(() => {
     // 如果用户已完全登录（非密码重置流程），阻止密码重置
@@ -55,6 +58,7 @@ const ResetPassword: React.FC = () => {
         } else {
           setError(null); // 令牌有效，清空任何错误
           console.log('Token verified successfully, data:', data);
+          setIsPasswordRecovery(true); // 验证成功后设置 isPasswordRecovery
         }
       } catch (err) {
         console.error('Unexpected error during token verification:', err);
@@ -65,7 +69,7 @@ const ResetPassword: React.FC = () => {
     };
 
     verifyToken();
-  }, [token, t, isAuthenticated, isPasswordRecovery]);
+  }, [token, t, isAuthenticated, isPasswordRecovery, setIsPasswordRecovery]);
 
   const handlePasswordReset = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -151,7 +155,7 @@ const ResetPassword: React.FC = () => {
       <div className="reset-password-container">
         <p>{t('resetPassword.messages.success')}</p>
         <button
-          onClick={() => redirectTo ? window.location.href = redirectTo : navigate('/auth')}
+          onClick={() => redirectTo ? window.location.href = decodeURIComponent(redirectTo) : navigate('/auth')}
           className="reset-password-button"
         >
           {t('resetPassword.buttons.backToLogin')}

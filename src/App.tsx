@@ -85,7 +85,7 @@ const App: React.FC = () => {
         {/* 仅在完全登录（非密码重置流程）时显示 Navbar */}
         {isAuthenticated && !isPasswordRecovery && <Navbar activeButton={activeButton} onButtonClick={setActiveButton} />}
         <Routes>
-          <Route path="/auth" element={<Auth />} /> {/* 移除 isAuthenticated 条件，确保未登录时始终渲染 Auth */}
+          <Route path="/auth" element={<Auth />} /> {/* 确保未登录时始终渲染 Auth */}
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route 
             path="/reset-password" 
@@ -94,6 +94,11 @@ const App: React.FC = () => {
               <Navigate to="/" replace /> : 
               <ResetPassword />
             } 
+          />
+          {/* 添加 /auth/v1/verify 路由，重定向到 /reset-password */}
+          <Route 
+            path="/auth/v1/verify" 
+            element={<Navigate to="/reset-password" replace state={{ token: new URLSearchParams(window.location.search).get('token'), type: 'recovery', redirectTo: new URLSearchParams(window.location.search).get('redirect_to') }} />} 
           />
           <Route
             path="/"
