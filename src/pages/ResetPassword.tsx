@@ -14,7 +14,7 @@ const ResetPassword: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { t } = useTranslation();
-  const { isAuthenticated, isPasswordRecovery } = useUserContext(); // 使用 isAuthenticated 和 isPasswordRecovery
+  const { isAuthenticated, isPasswordRecovery, userId } = useUserContext(); // 增加 userId
   const queryParams = new URLSearchParams(location.search);
   const token = queryParams.get('token');
   const redirectTo = queryParams.get('redirect_to');
@@ -62,7 +62,7 @@ const ResetPassword: React.FC = () => {
     };
 
     verifyToken();
-  }, [token, t, userId, isPasswordRecovery]);
+  }, [token, t, isAuthenticated, isPasswordRecovery]); // 移除 userId，因为它不是必需的依赖
 
   const handlePasswordReset = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
