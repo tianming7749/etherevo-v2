@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
 import { useTranslation } from 'react-i18next';
-import { useUserContext } from '../context/UserContext'; // 导入 UserContext
+import { useUserContext } from '../context/UserContext'; 
 import './ResetPassword.css';
 
 const ResetPassword: React.FC = () => {
@@ -14,14 +14,14 @@ const ResetPassword: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { t } = useTranslation();
-  const { userId, isPasswordRecovery } = useUserContext(); // 使用 userId 和 isPasswordRecovery
+  const { isAuthenticated, isPasswordRecovery } = useUserContext(); // 使用 isAuthenticated 和 isPasswordRecovery
   const queryParams = new URLSearchParams(location.search);
   const token = queryParams.get('token');
   const redirectTo = queryParams.get('redirect_to');
 
   useEffect(() => {
-    // 如果用户已登录（非密码重置流程），阻止密码重置
-    if (userId && !isPasswordRecovery) {
+    // 如果用户已完全登录（非密码重置流程），阻止密码重置
+    if (isAuthenticated && !isPasswordRecovery) {
       setError(t('resetPassword.messages.alreadyLoggedIn'));
       setIsLoading(false);
       return;
@@ -67,7 +67,7 @@ const ResetPassword: React.FC = () => {
   const handlePasswordReset = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    if (userId && !isPasswordRecovery) {
+    if (isAuthenticated && !isPasswordRecovery) {
       setError(t('resetPassword.messages.alreadyLoggedIn'));
       return;
     }
@@ -119,7 +119,73 @@ const ResetPassword: React.FC = () => {
     }
   };
 
-  // ... 其余代码保持不变（渲染部分）
+  if (isLoading) {
+    return <div className="reset-password-container">{t('resetPassword.messages.loading')}</div>;
+  }
+
+  if (!token) {
+    return <div className="reset-password-container">{t('resetPassword.messages.invalidToken')}</div>;
+  }
+
+  if (isAuthenticated && !isPasswordRecovery) {
+    return (
+      <div className="reset-password-container">
+        <p>{t('resetPassword.messages.alreadyLoggedIn')}</p>
+        <button
+          onClick={() => navigate('/auth')}
+          className="reset-password-button"
+        >
+          {t('resetPassword.buttons.backToLogin')}
+        </button>
+      </div>
+    );
+  }
+
+  if (success) {
+    return (
+      <div className="reset-password-container">
+        <p>{t('resetPassword.messages.success')}</p>
+        <button
+          onClick={() => redirectTo ? window.location.href = redirectTo : navigate('/auth')}
+          className="reset-password-button"
+        >
+          {t('resetPassword.buttons.backToLogin')}
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <div className="reset-password-container">
+      <h2>{t('resetPassword.title')}</h2>
+      {error && <p className="reset-password-error">{error}</p>}
+      <form onSubmit={handlePasswordReset}>
+        <label htmlFor="newPassword">{t('resetPassword.labels.newPassword')}</label>
+        <input
+          id="newPassword"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+          className="reset-password-input"
+          disabled={isLoading || !!error}
+        />
+        <label htmlFor="confirmNewPassword">{t('resetPassword.labels.confirmNewPassword')}</label>
+        <input
+          id="confirmNewPassword"
+          type="password"
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
+          required
+          className="reset-password-input"
+          disabled={isLoading || !!error}
+        />
+        <button type="submit" className="reset-password-button" disabled={isLoading || !!error}>
+          {t('resetPassword.buttons.resetPassword')}
+        </button>
+      </form>
+    </div>
+  );
 };
 
 export default ResetPassword;
