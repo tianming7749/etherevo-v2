@@ -14,7 +14,7 @@ const ResetPassword: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { t } = useTranslation();
-  const { isAuthenticated, isPasswordRecovery } = useUserContext(); // 只使用必要的状态，移除 userId
+  const { isAuthenticated, isPasswordRecovery } = useUserContext(); // 只使用必要的状态
   const queryParams = new URLSearchParams(location.search);
   const token = queryParams.get('token');
   const redirectTo = queryParams.get('redirect_to');
@@ -38,8 +38,10 @@ const ResetPassword: React.FC = () => {
         console.log('Token being verified:', token);
         const { data, error } = await supabase.auth.verifyOtp({
           token,
-          type: 'recovery',
+          type: 'recovery', // 确保 type 为 'recovery'
         });
+
+        console.log('Verify OTP response:', { data, error }); // 添加详细日志
 
         if (error) {
           if (error.message.includes('expired')) {
@@ -52,6 +54,7 @@ const ResetPassword: React.FC = () => {
           }
         } else {
           setError(null); // 令牌有效，清空任何错误
+          console.log('Token verified successfully, data:', data);
         }
       } catch (err) {
         console.error('Unexpected error during token verification:', err);
@@ -90,11 +93,13 @@ const ResetPassword: React.FC = () => {
     setIsLoading(true);
     try {
       console.log('Resetting password with token:', token, 'and password:', password);
-      const { error } = await supabase.auth.verifyOtp({
+      const { data, error } = await supabase.auth.verifyOtp({ // 修改为返回 data 和 error
         token,
         type: 'recovery',
-        newPassword: password,
+        newPassword: password, // 确保传递 newPassword
       });
+
+      console.log('Password reset response:', { data, error }); // 添加详细日志
 
       if (error) {
         if (error.message.includes('expired')) {
