@@ -7,6 +7,7 @@ interface UserContextProps {
   userName: string | null;
   setUserId: (id: string | null) => void;
   loading: boolean;
+  isPasswordRecovery: boolean; // 新增状态，表示是否在密码重置流程中
 }
 
 const UserContext = createContext<UserContextProps | undefined>(undefined);
@@ -15,6 +16,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [userId, setUserId] = useState<string | null>(null);
   const [userName, setUserName] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isPasswordRecovery, setIsPasswordRecovery] = useState(false); // 新增状态
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -26,23 +28,27 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
           console.error("Error fetching session:", sessionError);
           setUserId(null);
           setUserName(null);
+          setIsPasswordRecovery(false);
         } else if (!sessionData?.session) {
           console.log("User not logged in");
           setUserId(null);
           setUserName(null);
+          setIsPasswordRecovery(false);
         } else {
           const user = sessionData.session.user;
           console.log("User session data:", user);
-          setUserId(user.id || null); // 确保 user.id 存在
+          setUserId(user.id || null);
           setUserName(user.email || user.user_metadata?.display_name || "User");
+          setIsPasswordRecovery(false);
         }
       } catch (error) {
         console.error("Error in fetchUser:", error);
         setUserId(null);
         setUserName(null);
+        setIsPasswordRecovery(false);
       } finally {
         setLoading(false);
-        console.log("Loading state set to false, userId:", userId, "userName:", userName);
+        console.log("Loading state set to false, userId:", userId, "userName:", userName, "isPasswordRecovery:", isPasswordRecovery);
       }
     };
 
@@ -53,11 +59,19 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
       if (event === "SIGNED_IN" || event === "USER_UPDATED") {
         setUserId(session?.user.id || null);
         setUserName(session?.user.email || session?.user.user_metadata?.display_name || "User");
+        setIsPasswordRecovery(false);
         console.log("User signed in, userId:", session?.user.id, "userName:", session?.user.email);
       } else if (event === "SIGNED_OUT") {
         setUserId(null);
         setUserName(null);
+        setIsPasswordRecovery(false);
         console.log("User signed out");
+      } else if (event === "PASSWORD_RECOVERY") {
+        // 在密码重置流程中，仅设置 isPasswordRecovery 为 true，不立即更新用户状态
+        setIsPasswordRecovery(true);
+        setUserId(null); // 临时清空用户状态，等待重置完成
+        setUserName(null);
+        console.log("Password recovery initiated");
       }
       setLoading(false);
     });
@@ -68,7 +82,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   return (
-    <UserContext.Provider value={{ userId, userName, setUserId, loading }}>
+    <UserContext.Provider value={{ userId, userName, setUserId, loading, isPasswordRecovery }}>
       {loading ? <div>Loading...</div> : children}
     </UserContext.Provider>
   );
