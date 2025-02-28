@@ -102,6 +102,7 @@
   },
   "tonesPage": {
     "title": "Choose Your Tone",
+    "loadingMessage": "Loading...",
     "descriptionLine1": "Select dialogue tone to customize your conversation experience",
     "descriptionLine2": "Based on your current status and conversation needs, EtherEvo will interact with you in the style you choose, offering a more considerate and personalized communication experience.",
     "noTonesMessage": " ",
@@ -110,6 +111,7 @@
     "saveErrorLog": "Error saving tone:",
     "saveErrorAlert": "Save failed, please try again later!",
     "errorMessagePrefix": "Error: ",
+    "skipButton": "Skip",
     "savingButton": "Saving...",
     "saveButton": "Save",
     "tone_motivational": "Motivational",
@@ -136,6 +138,7 @@
     "saveSuccessAlert": "Goals saved successfully!",
     "saveErrorAlert": "Error saving goals or updating prompt, please try again later.",
     "maxGoalsAlert": "You can only select up to 3 goals!",
+    "skipButton": "Skip",
     "savingButton": "Saving...",
     "saveButton": "Save",
     "predefinedGoals": {
@@ -166,6 +169,8 @@
   },
   "basicInfoPage": {
     "title": "Basic Information",
+    "loadingMessage": "Loading...",
+    "skipButton": "Skip",
     "savingButton": "Saving...",
     "saveButton": "Save",
     "noLoginAlert": "User not logged in, please log in first!",
@@ -224,6 +229,8 @@
   },
   "lifeEnvironmentPage": {
     "title": "Life Environment and Stressors",
+    "loadingMessage": "Loading...",
+    "skipButton": "Skip",
     "saveButton": "Save",
     "savingButton": "Saving...",
     "noLoginAlert": "No user login detected, please log in first!",
@@ -288,6 +295,8 @@
     "treatmentQuestion": "Are you currently receiving treatment for mental health?",
     "yes": "Yes",
     "no": "No",
+    "loadingMessage": "Loading...",
+    "skipButton": "Skip",
     "saveButton": "Save",
     "savingButton": "Saving...",
     "saveSuccessAlert": "Saved successfully!",
@@ -296,6 +305,7 @@
   },
   "interestsPage": {
     "loadingMessage": "Loading...",
+    "skipButton": "Skip",
     "saveButton": "Save",
     "savingButton": "Saving...",
     "addInterestPlaceholder": "Add other interests",
@@ -428,6 +438,8 @@
       "monthly": "Monthly",
       "less": "Less"
     },
+    "loadingMessage": "Loading...",
+    "skipButton": "Skip",
     "saveButton": "Save",
     "savingButton": "Saving...",
     "saveSuccessAlert": "Saved successfully!",
@@ -436,6 +448,7 @@
   },
   "recentEventsPage": {
     "loadingMessage": "Loading...",
+    "skipButton": "Skip",
     "saveButton": "Save",
     "savingButton": "Saving...",
     "saveSuccessAlert": "Saved successfully!",

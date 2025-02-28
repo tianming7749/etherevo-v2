@@ -1,6 +1,6 @@
 // Settings.tsx
 import React from 'react';
-import { Routes, Route, NavLink, Outlet } from 'react-router-dom';
+import { Routes, Route, Outlet } from 'react-router-dom'; // 移除 NavLink，因为不再需要导航
 import { useTranslation } from 'react-i18next';
 import TonesPage from '../pages/Tones/TonesPage'; // 确保路径正确
 import GoalsPage from '../pages/Goals/GoalsPage'; // 确保路径正确
@@ -21,17 +21,6 @@ const Settings: React.FC = () => {
   try {
     return (
       <div className="settings-container">
-        <nav className="settings-nav">
-          <NavLink to="/settings/tones" className={({ isActive }) => isActive ? "settings-link active" : "settings-link"}>
-            {t('settings.tones', 'Tones')} {/* 提供默认值以防翻译失败 */}
-          </NavLink>
-          <NavLink to="/settings/goals" className={({ isActive }) => isActive ? "settings-link active" : "settings-link"}>
-            {t('settings.goals', 'Goals')}
-          </NavLink>
-          <NavLink to="/settings/user-info" className={({ isActive }) => isActive ? "settings-link active" : "settings-link"}>
-            {t('settings.userInfo', 'User Info')}
-          </NavLink>
-        </nav>
         <div className="settings-content">
           <Routes>
             <Route path="tones" element={<TonesPage />} />

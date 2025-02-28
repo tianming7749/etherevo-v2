@@ -1,7 +1,8 @@
+// TonesPage.tsx
 import React, { useState, useEffect } from "react";
 import i18next from 'i18next';
 import { useUserContext } from "../../context/UserContext";
-import { fetchUserTone, saveUserPrompt } from "../../utils/supabaseHelpers";
+import { saveUserPrompt } from "../../utils/supabaseHelpers"; // 假设从 supabaseHelpers 导入
 import { supabase } from "../../supabaseClient";
 import { generatePromptsForUser } from "../../utils/generatePrompts"; // 导入外部版本
 import { useTranslation } from 'react-i18next';
@@ -17,21 +18,26 @@ interface Tone {
 }
 
 const TonesPage: React.FC = () => {
-  const { userId } = useUserContext();
+  const { userId } = useUserContext(); // 仅使用 userId
   const [tones, setTones] = useState<Tone[]>([]);
   const [selectedToneId, setSelectedToneId] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true); // 用于初始加载
+  const [loading, setLoading] = useState(false); // 保持 loading 用于保存时的加载状态
+  const [error, setError] = useState<string | null>(null); // 添加错误状态
+  const [saveStatus, setSaveStatus] = useState<string>(''); // 保存状态反馈
   const { t } = useTranslation();
   const navigate = useNavigate(); // 使用 useNavigate 钩子
 
   useEffect(() => {
     const fetchTonesAndUserSelection = async () => {
-      setLoading(true);
-      setError(null);
+      if (!userId) {
+        setIsLoading(false); // 如果没有 userId，直接结束加载状态
+        setError(t('tonesPage.noLoginMessage', 'Please log in to set your tone.'));
+        return;
+      }
 
-      console.log("TonesPage useEffect - Start, current language:", i18next.language);
-
+      setIsLoading(true); // 开始加载时设置 isLoading 为 true
+      setError(null); // 重置错误状态
       try {
         const { data: tonesData, error: tonesError } = await supabase
           .from("tones_options")
@@ -45,48 +51,53 @@ const TonesPage: React.FC = () => {
         if (tonesError) throw new Error(tonesError.message);
         setTones(tonesData as Tone[] || []);
 
-        if (userId) {
-          const { data: userToneData, error: userToneError } = await supabase
-            .from("user_select_tones")
-            .select("prompt_template_key")
-            .eq("user_id", userId)
-            .single();
+        const { data: userToneData, error: userToneError } = await supabase
+          .from("user_select_tones")
+          .select("prompt_template_key")
+          .eq("user_id", userId)
+          .single();
 
-          if (userToneError && userToneError.code !== "PGRST116") {
-            throw new Error(userToneError.message);
-          }
+        if (userToneError && userToneError.code !== "PGRST116") {
+          throw new Error(userToneError.message);
+        }
 
-          if (userToneData) {
-            const previouslySelectedTone = tonesData?.find(
-              (tone: Tone) => tone.prompt_template_key === userToneData.prompt_template_key
-            );
-            if (previouslySelectedTone) {
-              setSelectedToneId(previouslySelectedTone.id);
-            }
+        if (userToneData) {
+          const previouslySelectedTone = tonesData?.find(
+            (tone: Tone) => tone.prompt_template_key === userToneData.prompt_template_key
+          );
+          if (previouslySelectedTone) {
+            setSelectedToneId(previouslySelectedTone.id);
           }
         }
       } catch (error: any) {
-        setError(error.message);
+        setError(error.message || t('tonesPage.fetchError', 'Failed to load tones. Please try again later.'));
       } finally {
-        setLoading(false);
+        setIsLoading(false); // 加载完成，设置 isLoading 为 false
         console.log("TonesPage useEffect - End, current language:", i18next.language);
       }
     };
 
     fetchTonesAndUserSelection();
-  }, [userId]);
+  }, [userId, t]); // 依赖项优化为 userId 和 t，确保仅在必要时触发
 
   const handleToneSelection = (id: string) => {
     setSelectedToneId(id);
   };
 
   const saveSelection = async () => {
+    if (!userId) {
+      alert(t('tonesPage.noLoginMessage', 'Please log in to set your tone.'));
+      return;
+    }
+
     if (!selectedToneId) {
       alert(t('tonesPage.toneSelectionAlert'));
       return;
     }
 
     setLoading(true);
+    setSaveStatus(t('tonesPage.savingButton')); // 显示“Saving...”
+
     try {
       const selectedTone = tones.find((tone) => tone.id === selectedToneId);
       if (!selectedTone) throw new Error(t('tonesPage.noTonesMessage'));
@@ -117,17 +128,36 @@ const TonesPage: React.FC = () => {
         .eq("user_id", userId);
       if (settingsError) throw new Error(`Settings update error: ${settingsError.message}`);
 
-      alert(t('tonesPage.saveSuccessAlert'));
-      navigate('/settings/goals'); // 保存成功后跳转到 Goals 页面
+      setSaveStatus(t('tonesPage.saveSuccessAlert')); // 显示“Saved!”
+      setTimeout(() => {
+        setSaveStatus(''); // 2秒后恢复为“Save”
+        navigate('/settings/goals'); // 跳转到 Goals 页面
+      }, 2000);
     } catch (error: any) {
       console.error(t('tonesPage.saveErrorLog'), error.message);
-      alert(t('tonesPage.saveErrorAlert'));
+      setSaveStatus(t('tonesPage.saveErrorAlert')); // 显示保存失败提示
+      setTimeout(() => setSaveStatus(''), 2000); // 2秒后清空
     } finally {
       setLoading(false);
     }
   };
 
-  if (error) return <div className="tones-page"><p>{t('tonesPage.errorMessagePrefix') + error}</p></div>;
+  const handleSkip = () => {
+    if (!userId) {
+      alert(t('tonesPage.noLoginMessage', 'Please log in to set your tone.'));
+      return;
+    }
+
+    navigate('/settings/goals'); // 直接跳转，无需显示“Skipping...”或“Skipped!”
+  };
+
+  if (isLoading) {
+    return <div className="loading-message">{t('tonesPage.loadingMessage', 'Loading...')}</div>;
+  }
+
+  if (error) {
+    return <div className="error-message">{t('tonesPage.errorMessagePrefix') + error}</div>;
+  }
 
   return (
     <div className="tones-page">
@@ -156,9 +186,14 @@ const TonesPage: React.FC = () => {
               </label>
             ))}
           </div>
-          <button onClick={saveSelection} disabled={loading}>
-            {loading ? t('tonesPage.savingButton') : t('tonesPage.saveButton')}
-          </button>
+          <div className="buttons-container"> {/* 添加容器以并排放置按钮 */}
+            <button onClick={handleSkip} disabled={loading}>
+              {t('tonesPage.skipButton')}
+            </button>
+            <button onClick={saveSelection} disabled={loading}>
+              {saveStatus || (loading ? t('tonesPage.savingButton') : t('tonesPage.saveButton'))}
+            </button>
+          </div>
         </>
       )}
     </div>

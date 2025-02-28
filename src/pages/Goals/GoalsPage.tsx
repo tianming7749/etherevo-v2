@@ -1,3 +1,4 @@
+// GoalsPage.tsx
 import React, { useState, useEffect } from "react";
 import { useUserContext } from "../../context/UserContext";
 import { saveUserGoals, fetchUserGoals } from "../../utils/supabaseHelpers";
@@ -8,10 +9,12 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom'; // 导入 useNavigate
 
 const GoalsPage: React.FC = () => {
-  const { userId } = useUserContext();
+  const { userId } = useUserContext(); // 仅使用 userId
   const [goals, setGoals] = useState<string[]>([]); // 保存 key（如 "reduce_anxiety"）
-  const [isLoading, setIsLoading] = useState<boolean>(true); // 添加加载状态
-  const [error, setError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true); // 用于初始加载
+  const [isSaving, setIsSaving] = useState(false); // 用于保存时的加载状态
+  const [error, setError] = useState<string | null>(null); // 添加错误状态
+  const [saveStatus, setSaveStatus] = useState<string>(''); // 保存状态反馈
   const { t } = useTranslation();
   const navigate = useNavigate(); // 使用 useNavigate 钩子
 
@@ -20,7 +23,14 @@ const GoalsPage: React.FC = () => {
 
   useEffect(() => {
     const loadUserGoals = async () => {
-      setError(null);
+      if (!userId) {
+        setIsLoading(false); // 如果没有 userId，直接结束加载状态
+        setError(t('goalsPage.noLoginMessage'));
+        return;
+      }
+
+      setIsLoading(true); // 开始加载时设置 isLoading 为 true
+      setError(null); // 重置错误状态
       try {
         const savedGoals = await fetchUserGoals(userId);
         
@@ -40,14 +50,12 @@ const GoalsPage: React.FC = () => {
         console.error("加载用户目标时出错：", err);
         setError(t('goalsPage.errorMessage'));
       } finally {
-        setIsLoading(false);
+        setIsLoading(false); // 加载完成，设置 isLoading 为 false
       }
     };
 
-    if (userId) {
-      loadUserGoals();
-    }
-  }, [userId, t]);
+    loadUserGoals();
+  }, [userId, t]); // 依赖项优化为 userId 和 t，确保仅在必要时触发
 
   const handleGoalSelection = (goalKey: string) => {
     setGoals((prevGoals) => {
@@ -61,19 +69,26 @@ const GoalsPage: React.FC = () => {
       } else if (prevGoals.length < 3) {
         return [...prevGoals, goalKey];
       } else {
-        alert(t('goalsPage.maxGoalsAlert')); // 保持验证失败的提示，类似 TonesPage
+        alert(t('goalsPage.maxGoalsAlert')); // 保持验证失败的提示
         return prevGoals;
       }
     });
   };
 
   const handleSaveGoals = async () => {
-    if (goals.length === 0) { // 验证是否选择了目标，类似 TonesPage 的 !selectedToneId
-      alert(t('goalsPage.noGoalsSelectionAlert')); // 添加新的翻译键或复用现有键（如 t('goalsPage.toneSelectionAlert')）
+    if (!userId) {
+      alert(t('goalsPage.noLoginMessage'));
       return;
     }
 
-    setIsLoading(true); // 开始保存时设置加载状态
+    if (goals.length === 0) { // 验证是否选择了目标
+      alert(t('goalsPage.noGoalsSelectionAlert'));
+      return;
+    }
+
+    setIsSaving(true); // 开始保存时设置 isSaving，而不是 isLoading
+    setSaveStatus(t('goalsPage.savingButton')); // 显示“Saving...”
+
     try {
       await saveUserGoals(userId, JSON.stringify(goals)); // 保存 key 数组
       const updatedPrompt = await generatePromptsForUser(userId);
@@ -81,26 +96,44 @@ const GoalsPage: React.FC = () => {
         await saveUserPrompt(userId, updatedPrompt);
         console.log("提示词已更新并保存。");
       } else {
-        throw new Error("未能生成或保存新的提示词。");
+        throw new Error(t('goalsPage.savePromptError', 'Failed to generate or save the prompt.'));
       }
 
-      alert(t('goalsPage.saveSuccessAlert')); // 保持成功提示
-      navigate('/settings/user-info'); // 保存成功后跳转到 UserInfo 页面
+      setSaveStatus(t('goalsPage.saveSuccessAlert')); // 显示“Saved!”
+      setTimeout(() => {
+        setSaveStatus(''); // 2秒后恢复为“Save”
+        navigate('/settings/user-info'); // 跳转到 UserInfo 页面
+      }, 2000);
     } catch (err) {
       console.error("保存目标或更新提示词时出错：", err);
-      alert(t('goalsPage.saveErrorAlert')); // 保持失败提示
+      setSaveStatus(t('goalsPage.saveErrorAlert')); // 显示保存失败提示
+      setTimeout(() => setSaveStatus(''), 2000); // 2秒后清空
     } finally {
-      setIsLoading(false); // 保存完成（无论成功或失败）重置加载状态
+      setIsSaving(false); // 保存完成（无论成功或失败）重置 isSaving
     }
   };
 
-  if (!userId) return <p>{t('goalsPage.noLoginMessage')}</p>;
+  const handleSkip = () => {
+    // 跳过当前页面，直接导航到下一个页面（UserInfo）
+    if (!userId) {
+      alert(t('goalsPage.noLoginMessage'));
+      return;
+    }
+    navigate('/settings/user-info'); // 直接跳转，无反馈
+  };
+
+  if (isLoading) {
+    return <div className="loading-message">{t('goalsPage.loadingMessage', 'Loading...')}</div>;
+  }
+
+  if (error) {
+    return <div className="error-message">{error}</div>;
+  }
 
   return (
     <div className="goals-page">
       <h1>{t('goalsPage.title')}</h1>
       <p>{t('goalsPage.description')}</p>
-      {error && <p className="error-message">{error}</p>}
       <div>
         {goalKeys.map((goalKey) => (
           <div key={goalKey} className="goal-item">
@@ -109,19 +142,24 @@ const GoalsPage: React.FC = () => {
                 type="checkbox"
                 checked={goals.includes(goalKey)}
                 onChange={() => handleGoalSelection(goalKey)}
-                disabled={isLoading} // 禁用输入框以匹配加载状态
+                disabled={isSaving} // 使用 isSaving 禁用输入框（仅在保存时）
               />
               {predefinedGoals[goalKey]} {/* 显示翻译后的文本 */}
             </label>
           </div>
         ))}
       </div>
-      <button
-        onClick={handleSaveGoals}
-        disabled={isLoading || goals.length === 0} // 根据加载状态和目标数量禁用按钮
-      >
-        {isLoading ? t('goalsPage.savingButton') : t('goalsPage.saveButton')} 
-      </button>
+      <div className="buttons-container"> {/* 添加容器以并排放置按钮 */}
+        <button onClick={handleSkip} disabled={!userId}> {/* 仅在未登录时禁用 */}
+          {t('goalsPage.skipButton', 'Skip')} {/* 保持原始文本，无状态反馈 */}
+        </button>
+        <button
+          onClick={handleSaveGoals}
+          disabled={isSaving || goals.length === 0} // 根据保存状态和目标数量禁用按钮
+        >
+          {saveStatus || (isSaving ? t('goalsPage.savingButton', 'Saving...') : t('goalsPage.saveButton', 'Save'))}
+        </button>
+      </div>
     </div>
   );
 };

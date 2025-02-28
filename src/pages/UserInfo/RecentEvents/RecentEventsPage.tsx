@@ -1,3 +1,4 @@
+// RecentEventsPage.tsx
 import React, { useState, useEffect } from "react";
 import { supabase } from "../../../supabaseClient";
 import { generatePromptsForUser } from "../../../utils/generatePrompts";
@@ -7,7 +8,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom'; // 导入 useNavigate
 
 const RecentEventsPage: React.FC = () => {
-  const { userId, loading } = useUserContext();
+  const { userId } = useUserContext(); // 仅使用 userId，不使用 loading，因为我们自定义 isLoading
   const [recentEvents, setRecentEvents] = useState({
     moving: false,
     jobChange: false,
@@ -21,33 +22,33 @@ const RecentEventsPage: React.FC = () => {
     financialChange: false,
     other: "",
   });
-  const [isSaving, setIsSaving] = useState(false);
+  const [isLoading, setIsLoading] = useState(true); // 用于初始加载
+  const [isSaving, setIsSaving] = useState(false); // 用于保存时的加载状态
+  const [error, setError] = useState<string | null>(null); // 添加错误状态
+  const [saveStatus, setSaveStatus] = useState<string>(''); // 保存状态反馈
   const { t } = useTranslation();
   const navigate = useNavigate(); // 使用 useNavigate 钩子
 
   useEffect(() => {
     const fetchRecentEvents = async () => {
-      if (!userId) return;
+      if (!userId) {
+        setIsLoading(false); // 如果没有 userId，直接结束加载状态
+        setError(t('recentEventsPage.noLoginMessage', 'Please log in to set your recent events.'));
+        return;
+      }
 
-      const { data, error } = await supabase
-        .from("user_recent_events")
-        .select("recent_events")
-        .eq("user_id", userId)
-        .single();
+      setIsLoading(true); // 开始加载时设置 isLoading 为 true
+      setError(null); // 重置错误状态
+      try {
+        const { data, error } = await supabase
+          .from("user_recent_events")
+          .select("recent_events")
+          .eq("user_id", userId)
+          .single();
 
-      if (error) {
-        if (error.code === "PGRST116") {
-          const { error: insertError } = await supabase
-            .from("user_recent_events")
-            .insert({
-              user_id: userId,
-              recent_events: {},
-            });
-
-          if (insertError) {
-            console.error("Error inserting default recent events:", insertError);
-          } else {
-            console.log("Inserted default recent events.");
+        if (error) {
+          if (error.code === "PGRST116") {
+            console.log("No recent events found, initializing with defaults.");
             setRecentEvents({
               moving: false,
               jobChange: false,
@@ -61,22 +62,44 @@ const RecentEventsPage: React.FC = () => {
               financialChange: false,
               other: "",
             });
+          } else {
+            console.error("Error fetching recent events:", error);
+            setError(t('recentEventsPage.fetchError', 'Failed to load recent events. Please try again later.'));
           }
-        } else {
-          console.error("Error fetching recent events:", error);
+        } else if (data) {
+          setRecentEvents(data.recent_events || {
+            moving: false,
+            jobChange: false,
+            promotion: false,
+            studyChange: false,
+            marriage: false,
+            newBaby: false,
+            relationshipChange: false,
+            bereavement: false,
+            healthIssue: false,
+            financialChange: false,
+            other: "",
+          });
         }
-      } else if (data) {
-        setRecentEvents(data.recent_events);
+      } catch (err) {
+        console.error("Error loading recent events:", err);
+        setError(t('recentEventsPage.fetchError', 'Failed to load recent events. Please try again later.'));
+      } finally {
+        setIsLoading(false); // 加载完成，设置 isLoading 为 false
       }
     };
 
     fetchRecentEvents();
-  }, [userId]);
+  }, [userId, t]); // 依赖项优化为 userId 和 t，确保仅在必要时触发
 
   const saveRecentEvents = async () => {
-    if (!userId) return;
+    if (!userId) {
+      alert(t('recentEventsPage.noLoginMessage', 'Please log in to set your recent events.'));
+      return;
+    }
 
-    setIsSaving(true);
+    setIsSaving(true); // 开始保存时设置 isSaving
+    setSaveStatus(t('recentEventsPage.savingButton', 'Saving...')); // 显示“Saving...”
 
     try {
       const { error } = await supabase
@@ -91,7 +114,8 @@ const RecentEventsPage: React.FC = () => {
 
       if (error) {
         console.error("Error saving recent events:", error);
-        alert(t('recentEventsPage.saveErrorAlert'));
+        setSaveStatus(t('recentEventsPage.saveErrorAlert')); // 显示保存失败提示
+        setTimeout(() => setSaveStatus(''), 2000); // 2秒后清空
         return;
       }
 
@@ -106,21 +130,41 @@ const RecentEventsPage: React.FC = () => {
 
       if (savePromptError) {
         console.error("保存提示词失败：", savePromptError.message);
+        setSaveStatus(t('recentEventsPage.saveNetworkErrorAlert')); // 显示网络错误提示
+        setTimeout(() => setSaveStatus(''), 2000); // 2秒后清空
       } else {
         console.log("提示词已成功保存");
+        setSaveStatus(t('recentEventsPage.saveSuccessAlert')); // 显示“Saved!”
+        setTimeout(() => {
+          setSaveStatus(''); // 2秒后恢复为“Save”
+          navigate('/chat'); // 保存成功后跳转到 Chat 页面
+        }, 2000);
       }
-
-      alert(t('recentEventsPage.saveSuccessAlert'));
-      navigate('/chat'); // 保存成功后跳转到 Chat 页面
     } catch (error) {
       console.error("保存过程中发生错误：", error);
-      alert(t('recentEventsPage.saveNetworkErrorAlert'));
+      setSaveStatus(t('recentEventsPage.saveNetworkErrorAlert')); // 显示网络错误提示
+      setTimeout(() => setSaveStatus(''), 2000); // 2秒后清空
     } finally {
-      setIsSaving(false);
+      setIsSaving(false); // 保存完成（无论成功或失败）重置 isSaving
     }
   };
 
-  if (loading) return <div>{t('recentEventsPage.loadingMessage')}</div>;
+  const handleSkip = () => {
+    // 跳过当前页面，直接导航到下一个页面（Chat）
+    if (!userId) {
+      alert(t('recentEventsPage.noLoginMessage', 'Please log in to set your recent events.'));
+      return;
+    }
+    navigate('/chat'); // 直接跳转，无反馈
+  };
+
+  if (isLoading) {
+    return <div className="loading-message">{t('recentEventsPage.loadingMessage', 'Loading...')}</div>;
+  }
+
+  if (error) {
+    return <div className="error-message">{error}</div>;
+  }
 
   return (
     <div className="recent-events-page">
@@ -133,6 +177,7 @@ const RecentEventsPage: React.FC = () => {
             onChange={(e) =>
               setRecentEvents((prev) => ({ ...prev, moving: e.target.checked }))
             }
+            disabled={isSaving} // 使用 isSaving 禁用输入框
           />
           <span>{t('recentEventsPage.sections.moving.label')}</span>
         </label>
@@ -150,6 +195,7 @@ const RecentEventsPage: React.FC = () => {
                 jobChange: e.target.checked,
               }))
             }
+            disabled={isSaving} // 使用 isSaving 禁用输入框
           />
           <span>{t('recentEventsPage.sections.careerAndEducation.jobChangeLabel')}</span>
         </label>
@@ -163,6 +209,7 @@ const RecentEventsPage: React.FC = () => {
                 promotion: e.target.checked,
               }))
             }
+            disabled={isSaving} // 使用 isSaving 禁用输入框
           />
           <span>{t('recentEventsPage.sections.careerAndEducation.promotionLabel')}</span>
         </label>
@@ -176,6 +223,7 @@ const RecentEventsPage: React.FC = () => {
                 studyChange: e.target.checked,
               }))
             }
+            disabled={isSaving} // 使用 isSaving 禁用输入框
           />
           <span>{t('recentEventsPage.sections.careerAndEducation.studyChangeLabel')}</span>
         </label>
@@ -193,6 +241,7 @@ const RecentEventsPage: React.FC = () => {
                 marriage: e.target.checked,
               }))
             }
+            disabled={isSaving} // 使用 isSaving 禁用输入框
           />
           <span>{t('recentEventsPage.sections.relationships.marriageLabel')}</span>
         </label>
@@ -206,6 +255,7 @@ const RecentEventsPage: React.FC = () => {
                 newBaby: e.target.checked,
               }))
             }
+            disabled={isSaving} // 使用 isSaving 禁用输入框
           />
           <span>{t('recentEventsPage.sections.relationships.newBabyLabel')}</span>
         </label>
@@ -219,6 +269,7 @@ const RecentEventsPage: React.FC = () => {
                 relationshipChange: e.target.checked,
               }))
             }
+            disabled={isSaving} // 使用 isSaving 禁用输入框
           />
           <span>{t('recentEventsPage.sections.relationships.relationshipChangeLabel')}</span>
         </label>
@@ -232,6 +283,7 @@ const RecentEventsPage: React.FC = () => {
                 bereavement: e.target.checked,
               }))
             }
+            disabled={isSaving} // 使用 isSaving 禁用输入框
           />
           <span>{t('recentEventsPage.sections.relationships.bereavementLabel')}</span>
         </label>
@@ -249,6 +301,7 @@ const RecentEventsPage: React.FC = () => {
                 healthIssue: e.target.checked,
               }))
             }
+            disabled={isSaving} // 使用 isSaving 禁用输入框
           />
           <span>{t('recentEventsPage.sections.health.healthIssueLabel')}</span>
         </label>
@@ -266,6 +319,7 @@ const RecentEventsPage: React.FC = () => {
                 financialChange: e.target.checked,
               }))
             }
+            disabled={isSaving} // 使用 isSaving 禁用输入框
           />
           <span>{t('recentEventsPage.sections.finance.financialChangeLabel')}</span>
         </label>
@@ -279,12 +333,18 @@ const RecentEventsPage: React.FC = () => {
           onChange={(e) =>
             setRecentEvents((prev) => ({ ...prev, other: e.target.value }))
           }
+          disabled={isSaving} // 使用 isSaving 禁用输入框
         />
       </div>
 
-      <button onClick={saveRecentEvents} disabled={isSaving}>
-        {isSaving ? t('recentEventsPage.savingButton') : t('recentEventsPage.saveButton')}
-      </button>
+      <div className="buttons-container"> {/* 添加容器以并排放置按钮 */}
+        <button onClick={handleSkip} disabled={isSaving}>
+          {t('recentEventsPage.skipButton', 'Skip')} {/* 保持原始文本，无状态反馈 */}
+        </button>
+        <button onClick={saveRecentEvents} disabled={isSaving}>
+          {saveStatus || (isSaving ? t('recentEventsPage.savingButton', 'Saving...') : t('recentEventsPage.saveButton', 'Save'))} {/* 动态显示保存状态 */}
+        </button>
+      </div>
     </div>
   );
 };

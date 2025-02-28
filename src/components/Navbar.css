@@ -1,3 +1,4 @@
+/* Navbar.css */
 .navbar {
   position: fixed; /* 保持固定导航栏 */
   top: 0;
@@ -106,3 +107,72 @@ option {
   white-space: nowrap; /* 确保单行显示 */
   text-orientation: mixed; /* 确保正常文本方向 */
 }
+
+/* 下拉菜单相关样式 */
+.dropdown-container {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-button {
+  background: none;
+  border: none;
+  padding: 8px 12px; /* 与 navbar-link 一致 */
+  cursor: pointer;
+  font-size: 16px; /* 与 navbar-link 一致 */
+  font-weight: 500; /* 与 navbar-link 一致 */
+  color: white; /* 与 navbar-link 一致 */
+  text-decoration: none;
+  writing-mode: horizontal-tb;
+  text-orientation: upright;
+  white-space: nowrap;
+  border-radius: 4px; /* 与 navbar-link 一致 */
+  transition: background-color 0.3s ease, color 0.3s ease; /* 与 navbar-link 一致 */
+}
+
+.dropdown-button.active {
+  background-color: #335881; /* 与 navbar-link.active 一致 */
+  color: #FFD700; /* 与 navbar-link.active 一致 */
+}
+
+.dropdown-button:hover {
+  background-color: #57a3f5; /* 与 navbar-link:hover 一致 */
+  color: #FFD700; /* 与 navbar-link:hover 一致 */
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background-color: #4682B4; /* 保持蓝色背景，与导航栏一致 */
+  border: 1px solid #335881; /* 深蓝色边框，与主题一致 */
+  border-radius: 4px; /* 与 navbar-link 一致 */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  min-width: 150px;
+  z-index: 1000;
+}
+
+.dropdown-item {
+  display: flex; /* 使用 flex 确保对齐 */
+  align-items: center; /* 垂直居中对齐 */
+  padding: 8px 12px; /* 与 navbar-link 一致 */
+  text-decoration: none;
+  color: white; /* 与 navbar-link 一致 */
+  font-size: 16px; /* 与 navbar-link 一致 */
+  font-weight: 500; /* 与 navbar-link 一致 */
+  writing-mode: horizontal-tb;
+  text-orientation: upright;
+  white-space: nowrap;
+  border-radius: 4px; /* 与 navbar-link 一致 */
+}
+
+.dropdown-item:hover {
+  background-color: #57a3f5; /* 与 navbar-link:hover 一致 */
+  color: #FFD700; /* 与 navbar-link:hover 一致 */
+}
+
+.dropdown-item.active {
+  background-color: #335881; /* 与 navbar-link.active 一致 */
+  color: #FFD700; /* 与 navbar-link.active 一致 */
+}
+

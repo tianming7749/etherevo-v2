@@ -3,7 +3,7 @@
 .tones-page {
   font-family: 'Arial', sans-serif;
   max-width: 800px;
-  margin: 0px; /* 减少顶部间距为 60px，保持底部间距 */
+  margin: 0px; /* 减少顶部间距为 0px，保持底部间距 */
   padding: 20px;
   background-color: #f9f9f9;
   border-radius: 8px;
@@ -68,15 +68,39 @@ button {
   padding: 12px 20px;
   font-size: 16px;
   cursor: pointer;
-  width: 100%;
   transition: background-color 0.3s;
 }
 
-button:hover {
+/* 通用按钮悬停效果 */
+button:not(:disabled):hover {
   background-color: #4169E1; /* 匹配 GoalsPage 的悬停效果 */
 }
 
+/* 禁用状态 */
 button:disabled {
   background-color: #B0C4DE; /* 匹配 GoalsPage 的禁用状态颜色 */
   cursor: not-allowed;
+}
+
+/* 按钮容器样式，确保“跳过”和“Save”按钮并排 */
+.buttons-container {
+  display: flex;
+  gap: 10px; /* 按钮之间的间距 */
+  justify-content: flex-end; /* 按钮靠右对齐 */
+  margin-top: 20px; /* 与内容保持一定间距 */
+}
+
+/* “跳过”按钮样式 */
+.buttons-container button:first-child { /* 针对跳过按钮 */
+  background-color: #4682B4; /* 使用较浅的蓝色，与主题一致但稍低调 */
+  color: white;
+}
+
+.buttons-container button:first-child:not(:disabled):hover {
+  background-color: #335881; /* 悬停时加深蓝色 */
+}
+
+/* 确保按钮宽度自适应，但不超过容器宽度 */
+button {
+  width: auto; /* 移除原来的 width: 100%，让按钮根据内容调整宽度 */
 }

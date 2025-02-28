@@ -31,8 +31,8 @@
       "unexpectedError": "发生意外错误。"
     },
     "languageSwitch": {
-      "toChinese": "切换到英文",
-      "toEnglish": "切换到中文"
+      "toChinese": "切换到中文",
+      "toEnglish": "切换到英文"
     }
   },
   "forgotPassword": {
@@ -102,6 +102,7 @@
   },
   "tonesPage": {
     "title": "选择对话语气",
+    "loadingMessage": "加载中...",
     "descriptionLine1": "选择对话语气，定制专属对话体验",
     "descriptionLine2": "根据您的当前状态和对话需求，选择最符合您心境的语气，EtherEvo 将以您选择的风格与您进行对话，提供更贴心、个性化的交流体验。",
     "noTonesMessage": " ",
@@ -110,6 +111,7 @@
     "saveErrorLog": "保存 语气 出错：",
     "saveErrorAlert": "保存失败，请稍后重试！",
     "errorMessagePrefix": "错误: ",
+    "skipButton": "跳过",
     "savingButton": "保存中...",
     "saveButton": "保存",
     "tone_motivational": "动机提升型",
@@ -136,6 +138,7 @@
     "saveSuccessAlert": "目标已保存！",
     "saveErrorAlert": "保存目标或更新提示词时发生错误，请稍后再试。",
     "maxGoalsAlert": "最多只能选择 3 个目标！",
+    "skipButton": "跳过",
     "savingButton": "保存中...",
     "saveButton": "保存",
     "predefinedGoals": {
@@ -166,6 +169,8 @@
   },
   "basicInfoPage": {
     "title": "基本信息",
+    "loadingMessage": "加载中...",
+    "skipButton": "跳过",
     "savingButton": "保存中...",
     "saveButton": "保存",
     "noLoginAlert": "用户未登录，请先登录！",
@@ -224,6 +229,8 @@
   },
   "lifeEnvironmentPage": {
     "title": "生活环境与压力源",
+    "loadingMessage": "加载中...",
+    "skipButton": "跳过",
     "saveButton": "保存",
     "savingButton": "保存中...",
     "noLoginAlert": "未检测到用户登录，请先登录！",
@@ -288,6 +295,8 @@
     "treatmentQuestion": "你目前是否在接受心理健康方面的治疗？",
     "yes": "是",
     "no": "否",
+    "loadingMessage": "加载中...",
+    "skipButton": "跳过",
     "saveButton": "保存",
     "savingButton": "保存中...",
     "saveSuccessAlert": "保存成功！",
@@ -296,6 +305,7 @@
   },
   "interestsPage": {
     "loadingMessage": "加载中...",
+    "skipButton": "跳过",
     "saveButton": "保存",
     "savingButton": "保存中...",
     "addInterestPlaceholder": "添加其他兴趣",
@@ -428,6 +438,8 @@
       "monthly": "每月",
       "less": "更少"
     },
+    "loadingMessage": "加载中...",
+    "skipButton": "跳过",
     "saveButton": "保存",
     "savingButton": "保存中...",
     "saveSuccessAlert": "保存成功！",
@@ -436,6 +448,7 @@
   },
   "recentEventsPage": {
     "loadingMessage": "加载中...",
+    "skipButton": "跳过",
     "saveButton": "保存",
     "savingButton": "保存中...",
     "saveSuccessAlert": "保存成功！",

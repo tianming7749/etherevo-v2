@@ -26,7 +26,7 @@
   border: 1px solid #ddd;
   border-radius: 4px;
   font-size: 16px;
-  vertical-align: middle; /*  垂直居中单选按钮和文本 */
+  vertical-align: middle; /* 垂直居中单选按钮和文本 */
 }
 
 /* 自定义选择器组件的样式 */
@@ -38,7 +38,7 @@
   margin-bottom: 20px;
 }
 
-/* 睡眠质量选项水平排列样式  */
+/* 睡眠质量选项水平排列样式 */
 .health-status-selector .sleep-options-row {
   display: flex;
   flex-direction: row;
@@ -52,40 +52,49 @@
   align-items: center; /* 垂直居中 label 内的 radio 和 text */
 }
 
-/*  用户信息导航按钮容器样式 -  请将 .user-info-buttons 替换为您实际的容器类名 */
-.user-info-buttons {
-  display: flex; /* 启用 Flexbox 布局 */
-  flex-wrap: wrap; /* 允许按钮在空间不足时换行 */
-  justify-content: center; /* 水平方向居中对齐按钮 (可选) */
-  margin-bottom: 20px; /*  可以根据需要添加外边距，和其他内容隔开 */
+/* 按钮容器样式，确保“跳过”和“Save”按钮并排 */
+.buttons-container {
+  display: flex;
+  gap: 10px; /* 按钮之间的间距 */
+  justify-content: flex-end; /* 按钮靠右对齐 */
+  margin-top: 20px; /* 与内容保持一定间距 */
 }
 
-/* 用户信息导航按钮样式 -  请将 .user-info-buttons button 替换为您实际的按钮选择器 */
-.user-info-buttons button {
-  margin: 5px; /* 按钮间距 */
-  padding: 10px 15px; /*  按钮内边距 */
-  font-size: 16px; /*  按钮字体大小 */
-}
-
-
-/* 按钮样式 */
-.save-button {
-  background-color: #004085;
+/* “跳过”按钮样式 */
+.buttons-container button:first-child { /* 针对跳过按钮 */
+  background-color: #4682B4; /* 使用较浅的蓝色，与主题一致但稍低调 */
   color: white;
-  padding: 10px 20px;
   border: none;
   border-radius: 4px;
-  cursor: pointer;
+  padding: 10px 20px;
   font-size: 16px;
+  cursor: pointer;
   transition: background-color 0.3s;
-  margin-top: 20px;
 }
 
-.save-button:hover {
+.buttons-container button:first-child:not(:disabled):hover {
+  background-color: #335881; /* 悬停时加深蓝色 */
+}
+
+/* 按钮样式（保持与 save-button 一致，但适用于新结构） */
+.life-environment button {
+  background-color: #004085;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+/* 通用按钮悬停效果 */
+.life-environment button:not(:disabled):hover {
   background-color: #0279f0;
 }
 
-.save-button:disabled {
+/* 禁用状态 */
+.life-environment button:disabled {
   background-color: #888;
   cursor: not-allowed;
 }
@@ -100,25 +109,25 @@
 
 /* 媒体查询，针对小屏幕设备 (最大宽度 768px) */
 @media (max-width: 768px) {
-  /*  调整用户信息导航按钮容器在小屏幕下的对齐方式 */
-  .user-info-buttons {
-    justify-content: space-around; /*  例如： 分散对齐 */
+  /* 调整用户信息导航按钮容器在小屏幕下的对齐方式 */
+  .buttons-container {
+    justify-content: space-around; /* 分散对齐 */
   }
 
-  /* 减小用户信息导航按钮在小屏幕下的字体和内边距 */
-  .user-info-buttons button {
+  /* 减小按钮在小屏幕下的字体和内边距 */
+  .buttons-container button {
     font-size: 14px;
     padding: 8px 12px;
   }
 
-  /*  如果需要，您可以在小屏幕下调整 life-environment 组件自身的内边距和字体大小 */
+  /* 如果需要，您可以在小屏幕下调整 life-environment 组件自身的内边距和字体大小 */
   .life-environment {
-    padding: 15px; /*  减小 padding */
+    padding: 15px; /* 减小 padding */
     font-size: 15px; /* 减小整体字体大小 */
   }
 
   .life-environment h2 {
-    margin-bottom: 20px; /*  减小标题下外边距 */
-    font-size: 24px; /*  减小标题字体大小 */
+    margin-bottom: 20px; /* 减小标题下外边距 */
+    font-size: 24px; /* 减小标题字体大小 */
   }
 }

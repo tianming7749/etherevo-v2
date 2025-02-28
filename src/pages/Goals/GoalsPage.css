@@ -1,71 +1,95 @@
 /* GoalsPage.css */
 
 .goals-page {
-    font-family: 'Arial', sans-serif;
-    max-width: 800px;
-    margin: 0px; 
-    padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  }
-  
-  .goals-page h1 {
-    font-size: 30px;
-    margin-bottom: 20px;
-    text-align: center;
-  }
-  
-  .goals-page p {
-    color: #666;
-    line-height: 1.6;
-    margin-bottom: 20px; /* 增加了下边距来匹配原始的间距 */
-  }
-  
-  .goals-page .error-message {
-    color: #ff0000;
-    margin-bottom: 20px;
-  }
-  
-  .goals-page .goal-item {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px; /* 保持原有间距 */
-  }
-  
-  .goals-page .goal-item input[type="checkbox"] {
-    margin-right: 10px; /* 保持原有右边距 */
-  }
-  
-  .goals-page button {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    padding: 12px 20px;
-    font-size: 16px;
-    cursor: pointer;
-    width: 100%;
-    transition: background-color 0.3s;
-  }
-  
-  .goals-page button:disabled {
-    background-color: #B0C4DE; /* 匹配之前的禁用状态颜色 */
-    cursor: not-allowed;
-  }
-  
-  .goals-page button:hover:not(:disabled) {
-    background-color: #4169E1; /* 悬停效果 */
-  }
+  font-family: 'Arial', sans-serif;
+  max-width: 800px;
+  margin: 0px; 
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
 
-  .warning-message {
-    color: orange;
-    font-weight: bold;
-    margin-bottom: 1rem;
-  }
-  
-  .error-message {
-    color: red;
-    font-weight: bold;
-    margin-bottom: 1rem;
-  }
+.goals-page h1 {
+  font-size: 30px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.goals-page p {
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 20px; /* 增加了下边距来匹配原始的间距 */
+}
+
+.goals-page .error-message {
+  color: #ff0000;
+  margin-bottom: 20px;
+}
+
+.goals-page .goal-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px; /* 保持原有间距 */
+}
+
+.goals-page .goal-item input[type="checkbox"] {
+  margin-right: 10px; /* 保持原有右边距 */
+}
+
+.goals-page button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 12px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+/* 通用按钮悬停效果 */
+.goals-page button:not(:disabled):hover {
+  background-color: #4169E1; /* 悬停效果 */
+}
+
+/* 禁用状态 */
+.goals-page button:disabled {
+  background-color: #B0C4DE; /* 匹配之前的禁用状态颜色 */
+  cursor: not-allowed;
+}
+
+/* 按钮容器样式，确保“跳过”和“Save”按钮并排 */
+.buttons-container {
+  display: flex;
+  gap: 10px; /* 按钮之间的间距 */
+  justify-content: flex-end; /* 按钮靠右对齐 */
+  margin-top: 20px; /* 与内容保持一定间距 */
+}
+
+/* “跳过”按钮样式 */
+.buttons-container button:first-child { /* 针对跳过按钮 */
+  background-color: #4682B4; /* 使用较浅的蓝色，与主题一致但稍低调 */
+  color: white;
+}
+
+.buttons-container button:first-child:not(:disabled):hover {
+  background-color: #335881; /* 悬停时加深蓝色 */
+}
+
+/* 确保按钮宽度自适应，但不超过容器宽度 */
+.goals-page button {
+  width: auto; /* 移除原来的 width: 100%，让按钮根据内容调整宽度 */
+}
+
+.warning-message {
+  color: orange;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.error-message {
+  color: red;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}

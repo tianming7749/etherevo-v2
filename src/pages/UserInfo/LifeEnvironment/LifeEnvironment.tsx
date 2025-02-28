@@ -1,3 +1,4 @@
+// LifeEnvironment.tsx
 import React, { useEffect, useState } from "react";
 import { supabase } from "../../../supabaseClient";
 import { generatePromptsForUser } from "../../../utils/generatePrompts";
@@ -28,8 +29,12 @@ const defaultData: LifeEnvironmentData = {
 
 const getCurrentUser = async () => {
   const { data: { session }, error } = await supabase.auth.getSession();
-  if (error || !session) {
+  if (error) {
     console.error("获取用户会话时出错：", error);
+    return null;
+  }
+  if (!session || !session.user) {
+    console.warn("用户会话无效或未登录");
     return null;
   }
   return session.user;
@@ -37,8 +42,9 @@ const getCurrentUser = async () => {
 
 const LifeEnvironment: React.FC = () => {
   const [formData, setFormData] = useState<LifeEnvironmentData>(defaultData);
-  const [isSaving, setIsSaving] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true); // 用于初始加载
+  const [isSaving, setIsSaving] = useState(false); // 用于保存时的加载状态
+  const [saveStatus, setSaveStatus] = useState<string>(''); // 保存状态反馈
   const { t } = useTranslation();
   const navigate = useNavigate(); // 使用 useNavigate 钩子
 
@@ -46,32 +52,35 @@ const LifeEnvironment: React.FC = () => {
     const fetchLatestData = async () => {
       const user = await getCurrentUser();
       if (!user) {
-        alert(t('lifeEnvironmentPage.noLoginAlert'));
-        setIsLoading(false);
-        return;
+        setIsLoading(false); // 如果没有用户，直接结束加载状态
+        return; // 不显示弹窗，直接返回空表单
       }
 
-      const { data, error } = await supabase
-        .from("life_environment")
-        .select("stress_level, relationship_stress, financial_stress, sleep_quality, additional_details")
-        .eq("user_id", user.id)
-        .order("created_at", { ascending: false })
-        .limit(1);
+      setIsLoading(true); // 开始加载时设置 isLoading 为 true
+      try {
+        const { data, error } = await supabase
+          .from("life_environment")
+          .select("stress_level, relationship_stress, financial_stress, sleep_quality, additional_details")
+          .eq("user_id", user.id)
+          .order("created_at", { ascending: false })
+          .limit(1);
 
-      if (error) {
-        console.error("获取生活环境数据时出错：", error);
-        alert(t('lifeEnvironmentPage.loadErrorAlert'));
-      } else if (data && data.length > 0) {
-        setFormData({
-          stress_level: data[0].stress_level || "",
-          relationship_stress: data[0].relationship_stress || [],
-          financial_stress: data[0].financial_stress || "",
-          sleep_quality: data[0].sleep_quality || "",
-          additional_details: data[0].additional_details || "",
-        });
+        if (error) {
+          console.error("获取生活环境数据时出错：", error);
+        } else if (data && data.length > 0) {
+          setFormData({
+            stress_level: data[0].stress_level || "",
+            relationship_stress: data[0].relationship_stress || [],
+            financial_stress: data[0].financial_stress || "",
+            sleep_quality: data[0].sleep_quality || "",
+            additional_details: data[0].additional_details || "",
+          });
+        }
+      } catch (err) {
+        console.error("加载生活环境数据时出错：", err);
+      } finally {
+        setIsLoading(false); // 加载完成
       }
-
-      setIsLoading(false);
     };
 
     fetchLatestData();
@@ -85,14 +94,16 @@ const LifeEnvironment: React.FC = () => {
   };
 
   const handleSaveToSupabase = async () => {
-    try {
-      setIsSaving(true);
-      const user = await getCurrentUser();
-      if (!user) {
-        alert(t('lifeEnvironmentPage.noLoginAlert'));
-        return;
-      }
+    const user = await getCurrentUser();
+    if (!user) {
+      alert(t('lifeEnvironmentPage.noLoginAlert')); // 保持未登录提示
+      return;
+    }
 
+    setIsSaving(true); // 开始保存时设置 isSaving
+    setSaveStatus(t('lifeEnvironmentPage.savingButton')); // 显示“Saving...”
+
+    try {
       const { error } = await supabase.from("life_environment").upsert([
         {
           user_id: user.id,
@@ -108,7 +119,8 @@ const LifeEnvironment: React.FC = () => {
 
       if (error) {
         console.error("保存数据时出错：", error);
-        alert(t('lifeEnvironmentPage.saveErrorAlert'));
+        setSaveStatus(t('lifeEnvironmentPage.saveErrorAlert')); // 显示保存失败提示
+        setTimeout(() => setSaveStatus(''), 2000); // 2秒后清空
         return;
       }
 
@@ -123,19 +135,38 @@ const LifeEnvironment: React.FC = () => {
 
       if (savePromptError) {
         console.error("保存提示词失败：", savePromptError.message);
+        setSaveStatus(t('lifeEnvironmentPage.saveErrorAlert')); // 显示网络错误提示
+        setTimeout(() => setSaveStatus(''), 2000); // 2秒后清空
       } else {
         console.log("提示词已成功保存");
+        setSaveStatus(t('lifeEnvironmentPage.saveSuccessAlert')); // 显示“Saved!”
+        setTimeout(() => {
+          setSaveStatus(''); // 2秒后恢复为“Save”
+          navigate('/settings/user-info/health-condition'); // 跳转到 HealthCondition 页面
+        }, 2000);
       }
-
-      alert(t('lifeEnvironmentPage.saveSuccessAlert'));
-      navigate('/settings/user-info/health-condition'); // 保存成功后跳转到 HealthCondition 页面
     } catch (error) {
       console.error("保存过程中发生错误：", error);
-      alert(t('lifeEnvironmentPage.saveErrorAlert'));
+      setSaveStatus(t('lifeEnvironmentPage.saveErrorAlert')); // 显示网络错误提示
+      setTimeout(() => setSaveStatus(''), 2000); // 2秒后清空
     } finally {
-      setIsSaving(false);
+      setIsSaving(false); // 保存完成（无论成功或失败）重置 isSaving
     }
   };
+
+  const handleSkip = async () => { // 修改为 async 函数以支持 await
+    // 跳过当前页面，直接导航到下一个页面（HealthCondition）
+    const user = await getCurrentUser();
+    if (!user) {
+      alert(t('lifeEnvironmentPage.noLoginAlert')); // 保持未登录提示
+      return;
+    }
+    navigate('/settings/user-info/health-condition'); // 直接跳转，无反馈
+  };
+
+  if (isLoading) {
+    return <div className="loading-message">{t('lifeEnvironmentPage.loadingMessage', 'Loading...')}</div>;
+  }
 
   return (
     <div className="life-environment">
@@ -159,13 +190,18 @@ const LifeEnvironment: React.FC = () => {
         value={formData.additional_details}
         onChange={(value) => handleChange("additional_details", value)}
       />
-      <button
-        onClick={handleSaveToSupabase}
-        disabled={isSaving}
-        className="save-button"
-      >
-        {isSaving ? t('lifeEnvironmentPage.savingButton') : t('lifeEnvironmentPage.saveButton')}
-      </button>
+      <div className="buttons-container"> {/* 添加容器以并排放置按钮 */}
+        <button onClick={handleSkip} disabled={isSaving}> {/* 使用 isSaving 禁用按钮 */}
+          {t('lifeEnvironmentPage.skipButton')} {/* 保持原始文本，无状态反馈 */}
+        </button>
+        <button
+          onClick={handleSaveToSupabase}
+          disabled={isSaving}
+          className="save-button"
+        >
+          {saveStatus || (isSaving ? t('lifeEnvironmentPage.savingButton') : t('lifeEnvironmentPage.saveButton'))} {/* 动态显示保存状态 */}
+        </button>
+      </div>
     </div>
   );
 };

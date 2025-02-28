@@ -1,71 +1,52 @@
 // src/pages/UserInfo/UserInfo.tsx
-import React from "react";
-import { NavLink, Outlet } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { NavLink, Outlet, useLocation } from "react-router-dom";
 import "./UserInfo.css";
 import { useTranslation } from 'react-i18next';
 
 const UserInfo: React.FC = () => {
   const { t } = useTranslation();
+  const location = useLocation(); // 获取当前路径
+  const [selectedOption, setSelectedOption] = useState<string>(location.pathname.split('/').pop() || 'basic-info'); // 默认选中当前路由
 
-  const checkActive = (isActive: boolean, path: string) => {
-    const isCurrentPath = window.location.pathname.includes(path);
-    return isCurrentPath || isActive ? "nav-link nav-link-active" : "nav-link";
+  // 更新 selectedOption 当路由变化时
+  useEffect(() => {
+    const currentPath = location.pathname.split('/').pop() || 'basic-info';
+    setSelectedOption(currentPath);
+  }, [location.pathname]);
+
+  const navOptions = [
+    { path: "basic-info", label: t('userInfoPage.nav.basicInfo') },
+    { path: "environment", label: t('userInfoPage.nav.environment') },
+    { path: "health-condition", label: t('userInfoPage.nav.healthCondition') },
+    { path: "interests", label: t('userInfoPage.nav.interests') },
+    { path: "social-support", label: t('userInfoPage.nav.socialSupport') },
+    { path: "recent-events", label: t('userInfoPage.nav.recentEvents') },
+  ];
+
+  const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const path = event.target.value;
+    setSelectedOption(path);
+    // 使用 NavLink 导航到选中的路由
+    // 注意：确保路径以 /settings/user-info/ 开头
+    window.location.href = `/settings/user-info/${path}`; // 或者使用 navigate('/settings/user-info/' + path)
   };
 
   return (
     <div className="user-info-container">
       <h1>{t('userInfoPage.title')}</h1>
       <nav className="user-info-nav">
-        <ul className="user-info-nav-list">
-          <li>
-            <NavLink 
-              to="basic-info" 
-              className={({ isActive }) => checkActive(isActive, 'basic-info')}
-            >
-              {t('userInfoPage.nav.basicInfo')}
-            </NavLink>
-          </li>
-          <li>
-            <NavLink 
-              to="environment" 
-              className={({ isActive }) => checkActive(isActive, 'environment')}
-            >
-              {t('userInfoPage.nav.environment')}
-            </NavLink>
-          </li>
-          <li>
-            <NavLink 
-              to="health-condition" 
-              className={({ isActive }) => checkActive(isActive, 'health-condition')}
-            >
-              {t('userInfoPage.nav.healthCondition')}
-            </NavLink>
-          </li>
-          <li>
-            <NavLink 
-              to="interests" 
-              className={({ isActive }) => checkActive(isActive, 'interests')}
-            >
-              {t('userInfoPage.nav.interests')}
-            </NavLink>
-          </li>
-          <li>
-            <NavLink 
-              to="social-support" 
-              className={({ isActive }) => checkActive(isActive, 'social-support')}
-            >
-              {t('userInfoPage.nav.socialSupport')}
-            </NavLink>
-          </li>
-          <li>
-            <NavLink 
-              to="recent-events" 
-              className={({ isActive }) => checkActive(isActive, 'recent-events')}
-            >
-              {t('userInfoPage.nav.recentEvents')}
-            </NavLink>
-          </li>
-        </ul>
+        <select
+          value={selectedOption}
+          onChange={handleSelectChange}
+          className={`nav-dropdown ${selectedOption === location.pathname.split('/').pop() ? 'nav-link-active' : ''}`}
+        >
+          {navOptions.map((option) => (
+            <option key={option.path} value={option.path}>
+              {option.label}
+            </option>
+          ))}
+        </select>
       </nav>
       <Outlet />
     </div>

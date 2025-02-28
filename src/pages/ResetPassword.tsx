@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useLocation, useSearchParams } from 'react-router-dom'; // 导入 useSearchParams
+import { useNavigate, useLocation, useSearchParams } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
 import { useTranslation } from 'react-i18next';
 import { useUserContext } from '../context/UserContext'; 

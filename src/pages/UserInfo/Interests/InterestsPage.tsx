@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useRef } from "react";
+// InterestsPage.tsx
+import React, { useState, useEffect, useRef, useMemo, useCallback } from "react"; // 添加 useCallback
 import { supabase } from "../../../supabaseClient";
 import { generatePromptsForUser } from "../../../utils/generatePrompts";  
 import { useUserContext } from "../../../context/UserContext";
@@ -7,44 +8,74 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom'; // 导入 useNavigate
 
 const InterestsPage: React.FC = () => {
-  const { userId, loading } = useUserContext();
+  const { userId } = useUserContext(); // 仅使用 userId，不使用 loading，因为我们自定义 isLoading
   const [userInterests, setUserInterests] = useState<Record<string, string[]>>({});
-  const [isSaving, setIsSaving] = useState(false);
+  const [isLoading, setIsLoading] = useState(true); // 用于初始加载
+  const [isSaving, setIsSaving] = useState(false); // 用于保存时的加载状态
+  const [error, setError] = useState<string | null>(null); // 添加错误状态
+  const [saveStatus, setSaveStatus] = useState<string>(''); // 保存状态反馈
   const inputRefs = useRef<Record<string, HTMLInputElement>>({});
   const { t } = useTranslation();
   const navigate = useNavigate(); // 使用 useNavigate 钩子
 
-  const interestsData = t('interestsPage.categories', { returnObjects: true }) as Record<string, { title: string; options: Record<string, string> }>;
-  const categoryKeys = Object.keys(interestsData);
+  // 使用 useMemo 缓存 interestsData 和 categoryKeys，避免不必要的重新计算
+  const interestsData = useMemo(() => 
+    t('interestsPage.categories', { returnObjects: true }) as Record<string, { title: string; options: Record<string, string> }>,
+    [t]
+  );
+  const categoryKeys = useMemo(() => Object.keys(interestsData), [interestsData]);
 
   useEffect(() => {
     const fetchInterests = async () => {
-      if (!userId) return;
+      if (!userId) {
+        setIsLoading(false); // 如果没有 userId，直接结束加载状态
+        setError(t('interestsPage.noLoginMessage', 'Please log in to set your interests.'));
+        return;
+      }
 
-      const { data, error } = await supabase
-        .from("user_interests")
-        .select("interests")
-        .eq("user_id", userId)
-        .single();
+      setIsLoading(true); // 开始加载时设置 isLoading 为 true
+      setError(null); // 重置错误状态
+      try {
+        const { data, error } = await supabase
+          .from("user_interests")
+          .select("interests")
+          .eq("user_id", userId)
+          .single();
 
-      if (error) {
-        console.error("Error fetching interests:", error);
-      } else if (data) {
-        const savedInterests = JSON.parse(data.interests);
-        const updatedInterests = { ...savedInterests };
-
-        categoryKeys.forEach((categoryKey) => {
-          if (!updatedInterests[categoryKey]) {
-            updatedInterests[categoryKey] = [];
+        if (error) {
+          if (error.code === "PGRST116") { // 记录不存在
+            console.log("No interests found, initializing with defaults.");
+            const defaultInterests: Record<string, string[]> = {};
+            categoryKeys.forEach((categoryKey) => {
+              defaultInterests[categoryKey] = [];
+            });
+            setUserInterests(defaultInterests);
+          } else {
+            console.error("Error fetching interests:", error);
+            setError(t('interestsPage.fetchError', 'Failed to load interests. Please try again later.'));
           }
-        });
+        } else if (data) {
+          const savedInterests = JSON.parse(data.interests);
+          const updatedInterests = { ...savedInterests };
 
-        setUserInterests(updatedInterests);
+          categoryKeys.forEach((categoryKey) => {
+            if (!updatedInterests[categoryKey]) {
+              updatedInterests[categoryKey] = [];
+            }
+          });
+
+          setUserInterests(updatedInterests);
+        }
+      } catch (err) {
+        console.error("Error loading interests:", err);
+        setError(t('interestsPage.fetchError', 'Failed to load interests. Please try again later.'));
+      } finally {
+        setIsLoading(false); // 加载完成，设置 isLoading 为 false
       }
     };
 
     fetchInterests();
-  }, [userId, categoryKeys]);
+  }, [userId, categoryKeys, t]); // 依赖项优化为 userId 和 t，确保仅在必要时触发
 
   const handleInterestChange = (category: string, interest: string, isChecked: boolean) => {
     const updatedCategory = userInterests[category] || [];
@@ -71,84 +102,102 @@ const InterestsPage: React.FC = () => {
     setUserInterests(updatedInterests);
   };
 
-  const saveInterests = async () => {
-    if (!userId) return;
-  
+  // 使用 useCallback 包裹 saveInterests，防止不必要的重新创建
+  const saveInterests = useCallback(async () => {
+    if (!userId) {
+      alert(t('interestsPage.noLoginMessage', 'Please log in to set your interests.'));
+      return;
+    }
+
+    if (isSaving) return; // 防止重复调用
+
     addUnsavedInputs();
-  
-    setUserInterests(prevState => {
-      console.log('Ready to save interests:', prevState);
-      saveData(prevState);
-      return prevState;
-    });
 
-    async function saveData(updatedState) {
-      setIsSaving(true);
-    
-      try {
-        console.log('Saving interests (JSON):', JSON.stringify(updatedState));
+    setIsSaving(true);
+    setSaveStatus(t('interestsPage.savingButton')); // 显示“Saving...”
 
-        const { error } = await supabase
-          .from("user_interests")
-          .upsert(
-            {
-              user_id: userId,
-              interests: JSON.stringify(updatedState),
-            },
-            { onConflict: "user_id" }
-          );
-    
-        if (error) {
-          console.error("Error saving interests:", error);
-          alert(t('interestsPage.saveErrorAlert'));
-          return;
-        }
-    
-        const updatedPrompt = await generatePromptsForUser(userId);
-        console.log("Generated prompt:", updatedPrompt);
+    try {
+      console.log('Saving interests (JSON):', JSON.stringify(userInterests));
 
-        const { error: savePromptError } = await supabase
-          .from("user_prompts_summary")
-          .upsert({
+      const { error } = await supabase
+        .from("user_interests")
+        .upsert(
+          {
             user_id: userId,
-            full_prompt: updatedPrompt,
-          }, { onConflict: ["user_id"] });
-
-        if (savePromptError) {
-          console.error("保存提示词失败：", savePromptError.message);
-        } else {
-          console.log("提示词已成功保存");
-        }
-
-        Object.values(inputRefs.current).forEach(input => input.value = "");
-
-        const { data: checkData, error: checkError } = await supabase
-          .from("user_interests")
-          .select("interests")
-          .eq("user_id", userId)
-          .single();
-
-        if (checkError) {
-          console.error("Error checking saved data:", checkError);
-        } else {
-          console.log("Saved data verified:", checkData);
-        }
-
-        alert(t('interestsPage.saveSuccessAlert'));
-        navigate('/settings/user-info/social-support'); // 保存成功后跳转到 SocialSupportPage 页面
-      } catch (error) {
-        console.error("Error during save process:", error);
-        alert(t('interestsPage.saveNetworkErrorAlert'));
-      } finally {
-        setIsSaving(false);
+            interests: JSON.stringify(userInterests),
+          },
+          { onConflict: "user_id" }
+        );
+  
+      if (error) {
+        console.error("Error saving interests:", error);
+        setSaveStatus(t('interestsPage.saveErrorAlert')); // 显示保存失败提示
+        setTimeout(() => setSaveStatus(''), 2000); // 2秒后清空
+        return;
       }
-    };
+  
+      const updatedPrompt = await generatePromptsForUser(userId);
+      console.log("Generated prompt:", updatedPrompt);
+
+      const { error: savePromptError } = await supabase
+        .from("user_prompts_summary")
+        .upsert({
+          user_id: userId,
+          full_prompt: updatedPrompt,
+        }, { onConflict: ["user_id"] });
+
+      if (savePromptError) {
+        console.error("保存提示词失败：", savePromptError.message);
+        setSaveStatus(t('interestsPage.saveNetworkErrorAlert')); // 显示网络错误提示
+        setTimeout(() => setSaveStatus(''), 2000); // 2秒后清空
+      } else {
+        console.log("提示词已成功保存");
+        setSaveStatus(t('interestsPage.saveSuccessAlert')); // 显示“Saved!”
+        setTimeout(() => {
+          setSaveStatus(''); // 2秒后恢复为“Save”
+          navigate('/settings/user-info/social-support'); // 保存成功后跳转到 SocialSupportPage 页面
+        }, 2000);
+      }
+
+      Object.values(inputRefs.current).forEach(input => input.value = "");
+
+      const { data: checkData, error: checkError } = await supabase
+        .from("user_interests")
+        .select("interests")
+        .eq("user_id", userId)
+        .single();
+
+      if (checkError) {
+        console.error("Error checking saved data:", checkError);
+      } else {
+        console.log("Saved data verified:", checkData);
+      }
+    } catch (error) {
+      console.error("Error during save process:", error);
+      setSaveStatus(t('interestsPage.saveNetworkErrorAlert')); // 显示网络错误提示
+      setTimeout(() => setSaveStatus(''), 2000); // 2秒后清空
+    } finally {
+      setIsSaving(false);
+    }
+  }, [userId, userInterests, t, navigate]); // 依赖项包括 userId、userInterests、t 和 navigate
+
+  const handleSkip = () => {
+    // 跳过当前页面，直接导航到下一个页面（SocialSupport）
+    if (!userId) {
+      alert(t('interestsPage.noLoginMessage', 'Please log in to set your interests.'));
+      return;
+    }
+    navigate('/settings/user-info/social-support'); // 直接跳转，无反馈
   };
 
-  if (loading) {
-    return <p className="loading-message">{t('interestsPage.loadingMessage')}</p>;
+  if (isLoading) {
+    return <p className="loading-message">{t('interestsPage.loadingMessage', 'Loading...')}</p>;
   }
-  
+
+  if (error) {
+    return <div className="error-message">{error}</div>;
+  }
+
   return (
     <div className="interests-page">
       <div className="interests-grid">
@@ -163,6 +212,7 @@ const InterestsPage: React.FC = () => {
                       type="checkbox"
                       checked={userInterests[categoryKey]?.includes(interestKey) || false}
                       onChange={(e) => handleInterestChange(categoryKey, interestKey, e.target.checked)}
+                      disabled={isSaving} // 使用 isSaving 禁用输入框
                     />
                     {interestsData[categoryKey].options[interestKey]}
                   </label>
@@ -177,6 +227,7 @@ const InterestsPage: React.FC = () => {
                         type="checkbox"
                         checked
                         onChange={(e) => handleInterestChange(categoryKey, extraInterest, e.target.checked)}
+                        disabled={isSaving} // 使用 isSaving 禁用输入框
                       />
                       {extraInterest}
                     </label>
@@ -187,13 +238,19 @@ const InterestsPage: React.FC = () => {
               type="text"
               placeholder={t('interestsPage.addInterestPlaceholder')}
               ref={(el) => (el ? (inputRefs.current[categoryKey] = el) : delete inputRefs.current[categoryKey])}
+              disabled={isSaving} // 使用 isSaving 禁用输入框
             />
           </div>
         ))}
       </div>
-      <button onClick={saveInterests} disabled={isSaving}>
-        {isSaving ? t('interestsPage.savingButton') : t('interestsPage.saveButton')}
-      </button>
+      <div className="buttons-container"> {/* 添加容器以并排放置按钮 */}
+        <button onClick={handleSkip} disabled={isSaving}>
+          {t('interestsPage.skipButton')} {/* 保持原始文本，无状态反馈 */}
+        </button>
+        <button onClick={saveInterests} disabled={isSaving}>
+          {saveStatus || (isSaving ? t('interestsPage.savingButton') : t('interestsPage.saveButton'))} {/* 动态显示保存状态 */}
+        </button>
+      </div>
     </div>
   );
 };
