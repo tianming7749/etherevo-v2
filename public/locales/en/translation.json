@@ -72,7 +72,7 @@
       "passwordMismatch": "New password and confirmation do not match.",
       "passwordRequirements": "Password must be at least 8 characters long.",
       "success": "Password has been successfully reset!",
-      "emailRequired": "An email address is required for verification, please ensure the email is correct."
+      "emailRequired": "Email is required. Please request a new password reset link."
     }
   },
   "welcome": {

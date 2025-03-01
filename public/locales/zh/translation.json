@@ -72,7 +72,7 @@
       "passwordMismatch": "新密码和确认密码不匹配。",
       "passwordRequirements": "密码至少需要8个字符。",
       "success": "密码已成功重置！",
-      "emailRequired": "需要邮箱地址才能验证，请确保邮箱正确。"
+      "emailRequired": "需要邮箱地址，请重新请求密码重置链接。"
     }
   },
   "welcome": {

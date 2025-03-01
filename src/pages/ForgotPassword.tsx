@@ -35,6 +35,7 @@ const ForgotPassword: React.FC = () => {
         console.error("Error resetting password:", error.message);
       } else {
         // 成功发送邮件后，存储 email 到 localStorage
+        console.log('Storing email in localStorage:', email);
         localStorage.setItem('resetEmail', email);
         setSuccess(true);
         setError(null);

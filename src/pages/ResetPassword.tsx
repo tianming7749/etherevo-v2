@@ -22,7 +22,7 @@ const ResetPassword: React.FC = () => {
   const token = location.state?.token || queryParams.get('token');
   const redirectTo = location.state?.redirectTo || queryParams.get('redirect_to');
 
-  // 从 localStorage 获取 email，并尝试从 Supabase 获取备用
+  // 从 localStorage 获取 email
   const [email, setEmail] = useState<string | null>(null);
 
   useEffect(() => {
@@ -33,38 +33,15 @@ const ResetPassword: React.FC = () => {
         return;
       }
 
-      // 从 localStorage 获取 email
-      const storedEmail = localStorage.getItem('resetEmail');
+      // 优先从 localStorage 获取 email
+      let storedEmail = localStorage.getItem('resetEmail');
       if (storedEmail) {
         setEmail(storedEmail);
       } else {
-        // 如果 localStorage 没有 email，尝试从 Supabase 获取用户（基于 token）
-        try {
-          const { data, error } = await supabase.auth.getUser(token); // 可能需要调整 API
-          if (error) {
-            console.error('Error fetching user by token:', error);
-            // 尝试从历史 session 或其他方式获取 email（可选）
-            const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
-            if (sessionData?.session?.user?.email) {
-              setEmail(sessionData.session.user.email);
-            } else {
-              setError(t('resetPassword.messages.emailRequired'));
-              setIsLoading(false);
-              return;
-            }
-          } else if (data?.user?.email) {
-            setEmail(data.user.email);
-          } else {
-            setError(t('resetPassword.messages.emailRequired'));
-            setIsLoading(false);
-            return;
-          }
-        } catch (err) {
-          console.error('Unexpected error fetching email:', err);
-          setError(t('resetPassword.messages.unexpectedError'));
-          setIsLoading(false);
-          return;
-        }
+        // 如果 localStorage 没有 email，提示用户重新请求重置链接
+        setError(t('resetPassword.messages.emailRequired', 'Email is required. Please request a new password reset link.'));
+        setIsLoading(false);
+        return;
       }
 
       // 验证 token
