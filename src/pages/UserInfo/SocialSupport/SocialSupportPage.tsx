@@ -207,10 +207,10 @@ const SocialSupportPage: React.FC = () => {
 
         <div className="buttons-container"> {/* 添加容器以并排放置按钮 */}
           <button type="button" onClick={handleSkip} disabled={isSaving}> {/* 仅在未登录时禁用 */}
-            {t('socialSupportPage.skipButton', 'Skip')} {/* 保持原始文本，无状态反馈 */}
+            {t('socialSupportPage.skipButton')} {/* 保持原始文本，无状态反馈 */}
           </button>
           <button type="button" onClick={saveSocialSupport} disabled={isSaving}> {/* 使用 isSaving 禁用按钮 */}
-            {saveStatus || (isSaving ? t('socialSupportPage.savingButton', 'Saving...') : t('socialSupportPage.saveButton', 'Save'))} {/* 动态显示保存状态 */}
+            {saveStatus || (isSaving ? t('socialSupportPage.savingButton') : t('socialSupportPage.saveButton'))} {/* 动态显示保存状态 */}
           </button>
         </div>
       </form>

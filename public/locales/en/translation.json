@@ -132,6 +132,7 @@
   },
   "goalsPage": {
     "title": "Set Your Goals",
+    "loadingMessage": "Loading...",
     "description": "Tip: Setting your goals helps us tailor mental health support for you. You can select up to 3 goals to keep us focused on what matters most. Feel free to adjust them anytime as your needs evolve.",
     "noLoginMessage": "Please log in to view and set your goals.",
     "errorMessage": "An error occurred while loading goals, please try again later.",

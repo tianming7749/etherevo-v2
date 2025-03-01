@@ -39,14 +39,14 @@
 /* 按钮容器样式，确保“跳过”和“Save”按钮并排 */
 .buttons-container {
   display: flex;
-  gap: 10px; /* 按钮之间的间距 */
-  justify-content: flex-end; /* 按钮靠右对齐 */
-  margin-top: 20px; /* 与内容保持一定间距 */
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 20px;
 }
 
 /* “跳过”按钮样式 */
-.buttons-container button:first-child { /* 针对跳过按钮 */
-  background-color: #4682B4; /* 使用较浅的蓝色，与主题一致但稍低调 */
+.buttons-container button:first-child {
+  background-color: #4682B4;
   color: white;
   border: none;
   border-radius: 4px;
@@ -57,11 +57,19 @@
 }
 
 .buttons-container button:first-child:not(:disabled):hover {
-  background-color: #335881; /* 悬停时加深蓝色 */
+  background-color: #335881;
 }
 
-/* 按钮样式（保持与原有样式一致，但适用于新结构） */
-.social-support-container button {
+/* 禁用时的“跳过”按钮样式，保持原始颜色但禁用交互 */
+.buttons-container button:first-child:disabled {
+  background-color: #4682B4; /* 保持原始颜色 */
+  color: #ffffff; /* 保持文字白色，确保可读性 */
+  cursor: not-allowed; /* 保持禁用光标效果 */
+  opacity: 0.6; /* 可选：降低透明度以提示禁用状态，但保持颜色 */
+}
+
+/* “保存”按钮样式 */
+.social-support-container button:not(:first-child) {
   background-color: #004085;
   color: white;
   border: none;
@@ -72,14 +80,13 @@
   transition: background-color 0.3s;
 }
 
-/* 通用按钮悬停效果 */
-.social-support-container button:not(:disabled):hover {
+.social-support-container button:not(:first-child):not(:disabled):hover {
   background-color: #0279f0;
 }
 
-/* 禁用状态 */
-.social-support-container button:disabled {
-  background-color: #888;
+/* 禁用时的“保存”按钮样式 */
+.social-support-container button:not(:first-child):disabled {
+  background-color: #888; /* 保持原有灰色禁用样式 */
   cursor: not-allowed;
 }
 
