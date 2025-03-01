@@ -1,8 +1,9 @@
+// ResetPassword.tsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation, useSearchParams } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
 import { useTranslation } from 'react-i18next';
-import { useUserContext } from '../context/UserContext'; 
+import { useUserContext } from '../context/UserContext';
 import './ResetPassword.css';
 
 const ResetPassword: React.FC = () => {
@@ -14,61 +15,93 @@ const ResetPassword: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { t } = useTranslation();
-  const { isAuthenticated, isPasswordRecovery, setIsPasswordRecovery } = useUserContext(); // 确保包含 setIsPasswordRecovery
+  const { isAuthenticated, isPasswordRecovery, setIsPasswordRecovery } = useUserContext();
   const queryParams = new URLSearchParams(location.search);
-  const [searchParams] = useSearchParams(); // 使用 useSearchParams 获取查询参数
+  const [searchParams] = useSearchParams();
 
-  // 从路由状态或查询参数中获取 token
+  // 从路由状态或查询参数中获取 token 和 redirectTo
   const token = location.state?.token || queryParams.get('token');
   const redirectTo = location.state?.redirectTo || queryParams.get('redirect_to');
 
+  // 从 localStorage 或后端获取 email（假设用户在忘记密码时已输入 email）
+  const [email, setEmail] = useState<string | null>(null); // 新增 email 状态
+
   useEffect(() => {
-    // 如果用户已完全登录（非密码重置流程），阻止密码重置
-    if (isAuthenticated && !isPasswordRecovery) {
-      setError(t('resetPassword.messages.alreadyLoggedIn'));
-      setIsLoading(false);
-      return;
-    }
-
-    if (!token) {
-      setError(t('resetPassword.messages.invalidToken'));
-      setIsLoading(false);
-      return;
-    }
-
-    const verifyToken = async () => {
-      try {
-        console.log('Token being verified:', token);
-        const { data, error } = await supabase.auth.verifyOtp({
-          token,
-          type: 'recovery', // 确保 type 为 'recovery'
-        });
-
-        console.log('Verify OTP response:', { data, error }); // 添加详细日志
-
-        if (error) {
-          if (error.message.includes('expired')) {
-            setError(t('resetPassword.messages.expiredToken'));
-          } else if (error.message.includes('invalid')) {
-            setError(t('resetPassword.messages.invalidToken'));
-          } else {
-            setError(t('resetPassword.messages.unexpectedError'));
-            console.error('Detailed token verification error:', error.message, error);
-          }
-        } else {
-          setError(null); // 令牌有效，清空任何错误
-          console.log('Token verified successfully, data:', data);
-          setIsPasswordRecovery(true); // 验证成功后设置 isPasswordRecovery
-        }
-      } catch (err) {
-        console.error('Unexpected error during token verification:', err);
-        setError(t('resetPassword.messages.unexpectedError'));
-      } finally {
+    const fetchEmail = async () => {
+      if (!token) {
+        setError(t('resetPassword.messages.invalidToken'));
         setIsLoading(false);
+        return;
       }
+
+      // 尝试从 localStorage 或 session 获取 email（根据你的 ForgotPassword 逻辑）
+      const storedEmail = localStorage.getItem('resetEmail'); // 假设 ForgotPassword 存储了 email
+      if (storedEmail) {
+        setEmail(storedEmail);
+      } else {
+        // 如果没有存储，尝试从 Supabase 获取用户（基于 token）
+        try {
+          const { data, error } = await supabase.auth.getUser(token); // 可能需要调整 API
+          if (error) {
+            console.error('Error fetching user by token:', error);
+          } else if (data?.user?.email) {
+            setEmail(data.user.email);
+          }
+        } catch (err) {
+          console.error('Unexpected error fetching email:', err);
+        }
+      }
+
+      // 如果用户已完全登录（非密码重置流程），阻止密码重置
+      if (isAuthenticated && !isPasswordRecovery) {
+        setError(t('resetPassword.messages.alreadyLoggedIn'));
+        setIsLoading(false);
+        return;
+      }
+
+      const verifyToken = async () => {
+        try {
+          console.log('Token being verified:', token);
+          if (!email) {
+            setError(t('resetPassword.messages.emailRequired'));
+            setIsLoading(false);
+            return;
+          }
+
+          const { data, error } = await supabase.auth.verifyOtp({
+            token,
+            type: 'recovery',
+            email, // 添加 email 参数
+          });
+
+          console.log('Verify OTP response:', { data, error });
+
+          if (error) {
+            if (error.message.includes('expired')) {
+              setError(t('resetPassword.messages.expiredToken'));
+            } else if (error.message.includes('invalid')) {
+              setError(t('resetPassword.messages.invalidToken'));
+            } else {
+              setError(t('resetPassword.messages.unexpectedError'));
+              console.error('Detailed token verification error:', error.message, error);
+            }
+          } else {
+            setError(null);
+            console.log('Token verified successfully, data:', data);
+            setIsPasswordRecovery(true);
+          }
+        } catch (err) {
+          console.error('Unexpected error during token verification:', err);
+          setError(t('resetPassword.messages.unexpectedError'));
+        } finally {
+          setIsLoading(false);
+        }
+      };
+
+      verifyToken();
     };
 
-    verifyToken();
+    fetchEmail();
   }, [token, t, isAuthenticated, isPasswordRecovery, setIsPasswordRecovery]);
 
   const handlePasswordReset = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -94,16 +127,22 @@ const ResetPassword: React.FC = () => {
       return;
     }
 
+    if (!email) {
+      setError(t('resetPassword.messages.emailRequired'));
+      return;
+    }
+
     setIsLoading(true);
     try {
-      console.log('Resetting password with token:', token, 'and password:', password);
-      const { data, error } = await supabase.auth.verifyOtp({ // 修改为返回 data 和 error
+      console.log('Resetting password with token:', token, 'email:', email, 'and password:', password);
+      const { data, error } = await supabase.auth.verifyOtp({
         token,
         type: 'recovery',
-        newPassword: password, // 确保传递 newPassword
+        email, // 传递 email
+        newPassword: password,
       });
 
-      console.log('Password reset response:', { data, error }); // 添加详细日志
+      console.log('Password reset response:', { data, error });
 
       if (error) {
         if (error.message.includes('expired')) {
@@ -117,8 +156,9 @@ const ResetPassword: React.FC = () => {
       } else {
         setSuccess(true);
         setError(null);
-        // 密码重置成功后，更新用户状态
-        setIsPasswordRecovery(false); // 完成密码重置，恢复正常状态
+        setIsPasswordRecovery(false);
+        // 清除存储的 email（如果有）
+        localStorage.removeItem('resetEmail');
       }
     } catch (err) {
       console.error('Unexpected error during password reset:', err);
