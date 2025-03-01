@@ -35,6 +35,10 @@ const ResetPassword: React.FC = () => {
 
       // 优先从 localStorage 获取 email
       let storedEmail = localStorage.getItem('resetEmail');
+      console.log('LocalStorage contents:', {
+        resetEmail: storedEmail,
+        allKeys: Object.keys(localStorage)
+      });
       if (storedEmail) {
         setEmail(storedEmail);
       } else {
