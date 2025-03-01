@@ -37,9 +37,15 @@ const ResetPassword: React.FC = () => {
       let storedEmail = localStorage.getItem('resetEmail');
       console.log('LocalStorage contents:', {
         resetEmail: storedEmail,
-        allKeys: Object.keys(localStorage)
+        allKeys: Object.keys(localStorage),
+        domain: window.location.hostname,
+        path: window.location.pathname
       });
+
       if (storedEmail) {
+        // 去除可能的空格或换行符
+        storedEmail = storedEmail.trim();
+        console.log('Retrieved and trimmed email from localStorage:', storedEmail);
         setEmail(storedEmail);
       } else {
         // 如果 localStorage 没有 email，提示用户重新请求重置链接
