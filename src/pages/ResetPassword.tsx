@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation, useSearchParams } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
 import { useTranslation } from 'react-i18next';
@@ -22,8 +22,8 @@ const ResetPassword: React.FC = () => {
   const token = location.state?.token || queryParams.get('token');
   const redirectTo = location.state?.redirectTo || queryParams.get('redirect_to');
 
-  // 从 localStorage 获取 email
-  const [email, setEmail] = useState<string | null>(null);
+  // 使用 useRef 跟踪 email 状态
+  const emailRef = useRef<string | null>(null);
 
   useEffect(() => {
     const fetchEmailAndVerify = async () => {
@@ -46,7 +46,8 @@ const ResetPassword: React.FC = () => {
         // 去除可能的空格或换行符
         storedEmail = storedEmail.trim();
         console.log('Retrieved and trimmed email from localStorage:', storedEmail);
-        setEmail(storedEmail);
+        emailRef.current = storedEmail; // 更新 ref
+        console.log('Email ref updated:', emailRef.current); // 调试
       } else {
         // 如果 localStorage 没有 email，提示用户重新请求重置链接
         setError(t('resetPassword.messages.emailRequired', 'Email is required. Please request a new password reset link.'));
@@ -62,11 +63,11 @@ const ResetPassword: React.FC = () => {
       }
 
       try {
-        console.log('Token being verified:', token, 'with email:', email);
+        console.log('Token being verified:', token, 'with email:', emailRef.current);
         const { data, error } = await supabase.auth.verifyOtp({
           token,
           type: 'recovery',
-          email, // 确保传递 email
+          email: emailRef.current, // 使用 ref 确保最新值
         });
 
         console.log('Verify OTP response:', { data, error });
@@ -119,18 +120,18 @@ const ResetPassword: React.FC = () => {
       return;
     }
 
-    if (!email) {
+    if (!emailRef.current) {
       setError(t('resetPassword.messages.emailRequired'));
       return;
     }
 
     setIsLoading(true);
     try {
-      console.log('Resetting password with token:', token, 'email:', email, 'and password:', password);
+      console.log('Resetting password with token:', token, 'email:', emailRef.current, 'and password:', password);
       const { data, error } = await supabase.auth.verifyOtp({
         token,
         type: 'recovery',
-        email, // 确保传递 email
+        email: emailRef.current, // 使用 ref 确保最新值
         newPassword: password,
       });
 
