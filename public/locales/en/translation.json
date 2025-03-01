@@ -53,16 +53,6 @@
     }
   },
   "resetPassword": {
-    "messages": {
-      "invalidToken": "Invalid or expired password reset link.",
-      "expiredToken": "The password reset link has expired. Please request a new one.",
-      "unexpectedError": "An unexpected error occurred. Please try again.",
-      "passwordMismatch": "Passwords do not match.",
-      "passwordRequirements": "Password must be at least 8 characters long.",
-      "requiredFields": "All fields are required.",
-      "loading": "Loading...",
-      "success": "Your password has been successfully reset."
-    },
     "title": "Reset Password",
     "labels": {
       "newPassword": "New Password",
@@ -71,6 +61,18 @@
     "buttons": {
       "resetPassword": "Reset Password",
       "backToLogin": "Back to Login"
+    },
+    "messages": {
+      "loading": "Loading...",
+      "invalidToken": "Invalid token, please request a new reset link.",
+      "expiredToken": "Token has expired, please request a new reset link.",
+      "unexpectedError": "An unexpected error occurred, please try again.",
+      "alreadyLoggedIn": "You are already logged in and cannot reset your password.",
+      "requiredFields": "Password and confirmation are required fields.",
+      "passwordMismatch": "New password and confirmation do not match.",
+      "passwordRequirements": "Password must be at least 8 characters long.",
+      "success": "Password has been successfully reset!",
+      "emailRequired": "An email address is required for verification, please ensure the email is correct."
     }
   },
   "welcome": {
