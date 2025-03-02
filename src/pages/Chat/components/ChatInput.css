@@ -17,15 +17,19 @@
 }
 
 .send-button {
-  padding: 10px 20px;
-  font-size: 16px;
-  background-color: #4682B4;
+  margin-left: 10px;
+  padding: 12px 24px;
+  font-size: 17px;
+  background-color: #007AFF; /* 使用苹果的系统蓝色 */
   color: white;
-  border: none;
-  border-radius: 5px;
   cursor: pointer;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  min-width: 100px; /* 确保触控目标 */
+  transition: background-color 200ms ease; /* 添加悬停效果 */
 }
 
 .send-button:hover {
-  background-color: #35608a;
+  background-color: #0056B3; /* 深蓝色悬停效果 */
 }

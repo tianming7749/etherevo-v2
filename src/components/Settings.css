@@ -1,49 +1,142 @@
+/* Settings.css */
 .settings-container {
-    max-width: 900px; /* 保持宽度 */
-    margin: 40px auto 20px; /* 减少顶部间距为 60px，保持底部间距 */
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 12px; /* 保持圆角 */
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* 保持阴影效果 */
+    max-width: 100%; /* 适配移动设备，移除固定宽度 */
+    margin: 20px auto; /* 增加顶部间距为 20px，适配 iOS 屏幕 */
+    padding: 16px; /* 标准的 iOS 内边距 */
+    background-color: #ffffff; /* 白色背景 */
+    border-radius: 12px; /* 微调圆角以符合 iOS */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* 轻微阴影 */
     position: relative;
     z-index: 90; /* 保持低于导航栏 */
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; /* 使用 San Francisco 或类似 */
+    color: #000000; /* 黑色文本 */
   }
   
-  .settings-nav {
+  /* 头部标题和返回按钮 */
+  .settings-header {
     display: flex;
-    gap: 30px; /* 保持间距 */
-    margin-bottom: 30px; /* 保持底部间距 */
-    border-bottom: 2px solid #e0e0e0; /* 保持底部边框 */
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 0; /* 保持内边距，但不影响顶部间距 */
+    border-bottom: 1px solid #e5e5e5; /* 浅灰色分隔线 */
   }
   
-  .settings-link {
-    text-decoration: none;
-    color: #007bff;
-    padding: 10px 15px; /* 保持内边距 */
-    font-size: 16px; /* 保持字体大小 */
-    font-weight: 500; /* 保持字体权重 */
-    border-bottom: 2px solid transparent;
-    transition: color 0.3s ease, border-color 0.3s ease; /* 保持过渡 */
+  .settings-title {
+    color: #007AFF; /* 苹果的系统蓝色 */
+    font-size: 20px; /* 较大的标题字体 */
+    font-weight: 600;
+    margin: 0;
   }
   
-  .settings-link.active {
-    border-bottom: 2px solid #007bff;
-    font-weight: 600; /* 保持高亮 */
-    color: #0056b3; /* 保持颜色 */
+  .back-button {
+    background: none;
+    border: none;
+    font-size: 24px; /* 确保触控目标 */
+    padding: 8px;
+    cursor: pointer;
+    color: #007AFF; /* 苹果的系统蓝色 */
   }
   
-  .settings-link:hover {
-    color: #0056b3;
-    border-bottom: 2px solid #0056b3; /* 保持悬停效果 */
+  .back-button:hover {
+    opacity: 0.8;
   }
   
+  /* 内容区域 */
   .settings-content {
-    padding: 30px; /* 保持内边距 */
-    min-height: 400px; /* 保持最小高度 */
-    background-color: #ffffff; /* 保持纯白背景 */
-    border-radius: 8px; /* 保持微调圆角 */
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); /* 保持轻微阴影 */
-    position: relative; /* 保持层级正确 */
+    padding: 16px; /* 标准的 iOS 内边距 */
+    background-color: #ffffff; /* 白色背景 */
+    border-radius: 8px; /* 微调圆角 */
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05); /* 轻微阴影 */
+    position: relative;
+  }
+  
+  /* 优化后的退出按钮 */
+  .logout-button {
+    background-color: #FF3B30; /* 苹果的系统红色，较柔和 */
+    color: white;
+    border: none;
+    padding: 10px 20px; /* 确保触控目标，缩小尺寸 */
+    border-radius: 8px; /* iOS 风格圆角 */
+    font-size: 17px; /* 标准的 iOS 文本大小 */
+    cursor: pointer;
+    width: 200px; /* 固定宽度，减少视觉冲击 */
+    margin-top: 20px; /* 与内容保持距离 */
+    transition: opacity 0.2s ease; /* 细腻过渡 */
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); /* 轻微阴影 */
+  }
+  
+  .logout-button:hover {
+    opacity: 0.8; /* 悬停效果 */
+  }
+  
+  /* 确认对话框 */
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1001;
+  }
+  
+  .modal-content {
+    background-color: #ffffff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    min-width: 300px;
+  }
+  
+  .confirm-button {
+    background-color: #FF3B30; /* 苹果的系统红色 */
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 17px;
+    cursor: pointer;
+    margin-right: 10px;
+  }
+  
+  .cancel-button {
+    background-color: #007AFF; /* 苹果的系统蓝色 */
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 17px;
+    cursor: pointer;
+  }
+  
+  /* 媒体查询适配移动设备（iPhone） */
+  @media (max-width: 768px) {
+    .settings-container {
+      margin: 16px auto; /* 移动设备上减少顶部间距为 16px */
+      padding: 10px;
+    }
+  
+    .settings-header {
+      padding: 10px 0;
+    }
+  
+    .settings-title {
+      font-size: 18px; /* 缩小标题字体 */
+    }
+  
+    .settings-content {
+      padding: 10px;
+    }
+  
+    .logout-button {
+      padding: 8px 16px; /* 调整移动设备的按钮大小 */
+      font-size: 16px; /* 适配较小屏幕 */
+      width: 180px; /* 缩小宽度 */
+    }
   }
   
   /* 调试类 - 如果需要移除 */

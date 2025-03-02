@@ -1,10 +1,27 @@
 /* Navbar.css */
+.navbar.loading {
+  background-color: #4682B4; /* 保持蓝色背景 */
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 20px;
+}
+
+.loading-placeholder {
+  color: #666666; /* 淡灰色文字 */
+  font-size: 17px; /* iOS 标准文本大小 */
+  font-weight: 500;
+  writing-mode: horizontal-tb;
+  text-orientation: upright;
+  white-space: nowrap;
+}
+
 .navbar {
   position: fixed; /* 保持固定导航栏 */
   top: 0;
   left: 0;
   width: 100%; /* 确保宽度充满视口 */
-  height: var(--navbar-height, 70px); /* 保持动态高度 */
+  height: 44px; /* 保持动态高度 */
   background-color: #4682B4; /* 蓝色背景 */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 阴影效果 */
   z-index: 100; /* 降低 z-index，使内容能覆盖导航栏（如果需要） */
@@ -59,69 +76,14 @@
   color: #FFD700; /* 保持悬停效果 */
 }
 
-/* 语言选择器 (下拉菜单) 样式调整 */
-.language-selector {
-  writing-mode: horizontal-tb;
-  text-orientation: upright;
-  background-color: #f0f0f0;
-  color: #333;
-  border: none;
-  border-radius: 5px;
-  padding: 5px 10px;
-  font-size: 14px; /* 保持字体大小 */
-  cursor: pointer;
-  margin-left: 15px; /* 保持外边距 */
-}
-
-/* 下拉选项样式 */
-option {
-  writing-mode: horizontal-tb;
-  text-orientation: upright;
-  font-size: 14px; /* 保持字体大小 */
-}
-
-/* 登出按钮样式 */
-.logout-button {
-  background-color: #5c015e; /* 红色背景 */
-  color: white;
-  border: none;
-  border-radius: 5px;
-  padding: 5px 10px; /* 保持内边距 */
-  font-size: 14px; /* 保持字体大小 */
-  cursor: pointer;
-  transition: background-color 0.3s ease; /* 保持过渡 */
-  margin-left: 15px; /* 保持外边距 */
-}
-
-.logout-button:hover {
-  background-color: #cc0000; /* 悬停效果 */
-}
-
-/* 用户名称样式 */
-.navbar .user-name {
-  color: #6fb8b8; /* 保持用户名称颜色 */
-  font-weight: 600; /* 保持字体权重 */
-  margin-right: 10px; /* 保持外边距 */
-  font-size: 16px; /* 保持字体大小 */
-  max-width: 150px; /* 限制名称宽度，避免过长 */
-  white-space: nowrap; /* 确保单行显示 */
-  text-orientation: mixed; /* 确保正常文本方向 */
-}
-
-/* 下拉菜单相关样式 */
-.dropdown-container {
-  position: relative;
-  display: inline-block;
-}
-
-.dropdown-button {
+/* 汉堡菜单样式 */
+.hamburger-menu {
   background: none;
   border: none;
   padding: 8px 12px; /* 与 navbar-link 一致 */
   cursor: pointer;
-  font-size: 16px; /* 与 navbar-link 一致 */
-  font-weight: 500; /* 与 navbar-link 一致 */
-  color: white; /* 与 navbar-link 一致 */
+  font-size: 24px; /* 保持汉堡图标大小 */
+  color: white; /* 保持白色文字 */
   text-decoration: none;
   writing-mode: horizontal-tb;
   text-orientation: upright;
@@ -130,16 +92,12 @@ option {
   transition: background-color 0.3s ease, color 0.3s ease; /* 与 navbar-link 一致 */
 }
 
-.dropdown-button.active {
-  background-color: #335881; /* 与 navbar-link.active 一致 */
-  color: #FFD700; /* 与 navbar-link.active 一致 */
+.hamburger-menu:hover {
+  background-color: #57a3f5; /* 保持悬停效果 */
+  color: #FFD700; /* 保持悬停效果 */
 }
 
-.dropdown-button:hover {
-  background-color: #57a3f5; /* 与 navbar-link:hover 一致 */
-  color: #FFD700; /* 与 navbar-link:hover 一致 */
-}
-
+/* 下拉菜单相关样式 */
 .dropdown-menu {
   position: absolute;
   top: 100%;
@@ -157,7 +115,7 @@ option {
   align-items: center; /* 垂直居中对齐 */
   padding: 8px 12px; /* 与 navbar-link 一致 */
   text-decoration: none;
-  color: white; /* 与 navbar-link 一致 */
+  color: white; /* 保持白色文字 */
   font-size: 16px; /* 与 navbar-link 一致 */
   font-weight: 500; /* 与 navbar-link 一致 */
   writing-mode: horizontal-tb;
@@ -176,3 +134,73 @@ option {
   color: #FFD700; /* 与 navbar-link.active 一致 */
 }
 
+/* 用户按钮和下拉菜单样式 */
+.user-button {
+  background: none;
+  border: none;
+  padding: 8px 12px; /* 与 navbar-link 一致 */
+  cursor: pointer;
+  font-size: 16px; /* 与 navbar-link 一致 */
+  font-weight: 500; /* 与 navbar-link 一致 */
+  color: white; /* 保持白色文字 */
+  text-decoration: none;
+  writing-mode: horizontal-tb;
+  text-orientation: upright;
+  white-space: nowrap;
+  border-radius: 4px; /* 与 navbar-link 一致 */
+  transition: background-color 0.3s ease, color 0.3s ease; /* 与 navbar-link 一致 */
+}
+
+.user-button:hover {
+  background-color: #57a3f5; /* 保持悬停效果 */
+  color: #FFD700; /* 保持悬停效果 */
+}
+
+.user-dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0; /* 右对齐以符合 iOS 一致性 */
+  background-color: #4682B4; /* 保持蓝色背景，与导航栏一致 */
+  border: 1px solid #335881; /* 深蓝色边框，与主题一致 */
+  border-radius: 4px; /* 与 navbar-link 一致 */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  min-width: 150px;
+  z-index: 1000;
+}
+
+.logout-button {
+  color: #FF0000; /* 红色用于“退出” */
+  background: none;
+  border: none;
+  width: 100%;
+  text-align: left;
+  padding: 8px 12px; /* 与 dropdown-item 一致 */
+  font-size: 16px; /* 与 dropdown-item 一致 */
+  font-weight: 500; /* 与 dropdown-item 一致 */
+  cursor: pointer;
+  writing-mode: horizontal-tb;
+  text-orientation: upright;
+  white-space: nowrap;
+}
+
+.logout-button:hover {
+  background-color: #57a3f5; /* 保持悬停效果 */
+  color: #FFD700; /* 保持悬停效果 */
+}
+
+/* 媒体查询适配移动设备 */
+@media (max-width: 768px) {
+  .navbar {
+    height: 44px; /* 调整为 iOS 标准高度 */
+    padding: 0 10px;
+  }
+
+  .navbar-right {
+    gap: 10px; /* 减少间距 */
+  }
+
+  .navbar-link, .hamburger-menu, .user-button, .dropdown-item, .logout-button {
+    font-size: 14px; /* 适配较小屏幕 */
+    padding: 6px 10px; /* 调整内边距 */
+  }
+}

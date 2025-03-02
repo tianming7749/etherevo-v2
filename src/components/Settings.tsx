@@ -1,6 +1,6 @@
 // Settings.tsx
 import React from 'react';
-import { Routes, Route, Outlet } from 'react-router-dom'; // 移除 NavLink，因为不再需要导航
+import { Routes, Route, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import TonesPage from '../pages/Tones/TonesPage'; // 确保路径正确
 import GoalsPage from '../pages/Goals/GoalsPage'; // 确保路径正确
@@ -15,12 +15,25 @@ import './Settings.css'; // 确保路径正确
 
 const Settings: React.FC = () => {
   const { t, i18n } = useTranslation();
+  const location = useLocation();
+  const navigate = useNavigate();
 
   console.log("Settings component rendered, language:", i18n.language); // 调试日志
 
   try {
     return (
       <div className="settings-container">
+        {/* 头部标题和返回按钮 */}
+        <div className="settings-header">
+          <h1 className="settings-title">{t('settings.title')}</h1>
+          <button 
+            className="back-button" 
+            onClick={() => navigate(-1)} 
+            aria-label={t('settings.back')}
+          >
+            ←
+          </button>
+        </div>
         <div className="settings-content">
           <Routes>
             <Route path="tones" element={<TonesPage />} />
@@ -41,7 +54,7 @@ const Settings: React.FC = () => {
     );
   } catch (error) {
     console.error("Error rendering Settings component:", error);
-    return <div>Error loading Settings. Please check the console for details.</div>; // 临时错误提示
+    return <div>{t('settings.errorLoading')}</div>; // 使用翻译的错误提示
   }
 };
 

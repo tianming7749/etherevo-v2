@@ -5,6 +5,7 @@
   padding: var(--navbar-height) 2rem 0; /* 顶部填充导航栏高度 */
   text-align: center;
   min-height: calc(100vh - var(--navbar-height)); /* 确保内容区高度 */
+  --navbar-height: 44px;
 }
 
 .logo {
@@ -24,7 +25,7 @@
 
 /* 动态导航栏高度，适配不同设备 */
 :root {
-  --navbar-height: 60px; /* 默认导航栏高度 */
+  --navbar-height: 44px; /* 默认导航栏高度 */
 }
 
 body {
@@ -37,7 +38,7 @@ body {
 /* 动态调整导航栏高度，适配小屏设备 */
 @media (max-width: 768px) {
   :root {
-    --navbar-height: 70px; /* 小屏设备导航栏高度 */
+    --navbar-height: 44px; /* 小屏设备导航栏高度 */
   }
 }
 
@@ -54,6 +55,12 @@ body {
 @media (prefers-reduced-motion: no-preference) {
   a:nth-of-type(2) .logo {
     animation: logo-spin infinite 20s linear;
+  }
+}
+
+@media (max-width: 768px) {
+  :root {
+    --navbar-height: 44px;
   }
 }
 

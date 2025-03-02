@@ -98,14 +98,25 @@
     "title": "EtherEvo",
     "chat": "聊天",
     "settings": "设置",
-    "logout": "退出"
+    "logout": "退出登录",
+    "confirmLogout": "确认退出",
+    "confirmLogoutMessage": "您确定要退出登录吗？",
+    "confirm": "确认",
+    "cancel": "取消",
+    "userPlaceholder": "用户",
+    "userMenu": "用户菜单",
+    "loading": "加载中..."
   },
   "settings": {
+    "title": "设置",
+    "back": "返回",
+    "errorLoading": "加载设置失败，请查看控制台详情。",
     "tones": "语气",
     "goals": "目标",
-    "userInfo": "信息"
+    "userInfo": "用户信息"
   },
   "tonesPage": {
+    "pageTitle": "语气页面",
     "title": "选择对话语气",
     "loadingMessage": "加载中...",
     "descriptionLine1": "选择对话语气，定制专属对话体验",
@@ -163,6 +174,7 @@
     }
   },
   "userInfoPage": {
+    "pageTitle": "用户信息页面",
     "title": "用户信息",
     "nav": {
       "basicInfo": "基本信息",
@@ -171,18 +183,19 @@
       "interests": "兴趣与爱好",
       "socialSupport": "社交支持系统",
       "recentEvents": "近期的重大生活事件"
-    }
+    },
+    "navLabel": "用户信息导航"
   },
   "basicInfoPage": {
-    "title": "基本信息",
+    "pageTitle": "基本信息页面",
+    "noLoginMessage": "请登录以设置您的基本信息。",
     "loadingMessage": "加载中...",
-    "skipButton": "跳过",
     "savingButton": "保存中...",
     "saveButton": "保存",
-    "noLoginAlert": "用户未登录，请先登录！",
-    "saveSuccessAlert": "保存成功！",
-    "saveErrorAlert": "保存过程中出错，请稍后重试！",
-    "saveFailedAlert": "保存失败，请重试！"
+    "saveSuccessAlert": "已保存！",
+    "saveFailedAlert": "保存失败，请重试。",
+    "saveErrorAlert": "网络错误，请重试。",
+    "skipButton": "跳过"
   },
   "ageSelector": {
     "label": "年龄：",
@@ -234,15 +247,14 @@
     }
   },
   "lifeEnvironmentPage": {
-    "title": "生活环境与压力源",
+    "pageTitle": "生活环境页面",
+    "noLoginAlert": "请登录以设置您的生活环境信息。",
     "loadingMessage": "加载中...",
-    "skipButton": "跳过",
-    "saveButton": "保存",
     "savingButton": "保存中...",
-    "noLoginAlert": "未检测到用户登录，请先登录！",
-    "loadErrorAlert": "加载数据失败，请稍后重试！",
-    "saveSuccessAlert": "保存成功！",
-    "saveErrorAlert": "保存失败，请稍后重试！"
+    "saveButton": "保存",
+    "saveSuccessAlert": "已保存！",
+    "saveErrorAlert": "保存失败，请重试。",
+    "skipButton": "跳过"
   },
   "additionalDetailsInput": {
     "label": "其他：",
@@ -288,33 +300,38 @@
     }
   },
   "healthConditionPage": {
-    "mentalHealthHistoryTitle": "心理健康历史",
-    "mentalHealthOptions": {
-      "depression": "抑郁",
-      "anxiety": "焦虑",
-      "bipolar": "双相情感障碍",
-      "ptsd": "PTSD",
-      "ocd": "OCD",
-      "other": "其他"
-    },
-    "otherSpecify": "其他（请指定）：",
-    "treatmentQuestion": "你目前是否在接受心理健康方面的治疗？",
+    "pageTitle": "健康状况页面",
+    "noLoginMessage": "请登录以设置您的健康状况。",
+    "loadingMessage": "加载中...",
+    "savingButton": "保存中...",
+    "saveButton": "保存",
+    "saveSuccessAlert": "已保存！",
+    "saveErrorAlert": "保存失败，请重试。",
+    "saveNetworkErrorAlert": "网络错误，请重试。",
+    "mentalHealthHistoryTitle": "心理健康史",
+    "mentalHealthHistoryLabel": "选择心理健康历史选项",
+    "treatmentQuestion": "您目前是否正在接受任何心理健康状况的治疗？",
+    "treatmentQuestionLabel": "治疗状态选择",
+    "otherSpecify": "其他（可选）：",
+    "otherSpecifyLabel": "指定其他心理健康历史",
     "yes": "是",
     "no": "否",
-    "loadingMessage": "加载中...",
     "skipButton": "跳过",
-    "saveButton": "保存",
-    "savingButton": "保存中...",
-    "saveSuccessAlert": "保存成功！",
-    "saveErrorAlert": "保存失败，请稍后重试！",
-    "saveNetworkErrorAlert": "保存失败，请检查网络连接或稍后重试！"
+    "mentalHealthOptions": {
+      "anxiety": "焦虑症",
+      "depression": "抑郁症",
+      "ptsd": "创伤后应激障碍",
+      "bipolar": "双相情感障碍",
+      "other": "其他"
   },
   "interestsPage": {
+    "pageTitle": "兴趣页面",
     "loadingMessage": "加载中...",
     "skipButton": "跳过",
     "saveButton": "保存",
     "savingButton": "保存中...",
     "addInterestPlaceholder": "添加其他兴趣",
+    "addInterestPlaceholderLabel": "添加新兴趣占位符",
     "saveSuccessAlert": "保存成功！",
     "saveErrorAlert": "保存兴趣失败，请稍后重试！",
     "saveNetworkErrorAlert": "保存失败，请检查网络连接或稍后重试！",
@@ -493,21 +510,22 @@
     }
   },
       "chat": {
-      "input": {
-        "placeholder": "输入您的消息...",
-        "sendButton": "发送",
-        "sendingButton": "发送中..."
-      },
-      "loading": "加载中...",
-      "header": {
-        "clearChat": "清除聊天"
-      },
-      "confirmationModal": {
-        "confirmClear": "您确定要清除聊天记录吗？",
-        "cancel": "取消",
-        "confirm": "确认"
-      },
-      "clearWarning": "此操作将清空所有历史记录，请谨慎操作" 
+        "pageTitle": "聊天页面",
+        "input": {
+          "placeholder": "输入您的消息...",
+          "sendButton": "发送",
+          "sendingButton": "发送中..."
+        },
+        "loading": "加载中...",
+        "header": {
+          "clearChat": "清除聊天"
+        },
+        "confirmationModal": {
+          "confirmClear": "您确定要清除聊天记录吗？",
+          "cancel": "取消",
+          "confirm": "确认"
+        },
+        "clearWarning": "此操作将清空所有历史记录，请谨慎操作" 
   
   },
   "prompts": {
@@ -609,6 +627,7 @@
       "saveSuccessAlert": "保存成功！",
       "saveErrorAlert": "保存失败，请稍后重试！",
       "saveNetworkErrorAlert": "保存失败，请检查网络连接或稍后重试！"
+    }
     },
     "interestsSection": "兴趣与爱好：",
     "interestCategories": {

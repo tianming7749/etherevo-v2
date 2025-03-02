@@ -98,14 +98,25 @@
     "title": "EtherEvo",
     "chat": "Chat",
     "settings": "Settings",
-    "logout": "Logout"
+    "logout": "Sign Out",
+    "confirmLogout": "Confirm Sign Out",
+    "confirmLogoutMessage": "Are you sure you want to sign out?",
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "userPlaceholder": "User",
+    "userMenu": "User Menu",
+    "loading": "Loading..."
   },
   "settings": {
+    "title": "Settings",
+    "back": "Back",
+    "errorLoading": "Error loading Settings. Please check the console for details.",
     "tones": "Tones",
     "goals": "Goals",
     "userInfo": "User Info"
   },
   "tonesPage": {
+    "pageTitle": "Tones Page",
     "title": "Choose Your Tone",
     "loadingMessage": "Loading...",
     "descriptionLine1": "Select dialogue tone to customize your conversation experience",
@@ -163,6 +174,7 @@
     }
   },
   "userInfoPage": {
+    "pageTitle": "User Info Page",
     "title": "User Information",
     "nav": {
       "basicInfo": "Basic Information",
@@ -171,18 +183,20 @@
       "interests": "Interests and Hobbies",
       "socialSupport": "Social Support System",
       "recentEvents": "Recent Major Life Events"
-    }
+      },
+    "navLabel": "User Information Navigation"
+    
   },
   "basicInfoPage": {
-    "title": "Basic Information",
+    "pageTitle": "Basic Info Page",
+    "noLoginMessage": "Please log in to set your basic information.",
     "loadingMessage": "Loading...",
-    "skipButton": "Skip",
     "savingButton": "Saving...",
     "saveButton": "Save",
-    "noLoginAlert": "User not logged in, please log in first!",
-    "saveSuccessAlert": "Saved successfully!",
-    "saveErrorAlert": "An error occurred during saving, please try again later!",
-    "saveFailedAlert": "Save failed, please try again!"
+    "saveSuccessAlert": "Saved!",
+    "saveFailedAlert": "Save failed. Please try again.",
+    "saveErrorAlert": "Network error. Please try again.",
+    "skipButton": "Skip"
   },
   "ageSelector": {
     "label": "Age:",
@@ -234,15 +248,14 @@
     }
   },
   "lifeEnvironmentPage": {
-    "title": "Life Environment and Stressors",
+    "pageTitle": "Life Environment Page",
+    "noLoginAlert": "Please log in to set your life environment information.",
     "loadingMessage": "Loading...",
-    "skipButton": "Skip",
-    "saveButton": "Save",
     "savingButton": "Saving...",
-    "noLoginAlert": "No user login detected, please log in first!",
-    "loadErrorAlert": "Failed to load data, please try again later!",
-    "saveSuccessAlert": "Saved successfully!",
-    "saveErrorAlert": "Save failed, please try again later!"
+    "saveButton": "Save",
+    "saveSuccessAlert": "Saved!",
+    "saveErrorAlert": "Save failed. Please try again.",
+    "skipButton": "Skip"
   },
   "additionalDetailsInput": {
     "label": "Other:",
@@ -288,33 +301,39 @@
     }
   },
   "healthConditionPage": {
+    "pageTitle": "Health Condition Page",
+    "noLoginMessage": "Please log in to set your health condition.",
+    "loadingMessage": "Loading...",
+    "savingButton": "Saving...",
+    "saveButton": "Save",
+    "saveSuccessAlert": "Saved!",
+    "saveErrorAlert": "Save failed. Please try again.",
+    "saveNetworkErrorAlert": "Network error. Please try again.",
     "mentalHealthHistoryTitle": "Mental Health History",
-    "mentalHealthOptions": {
-      "depression": "Depression",
-      "anxiety": "Anxiety",
-      "bipolar": "Bipolar Disorder",
-      "ptsd": "PTSD",
-      "ocd": "OCD",
-      "other": "Other"
-    },
-    "otherSpecify": "Other (please specify):",
-    "treatmentQuestion": "Are you currently receiving treatment for mental health?",
+    "mentalHealthHistoryLabel": "Select mental health history options",
+    "treatmentQuestion": "Are you currently receiving treatment for any mental health condition?",
+    "treatmentQuestionLabel": "Treatment status selection",
+    "otherSpecify": "Specify other (optional):",
+    "otherSpecifyLabel": "Specify other mental health history",
     "yes": "Yes",
     "no": "No",
-    "loadingMessage": "Loading...",
     "skipButton": "Skip",
-    "saveButton": "Save",
-    "savingButton": "Saving...",
-    "saveSuccessAlert": "Saved successfully!",
-    "saveErrorAlert": "Save failed, please try again later!",
-    "saveNetworkErrorAlert": "Save failed, please check your network connection or try again later!"
+    "mentalHealthOptions": {
+      "anxiety": "Anxiety",
+      "depression": "Depression",
+      "ptsd": "PTSD",
+      "bipolar": "Bipolar Disorder",
+      "other": "Other"
+    }
   },
   "interestsPage": {
+    "pageTitle": "Interests Page",
     "loadingMessage": "Loading...",
     "skipButton": "Skip",
     "saveButton": "Save",
     "savingButton": "Saving...",
     "addInterestPlaceholder": "Add other interests",
+    "addInterestPlaceholderLabel": "Add a new interest placeholder",
     "saveSuccessAlert": "Saved successfully!",
     "saveErrorAlert": "Failed to save interests, please try again later!",
     "saveNetworkErrorAlert": "Save failed, please check your network connection or try again later!",
@@ -493,21 +512,22 @@
      }
     },
       "chat": {
-      "input": {
-        "placeholder": "Type your message...",
-        "sendButton": "Send",
-        "sendingButton": "Sending..."
-      },
-      "loading": "Loading...",
-      "header": {
-        "clearChat": "Clear Chat"
-      },
-      "confirmationModal": {
-        "confirmClear": "Are you sure you want to clear the chat history?",
-        "cancel": "Cancel",
-        "confirm": "Confirm"
-      },
-      "clearWarning": "This operation will clear all history records, please proceed with caution"
+        "pageTitle": "Chat Page",
+        "input": {
+          "placeholder": "Type your message...",
+          "sendButton": "Send",
+          "sendingButton": "Sending..."
+        },
+        "loading": "Loading...",
+        "header": {
+          "clearChat": "Clear Chat"
+        },
+        "confirmationModal": {
+          "confirmClear": "Are you sure you want to clear the chat history?",
+          "cancel": "Cancel",
+          "confirm": "Confirm"
+        },
+        "clearWarning": "This operation will clear all history records, please proceed with caution"
     
     },
       "prompts": {

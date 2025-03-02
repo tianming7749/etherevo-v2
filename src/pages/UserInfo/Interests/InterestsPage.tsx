@@ -1,5 +1,5 @@
 // InterestsPage.tsx
-import React, { useState, useEffect, useRef, useMemo, useCallback } from "react"; // 添加 useCallback
+import React, { useState, useEffect, useRef, useMemo, useCallback } from "react";
 import { supabase } from "../../../supabaseClient";
 import { generatePromptsForUser } from "../../../utils/generatePrompts";  
 import { useUserContext } from "../../../context/UserContext";
@@ -15,7 +15,7 @@ const InterestsPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null); // 添加错误状态
   const [saveStatus, setSaveStatus] = useState<string>(''); // 保存状态反馈
   const inputRefs = useRef<Record<string, HTMLInputElement>>({});
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation(); // 添加 i18n 以检查当前语言
   const navigate = useNavigate(); // 使用 useNavigate 钩子
 
   // 使用 useMemo 缓存 interestsData 和 categoryKeys，避免不必要的重新计算
@@ -26,6 +26,7 @@ const InterestsPage: React.FC = () => {
   const categoryKeys = useMemo(() => Object.keys(interestsData), [interestsData]);
 
   useEffect(() => {
+    console.log("Current language:", i18n.language); // 调试当前语言
     const fetchInterests = async () => {
       if (!userId) {
         setIsLoading(false); // 如果没有 userId，直接结束加载状态
@@ -58,6 +59,7 @@ const InterestsPage: React.FC = () => {
           const savedInterests = JSON.parse(data.interests);
           const updatedInterests = { ...savedInterests };
 
+          // 确保所有类别都初始化
           categoryKeys.forEach((categoryKey) => {
             if (!updatedInterests[categoryKey]) {
               updatedInterests[categoryKey] = [];
@@ -75,7 +77,7 @@ const InterestsPage: React.FC = () => {
     };
 
     fetchInterests();
-  }, [userId, categoryKeys, t]); // 依赖项优化为 userId 和 t，确保仅在必要时触发
+  }, [userId, categoryKeys, t, i18n.language]); // 增加 i18n.language 作为依赖，确保语言变化时重新加载
 
   const handleInterestChange = (category: string, interest: string, isChecked: boolean) => {
     const updatedCategory = userInterests[category] || [];
@@ -191,43 +193,53 @@ const InterestsPage: React.FC = () => {
   };
 
   if (isLoading) {
-    return <p className="loading-message">{t('interestsPage.loadingMessage', 'Loading...')}</p>;
+    return (
+      <div className="loading-message" role="alert" aria-label={t('interestsPage.loadingMessage')}>
+        {t('interestsPage.loadingMessage', 'Loading...')}
+      </div>
+    );
   }
 
   if (error) {
-    return <div className="error-message">{error}</div>;
+    return (
+      <div className="error-message" role="alert" aria-label={error}>
+        {error}
+      </div>
+    );
   }
 
   return (
-    <div className="interests-page">
-      <div className="interests-grid">
+    <div className="interests-page" role="form" aria-label={t('interestsPage.pageTitle')}>
+      <div className="interests-grid" role="list">
         {categoryKeys.map((categoryKey) => (
-          <div key={categoryKey} className="interest-category">
-            <h3>{interestsData[categoryKey].title}</h3>
-            <ul>
-              {Object.keys(interestsData[categoryKey].options).map((interestKey) => (
-                <li key={interestKey}>
-                  <label>
+          <div key={categoryKey} className="interest-category" role="listitem" aria-label={interestsData[categoryKey].title}>
+            <h3 className="category-title">{interestsData[categoryKey].title}</h3>
+            <ul className="interests-list">
+              {Object.entries(interestsData[categoryKey].options).map(([interestKey, interestValue]) => (
+                <li key={interestKey} className="interest-item">
+                  <label className="checkbox-label">
                     <input
                       type="checkbox"
                       checked={userInterests[categoryKey]?.includes(interestKey) || false}
                       onChange={(e) => handleInterestChange(categoryKey, interestKey, e.target.checked)}
                       disabled={isSaving} // 使用 isSaving 禁用输入框
+                      aria-label={interestValue}
                     />
-                    {interestsData[categoryKey].options[interestKey]}
+                    {interestValue}
                   </label>
                 </li>
               ))}
               {userInterests[categoryKey]
                 ?.filter((interest) => !Object.keys(interestsData[categoryKey].options).includes(interest))
                 .map((extraInterest) => (
-                  <li key={extraInterest}>
-                    <label>
+                  <li key={extraInterest} className="interest-item">
+                    <label className="checkbox-label">
                       <input
                         type="checkbox"
                         checked
                         onChange={(e) => handleInterestChange(categoryKey, extraInterest, e.target.checked)}
                         disabled={isSaving} // 使用 isSaving 禁用输入框
+                        aria-label={extraInterest}
                       />
                       {extraInterest}
                     </label>
@@ -239,16 +251,26 @@ const InterestsPage: React.FC = () => {
               placeholder={t('interestsPage.addInterestPlaceholder')}
               ref={(el) => (el ? (inputRefs.current[categoryKey] = el) : delete inputRefs.current[categoryKey])}
               disabled={isSaving} // 使用 isSaving 禁用输入框
+              className="interest-input"
+              aria-label={t('interestsPage.addInterestPlaceholderLabel')}
             />
           </div>
         ))}
       </div>
-      <div className="buttons-container"> {/* 添加容器以并排放置按钮 */}
-        <button onClick={handleSkip} disabled={isSaving}>
-          {t('interestsPage.skipButton')} {/* 保持原始文本，无状态反馈 */}
+      <div className="buttons-container">
+        <button 
+          onClick={handleSkip} 
+          disabled={isSaving}
+          aria-label={t('interestsPage.skipButton')}
+        >
+          {t('interestsPage.skipButton', 'Skip')}
         </button>
-        <button onClick={saveInterests} disabled={isSaving}>
-          {saveStatus || (isSaving ? t('interestsPage.savingButton') : t('interestsPage.saveButton'))} {/* 动态显示保存状态 */}
+        <button 
+          onClick={saveInterests} 
+          disabled={isSaving}
+          aria-label={t('interestsPage.saveButton')}
+        >
+          {saveStatus || (isSaving ? t('interestsPage.savingButton', 'Saving...') : t('interestsPage.saveButton', 'Save'))}
         </button>
       </div>
     </div>

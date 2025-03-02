@@ -1,10 +1,12 @@
 .chat-header {
   display: flex;
   align-items: center;
-  padding: 10px;
-  background-color: #e3f2fd;
-  border-bottom: 1px solid #ccc;
-  justify-content: flex-end; 
+  padding: 16px; /* 增加内边距以符合 iOS 标准，保持与 chat-container 一致 */
+  background-color: #F9F9F9; /* 统一为 chat-container 的背景色，移除浅蓝色 */
+  border-bottom: 1px solid #E5E5E5; /* 使用更符合 iOS 的浅灰色分隔线 */
+  justify-content: flex-end;
+  margin: 0; /* 移除外边距 */
+  box-sizing: border-box; /* 确保内边距计算在内 */
 }
 
 /*
@@ -25,12 +27,17 @@
 
 .clear-chat-button {
   margin-left: 10px;
-  padding: 5px 10px;
+  padding: 12px 24px; /* 增加内边距以确保触控目标（至少 44x44 点） */
   border: none;
-  border-radius: 5px;
-  background-color: #1976d2;
+  border-radius: 8px; /* 更圆润的圆角，符合 iOS 设计 */
+  background-color: #007AFF; /* 使用苹果的系统蓝色 */
   color: white;
   cursor: pointer;
-  width: auto;
-  
+  font-size: 17px; /* 标准的 iOS 文本大小 */
+  min-width: 100px; /* 确保触控目标 */
+  transition: background-color 200ms ease; /* 添加悬停效果 */
+}
+
+.clear-chat-button:hover {
+  background-color: #0056B3; /* 深蓝色悬停效果 */
 }

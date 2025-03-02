@@ -1,12 +1,11 @@
 // TonesPage.tsx
 import React, { useState, useEffect } from "react";
-import i18next from 'i18next';
+import { useNavigate } from "react-router-dom";
+import { useTranslation } from 'react-i18next';
 import { useUserContext } from "../../context/UserContext";
 import { saveUserPrompt } from "../../utils/supabaseHelpers"; // 假设从 supabaseHelpers 导入
 import { supabase } from "../../supabaseClient";
 import { generatePromptsForUser } from "../../utils/generatePrompts"; // 导入外部版本
-import { useTranslation } from 'react-i18next';
-import { useNavigate } from 'react-router-dom'; // 导入 useNavigate
 import "./TonesPage.css";
 
 interface Tone {
@@ -73,7 +72,6 @@ const TonesPage: React.FC = () => {
         setError(error.message || t('tonesPage.fetchError', 'Failed to load tones. Please try again later.'));
       } finally {
         setIsLoading(false); // 加载完成，设置 isLoading 为 false
-        console.log("TonesPage useEffect - End, current language:", i18next.language);
       }
     };
 
@@ -102,8 +100,6 @@ const TonesPage: React.FC = () => {
       const selectedTone = tones.find((tone) => tone.id === selectedToneId);
       if (!selectedTone) throw new Error(t('tonesPage.noTonesMessage'));
 
-      console.log("Saving tone:", selectedTone);
-
       const { error: saveToneError } = await supabase.from("user_select_tones").upsert(
         {
           user_id: userId,
@@ -114,10 +110,8 @@ const TonesPage: React.FC = () => {
       if (saveToneError) throw new Error(`Save tone error: ${saveToneError.message}`);
 
       const updatedPrompt = await generatePromptsForUser(userId); // 使用外部版本
-      console.log("Generated prompt:", updatedPrompt);
       if (updatedPrompt) {
         await saveUserPrompt(userId, updatedPrompt);
-        console.log("提示词已更新并保存。");
       } else {
         throw new Error("Prompt generation failed");
       }
@@ -152,25 +146,39 @@ const TonesPage: React.FC = () => {
   };
 
   if (isLoading) {
-    return <div className="loading-message">{t('tonesPage.loadingMessage', 'Loading...')}</div>;
+    return (
+      <div className="loading-message" role="alert" aria-label={t('tonesPage.loadingMessage')}>
+        {t('tonesPage.loadingMessage', 'Loading...')}
+      </div>
+    );
   }
 
   if (error) {
-    return <div className="error-message">{t('tonesPage.errorMessagePrefix') + error}</div>;
+    return (
+      <div className="error-message" role="alert" aria-label={t('tonesPage.errorMessagePrefix') + error}>
+        {t('tonesPage.errorMessagePrefix') + error}
+      </div>
+    );
   }
 
   return (
-    <div className="tones-page">
-      <h1>{t('tonesPage.title')}</h1>
+    <div className="tones-page" role="main" aria-label={t('tonesPage.pageTitle')}>
+      <h1 className="tones-title">{t('tonesPage.title')}</h1>
       <p>{t('tonesPage.descriptionLine1')}</p>
       <p>{t('tonesPage.descriptionLine2')}</p>
       {tones.length === 0 ? (
-        <p>{t('tonesPage.noTonesMessage')}</p>
+        <p className="no-tones-message">{t('tonesPage.noTonesMessage')}</p>
       ) : (
         <>
-          <div className="tones-list">
+          <div className="tones-list" role="list">
             {tones.map((tone) => (
-              <label key={tone.id} className="tone-option">
+              <label 
+                key={tone.id} 
+                className={`tone-option ${selectedToneId === tone.id ? 'selected' : ''}`} 
+                role="radio" 
+                aria-checked={selectedToneId === tone.id}
+                aria-label={t(`tonesPage.${tone.tone_name_key}`)}
+              >
                 <input
                   type="radio"
                   name="tone"
@@ -178,6 +186,7 @@ const TonesPage: React.FC = () => {
                   checked={selectedToneId === tone.id}
                   onChange={() => handleToneSelection(tone.id)}
                   disabled={loading}
+                  aria-hidden="true" // 隐藏辅助技术直接访问原生输入框
                 />
                 <div className="tone-details">
                   <div className="tone-name">{t(`tonesPage.${tone.tone_name_key}`)}</div>
@@ -186,11 +195,19 @@ const TonesPage: React.FC = () => {
               </label>
             ))}
           </div>
-          <div className="buttons-container"> {/* 添加容器以并排放置按钮 */}
-            <button onClick={handleSkip} disabled={loading}>
+          <div className="buttons-container">
+            <button 
+              onClick={handleSkip} 
+              disabled={loading}
+              aria-label={t('tonesPage.skipButton')}
+            >
               {t('tonesPage.skipButton')}
             </button>
-            <button onClick={saveSelection} disabled={loading}>
+            <button 
+              onClick={saveSelection} 
+              disabled={loading}
+              aria-label={t('tonesPage.saveButton')}
+            >
               {saveStatus || (loading ? t('tonesPage.savingButton') : t('tonesPage.saveButton'))}
             </button>
           </div>

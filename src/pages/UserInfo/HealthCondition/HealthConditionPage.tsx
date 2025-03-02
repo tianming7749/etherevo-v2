@@ -8,7 +8,7 @@ import "./HealthConditionPage.css";
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom'; // 导入 useNavigate
 
-const HealthConditionPage = () => {
+const HealthConditionPage: React.FC = () => {
   const { userId } = useUserContext();
   const [healthCondition, setHealthCondition] = useState({
     mentalHealthHistory: [] as string[],
@@ -130,16 +130,20 @@ const HealthConditionPage = () => {
   };
 
   if (isLoading) {
-    return <div className="loading-message">{t('healthConditionPage.loadingMessage', 'Loading...')}</div>;
+    return (
+      <div className="loading-message" role="alert" aria-label={t('healthConditionPage.loadingMessage')}>
+        {t('healthConditionPage.loadingMessage', 'Loading...')}
+      </div>
+    );
   }
 
   return (
-    <div className="health-condition-container">
+    <div className="health-condition-container" role="form" aria-label={t('healthConditionPage.pageTitle')}>
       <form>
-        <h3>{t('healthConditionPage.mentalHealthHistoryTitle')}</h3>
-        <div>
+        <h3 className="section-title">{t('healthConditionPage.mentalHealthHistoryTitle')}</h3>
+        <div className="checkbox-group" role="group" aria-label={t('healthConditionPage.mentalHealthHistoryLabel')}>
           {mentalHealthKeys.map((key) => (
-            <label key={key}>
+            <label key={key} className="checkbox-label">
               <input
                 type="checkbox"
                 checked={healthCondition.mentalHealthHistory.includes(key)}
@@ -150,11 +154,12 @@ const HealthConditionPage = () => {
                   handleChange("mentalHealthHistory", updatedList);
                 }}
                 disabled={isSaving} // 使用 isSaving 禁用输入框
+                aria-label={options.mentalHealthHistory[key]}
               />
               {options.mentalHealthHistory[key]}
             </label>
           ))}
-          <div>
+          <div className="other-input">
             <label>
               {t('healthConditionPage.otherSpecify')}
               <input
@@ -173,37 +178,52 @@ const HealthConditionPage = () => {
                   handleChange("mentalHealthHistory", updatedList);
                 }}
                 disabled={isSaving} // 使用 isSaving 禁用输入框
+                aria-label={t('healthConditionPage.otherSpecifyLabel')}
               />
             </label>
           </div>
         </div>
 
-        <h3>{t('healthConditionPage.treatmentQuestion')}</h3>
-        <label>
-          <input
-            type="radio"
-            checked={healthCondition.isReceivingTreatment === true}
-            onChange={() => handleChange("isReceivingTreatment", true)}
-            disabled={isSaving} // 使用 isSaving 禁用输入框
-          />
-          {t('healthConditionPage.yes')}
-        </label>
-        <label>
-          <input
-            type="radio"
-            checked={healthCondition.isReceivingTreatment === false}
-            onChange={() => handleChange("isReceivingTreatment", false)}
-            disabled={isSaving} // 使用 isSaving 禁用输入框
-          />
-          {t('healthConditionPage.no')}
-        </label>
+        <h3 className="section-title">{t('healthConditionPage.treatmentQuestion')}</h3>
+        <div className="radio-group" role="radiogroup" aria-label={t('healthConditionPage.treatmentQuestionLabel')}>
+          <label className="radio-label">
+            <input
+              type="radio"
+              checked={healthCondition.isReceivingTreatment === true}
+              onChange={() => handleChange("isReceivingTreatment", true)}
+              disabled={isSaving} // 使用 isSaving 禁用输入框
+              aria-label={t('healthConditionPage.yes')}
+            />
+            {t('healthConditionPage.yes')}
+          </label>
+          <label className="radio-label">
+            <input
+              type="radio"
+              checked={healthCondition.isReceivingTreatment === false}
+              onChange={() => handleChange("isReceivingTreatment", false)}
+              disabled={isSaving} // 使用 isSaving 禁用输入框
+              aria-label={t('healthConditionPage.no')}
+            />
+            {t('healthConditionPage.no')}
+          </label>
+        </div>
 
-        <div className="buttons-container"> {/* 添加容器以并排放置按钮 */}
-          <button type="button" onClick={handleSkip} disabled={isSaving}> {/* 使用 isSaving 禁用按钮 */}
-            {t('healthConditionPage.skipButton')} {/* 保持原始文本，无状态反馈 */}
+        <div className="buttons-container">
+          <button 
+            type="button" 
+            onClick={handleSkip} 
+            disabled={isSaving}
+            aria-label={t('healthConditionPage.skipButton')}
+          >
+            {t('healthConditionPage.skipButton', 'Skip')}
           </button>
-          <button type="button" onClick={saveHealthCondition} disabled={isSaving}> {/* 使用 isSaving 禁用按钮 */}
-            {saveStatus || (isSaving ? t('healthConditionPage.savingButton', 'Saving...') : t('healthConditionPage.saveButton', 'Save'))} {/* 动态显示保存状态 */}
+          <button 
+            type="button" 
+            onClick={saveHealthCondition} 
+            disabled={isSaving}
+            aria-label={t('healthConditionPage.saveButton')}
+          >
+            {saveStatus || (isSaving ? t('healthConditionPage.savingButton', 'Saving...') : t('healthConditionPage.saveButton', 'Save'))}
           </button>
         </div>
       </form>

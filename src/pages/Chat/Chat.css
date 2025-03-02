@@ -114,45 +114,6 @@
   overflow-y: auto;
 }
 
-/* 发送按钮 */
-.send-button {
-  padding: 10px 20px;
-  font-size: 16px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 200ms ease;
-  width: auto;
-}
-
-.send-button:hover {
-  background-color: #0056b3;
-}
-
-/* 输入框聚焦状态样式 */
-.chat-input:focus {
-  border-color: #007bff;
-  outline: none;
-}
-
-/* 为移动设备优化输入栏 */
-@media (max-width: 768px) {
-  .chat-input-container {
-    padding: 10px;
-  }
-
-  .chat-input {
-    font-size: 14px;
-  }
-
-  .send-button {
-    font-size: 14px;
-    padding: 8px 16px;
-  }
-}
-
 /* 限制长文本滚动 */
 .chat-message.long-text {
   max-height: 150px;

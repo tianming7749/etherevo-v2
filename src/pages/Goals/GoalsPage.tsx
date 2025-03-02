@@ -1,3 +1,4 @@
+// GoalsPage.tsx
 import React, { useState, useEffect } from "react";
 import { useUserContext } from "../../context/UserContext";
 import { saveUserGoals, fetchUserGoals } from "../../utils/supabaseHelpers";
@@ -14,6 +15,7 @@ const GoalsPage: React.FC = () => {
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [saveStatus, setSaveStatus] = useState<string>('');
+  const [showMaxGoalsWarning, setShowMaxGoalsWarning] = useState(false); // 新增状态
   const { t } = useTranslation();
   const navigate = useNavigate();
 
@@ -67,7 +69,8 @@ const GoalsPage: React.FC = () => {
       } else if (prevGoals.length < 3) {
         return [...prevGoals, goalKey];
       } else {
-        alert(t('goalsPage.maxGoalsAlert'));
+        setShowMaxGoalsWarning(true); // 显示内联提示
+        setTimeout(() => setShowMaxGoalsWarning(false), 3000); // 3秒后隐藏
         return prevGoals;
       }
     });
@@ -92,7 +95,6 @@ const GoalsPage: React.FC = () => {
       const updatedPrompt = await generatePromptsForUser(userId);
       if (updatedPrompt) {
         await saveUserPrompt(userId, updatedPrompt);
-        console.log("提示词已更新并保存。");
       } else {
         throw new Error(t('goalsPage.savePromptError', 'Failed to generate or save the prompt.'));
       }
@@ -124,42 +126,64 @@ const GoalsPage: React.FC = () => {
   };
 
   if (isLoading) {
-    return <div className="loading-message">{t('goalsPage.loadingMessage')}</div>;
+    return (
+      <div className="loading-message" role="alert" aria-label={t('goalsPage.loadingMessage')}>
+        {t('goalsPage.loadingMessage', 'Loading...')}
+      </div>
+    );
   }
 
   if (error) {
-    return <div className="error-message">{error}</div>;
+    return (
+      <div className="error-message" role="alert" aria-label={error}>
+        {error}
+      </div>
+    );
   }
 
   return (
-    <div className="goals-page">
-      <h1>{t('goalsPage.title')}</h1>
+    <div className="goals-page" role="main" aria-label={t('goalsPage.pageTitle')}>
+      <h1 className="goals-title">{t('goalsPage.title')}</h1>
       <p>{t('goalsPage.description')}</p>
-      <div>
+      <div className="goals-list" role="list">
         {goalKeys.map((goalKey) => (
-          <div key={goalKey} className="goal-item">
+          <div 
+            key={goalKey} 
+            className={`goal-item ${goals.includes(goalKey) ? 'selected' : ''}`} 
+            role="checkbox" 
+            aria-checked={goals.includes(goalKey)}
+            aria-label={predefinedGoals[goalKey]}
+          >
             <label>
               <input
                 type="checkbox"
                 checked={goals.includes(goalKey)}
                 onChange={() => handleGoalSelection(goalKey)}
                 disabled={isSaving}
+                aria-hidden="true" // 隐藏辅助技术直接访问原生输入框
               />
               {predefinedGoals[goalKey]}
             </label>
           </div>
         ))}
       </div>
+      {showMaxGoalsWarning && (
+        <div className="max-goals-warning" role="alert" aria-label={t('goalsPage.maxGoalsAlert')}>
+          {t('goalsPage.maxGoalsAlert')}
+        </div>
+      )}
       <div className="buttons-container">
-        <button
-          onClick={handleSkip}
+        <button 
+          onClick={handleSkip} 
           disabled={!userId || isSaving}
+          aria-label={t('goalsPage.skipButton')}
         >
           {t('goalsPage.skipButton', 'Skip')}
         </button>
-        <button
-          onClick={handleSaveGoals}
+        <button 
+          onClick={handleSaveGoals} 
           disabled={isSaving || goals.length === 0}
+          aria-label={t('goalsPage.saveButton')}
         >
           {saveStatus || (isSaving ? t('goalsPage.savingButton', 'Saving...') : t('goalsPage.saveButton', 'Save'))}
         </button>

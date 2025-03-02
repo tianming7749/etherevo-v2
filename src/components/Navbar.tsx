@@ -1,6 +1,6 @@
 // Navbar.tsx
 import React, { useState, useEffect, useRef } from "react";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import "./Navbar.css";
 import { supabase } from "../supabaseClient";
 import { useTranslation } from 'react-i18next';
@@ -13,13 +13,17 @@ interface NavbarProps {
 }
 
 const Navbar: React.FC<NavbarProps> = ({ activeButton, onButtonClick }) => {
-  const { t, ready } = useTranslation('translation'); // 添加 ready 检查
-  const { userId, loading } = useUserContext();
+  const { t, ready } = useTranslation('translation');
+  const { userId, loading: contextLoading } = useUserContext();
   const [userName, setUserName] = useState<string | null>(null);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isSettingsDropdownOpen, setIsSettingsDropdownOpen] = useState(false);
+  const [isUserDropdownOpen, setIsUserDropdownOpen] = useState(false);
   const [language, setLanguage] = useState<string>(i18n.language || 'en');
+  const [isNameLoading, setIsNameLoading] = useState(true); // 单独跟踪 userName 的加载状态
   const location = useLocation();
-  const dropdownRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
+  const settingsDropdownRef = useRef<HTMLDivElement>(null);
+  const userDropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const savedLanguage = localStorage.getItem('i18nextLng');
@@ -30,32 +34,42 @@ const Navbar: React.FC<NavbarProps> = ({ activeButton, onButtonClick }) => {
     }
   }, []);
 
-  const handleLogout = async () => {
-    const { error } = await supabase.auth.signOut();
-    if (!error) {
-      onButtonClick('Auth');
-    } else {
-      console.error("Logout failed:", error.message);
-    }
-  };
-
   useEffect(() => {
+    let mounted = true;
     const fetchUserName = async () => {
-      if (!userId || loading) return;
-      const { data, error } = await supabase
-        .from("user_basic_info")
-        .select("name")
-        .eq("user_id", userId)
-        .single();
-      if (error) {
-        console.error("Error fetching user name:", error);
-        setUserName(null);
-      } else {
-        setUserName(data?.name || null);
+      if (!userId || contextLoading) {
+        if (mounted) setIsNameLoading(true); // 确保加载状态为 true
+        return;
+      }
+      setIsNameLoading(true); // 开始加载用户名称
+      try {
+        const { data, error } = await supabase
+          .from("user_basic_info")
+          .select("name")
+          .eq("user_id", userId)
+          .single();
+        if (mounted) {
+          if (error) {
+            console.error("Error fetching user name:", error);
+            setUserName(null);
+          } else {
+            setUserName(data?.name || null);
+          }
+          setIsNameLoading(false); // 加载完成
+        }
+      } catch (err) {
+        console.error("Unexpected error fetching user name:", err);
+        if (mounted) {
+          setUserName(null);
+          setIsNameLoading(false); // 加载失败也标记为完成
+        }
       }
     };
     fetchUserName();
-  }, [userId, loading]);
+    return () => {
+      mounted = false; // 防止内存泄漏
+    };
+  }, [userId, contextLoading]);
 
   useEffect(() => {
     setLanguage(i18n.language || 'en');
@@ -63,8 +77,11 @@ const Navbar: React.FC<NavbarProps> = ({ activeButton, onButtonClick }) => {
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
-        setIsDropdownOpen(false);
+      if (settingsDropdownRef.current && !settingsDropdownRef.current.contains(event.target as Node)) {
+        setIsSettingsDropdownOpen(false);
+      }
+      if (userDropdownRef.current && !userDropdownRef.current.contains(event.target as Node)) {
+        setIsUserDropdownOpen(false);
       }
     };
     document.addEventListener("mousedown", handleClickOutside);
@@ -73,20 +90,42 @@ const Navbar: React.FC<NavbarProps> = ({ activeButton, onButtonClick }) => {
     };
   }, []);
 
-  if (loading || !ready) return <div>加载中...</div>; // 加载中或翻译未就绪时显示占位符
+  // 只有当上下文加载和翻译就绪时才渲染导航栏，否则显示加载占位符
+  if (contextLoading || !ready || isNameLoading) {
+    return (
+      <nav className="navbar loading">
+        <div className="navbar-left">
+          <h2 className="etherevo-title">{t('navbar.title')}</h2>
+        </div>
+        <div className="navbar-right">
+          <span className="loading-placeholder">{t('navbar.loading')}</span>
+        </div>
+      </nav>
+    );
+  }
 
   const handleDropdownItemClick = (path: string) => {
-    setIsDropdownOpen(false);
+    setIsSettingsDropdownOpen(false);
     onButtonClick('Settings');
   };
 
   const isActiveRoute = (path: string) => location.pathname === path;
 
-  const handleLanguageChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const newLanguage = event.target.value;
+  const handleLanguageChange = (newLanguage: string) => {
     setLanguage(newLanguage);
     i18n.changeLanguage(newLanguage);
     localStorage.setItem('i18nextLng', newLanguage);
+    setIsUserDropdownOpen(false); // 选择语言后关闭下拉菜单
+  };
+
+  const handleLogout = async () => {
+    const { error } = await supabase.auth.signOut();
+    if (!error) {
+      navigate('/'); // 假设登出后返回首页
+    } else {
+      console.error("Logout failed:", error.message);
+    }
+    setIsUserDropdownOpen(false); // 登出后关闭下拉菜单
   };
 
   return (
@@ -100,54 +139,65 @@ const Navbar: React.FC<NavbarProps> = ({ activeButton, onButtonClick }) => {
           end
           onClick={() => onButtonClick('Chat')}
           className={`navbar-link ${activeButton === 'Chat' ? 'active' : ''}`}
+          aria-label={t('navbar.chat')}
         >
           {t('navbar.chat')}
         </NavLink>
-        <div className="dropdown-container" ref={dropdownRef}>
-          <button
-            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-            className={`navbar-link dropdown-button ${activeButton === 'Settings' ? 'active' : ''}`}
-          >
-            {t('navbar.settings')}
-          </button>
-          {isDropdownOpen && (
-            <div className="dropdown-menu">
-              <NavLink
-                to="/settings/tones"
-                className={`dropdown-item ${isActiveRoute('/settings/tones') ? 'active' : ''}`}
-                onClick={() => handleDropdownItemClick('/settings/tones')}
-              >
-                {isActiveRoute('/settings/tones') ? '✓ ' : '  '}{t('settings.tones')}
-              </NavLink>
-              <NavLink
-                to="/settings/goals"
-                className={`dropdown-item ${isActiveRoute('/settings/goals') ? 'active' : ''}`}
-                onClick={() => handleDropdownItemClick('/settings/goals')}
-              >
-                {isActiveRoute('/settings/goals') ? '✓ ' : '  '}{t('settings.goals')}
-              </NavLink>
-              <NavLink
-                to="/settings/user-info"
-                className={`dropdown-item ${isActiveRoute('/settings/user-info') ? 'active' : ''}`}
-                onClick={() => handleDropdownItemClick('/settings/user-info')}
-              >
-                {isActiveRoute('/settings/user-info') ? '✓ ' : '  '}{t('settings.userInfo')}
-              </NavLink>
-            </div>
-          )}
-        </div>
-        <select
-          value={language}
-          onChange={handleLanguageChange}
-          className="language-selector"
+        <button
+          className="hamburger-menu"
+          onClick={() => setIsSettingsDropdownOpen(!isSettingsDropdownOpen)}
+          aria-label={t('navbar.settings')}
         >
-          <option value="en">English</option>
-          <option value="zh">中文</option>
-        </select>
-        {userName && <span className="user-name">{userName}</span>}
-        <button onClick={handleLogout} className="logout-button">
-          {t('navbar.logout')}
+          ☰
         </button>
+        {isSettingsDropdownOpen && (
+          <div className="dropdown-menu" ref={settingsDropdownRef}>
+            <NavLink
+              to="/settings/tones"
+              className={`dropdown-item ${isActiveRoute('/settings/tones') ? 'active' : ''}`}
+              onClick={() => handleDropdownItemClick('/settings/tones')}
+              aria-label={t('settings.tones')}
+            >
+              {isActiveRoute('/settings/tones') ? '✓ ' : '  '}{t('settings.tones')}
+            </NavLink>
+            <NavLink
+              to="/settings/goals"
+              className={`dropdown-item ${isActiveRoute('/settings/goals') ? 'active' : ''}`}
+              onClick={() => handleDropdownItemClick('/settings/goals')}
+              aria-label={t('settings.goals')}
+            >
+              {isActiveRoute('/settings/goals') ? '✓ ' : '  '}{t('settings.goals')}
+            </NavLink>
+            <NavLink
+              to="/settings/user-info"
+              className={`dropdown-item ${isActiveRoute('/settings/user-info') ? 'active' : ''}`}
+              onClick={() => handleDropdownItemClick('/settings/user-info')}
+              aria-label={t('settings.userInfo')}
+            >
+              {isActiveRoute('/settings/user-info') ? '✓ ' : '  '}{t('settings.userInfo')}
+            </NavLink>
+          </div>
+        )}
+        <button
+          className="user-button"
+          onClick={() => setIsUserDropdownOpen(!isUserDropdownOpen)}
+          aria-label={t('navbar.userMenu')}
+        >
+          {userName || t('navbar.userPlaceholder')}
+        </button>
+        {isUserDropdownOpen && (
+          <div className="user-dropdown-menu" ref={userDropdownRef}>
+            <div className="dropdown-item" onClick={() => handleLanguageChange('en')}>
+              English
+            </div>
+            <div className="dropdown-item" onClick={() => handleLanguageChange('zh')}>
+              中文
+            </div>
+            <div className="dropdown-item logout-button" onClick={handleLogout}>
+              {t('navbar.logout')}
+            </div>
+          </div>
+        )}
       </div>
     </nav>
   );

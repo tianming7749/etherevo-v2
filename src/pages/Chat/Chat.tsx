@@ -1,3 +1,4 @@
+// Chat.tsx
 import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
@@ -94,15 +95,6 @@ const Chat: React.FC = () => {
   useEffect(() => {
     if (isSendingMessage && messages.length > 0 && messageListRef.current) {
       messageListRef.current.scrollTop = messageListRef.current.scrollHeight;
-      setIsInitialLoad(false);
-      console.log("发送消息后 - scrollTop:", messageListRef.current.scrollTop, "scrollHeight:", messageListRef.current.scrollHeight);
-    }
-  }, [isSendingMessage, messages]);
-
-  // 发送新消息时滚动到底部
-  useEffect(() => {
-    if (isSendingMessage && messages.length > 0 && messageListRef.current) {
-      messageListRef.current.scrollTop = messageListRef.current.scrollHeight;
       console.log("发送消息后 - scrollTop:", messageListRef.current.scrollTop, "scrollHeight:", messageListRef.current.scrollHeight);
     }
   }, [isSendingMessage, messages]);
@@ -161,11 +153,11 @@ const Chat: React.FC = () => {
   }
 
   return (
-    <div className="chat-container">
+    <div className="chat-container" role="main" aria-label={t('chat.pageTitle')}>
       <ChatHeader apiKey={apiKey} onClearChat={() => setShowConfirmation(true)} t={t} />
-      <div ref={messageListRef} className="message-list">
+      <div ref={messageListRef} className="message-list" role="log" aria-live="polite">
         {isLoadingMore && (
-          <div className="loading-indicator">{t('chat.loading')}</div>
+          <div className="loading-indicator" role="alert">{t('chat.loadingMore')}</div>
         )}
         {MessageListComponent}
       </div>
@@ -173,11 +165,27 @@ const Chat: React.FC = () => {
       {ConfirmationModal}
       {/* 最终确认提示弹窗 */}
       {showFinalConfirmation && (
-        <div className="final-confirmation-modal">
+        <div className="final-confirmation-modal" role="dialog" aria-labelledby="confirmation-title">
           <div className="modal-content">
-            <p>{t('chat.clearWarning')}</p> {/* 假设翻译文件中添加 'chat.clearWarning': '此操作将清空所有历史记录，请谨慎操作' */}
-            <button onClick={handleClearChat}>{t('chat.confirmationModal.confirm')}</button>
-            <button onClick={() => { console.log("取消按钮点击"); setShowFinalConfirmation(false); }}>{t('chat.confirmationModal.cancel')}</button>
+            <h2 id="confirmation-title">{t('chat.clearWarning')}</h2>
+            <p>{t('chat.clearWarningDescription')}</p>
+            <button 
+              onClick={handleClearChat} 
+              className="confirm-button" 
+              aria-label={t('chat.confirmClear')}
+            >
+              {t('chat.confirmationModal.confirm')}
+            </button>
+            <button 
+              onClick={() => { 
+                console.log("取消按钮点击"); 
+                setShowFinalConfirmation(false); 
+              }} 
+              className="cancel-button" 
+              aria-label={t('chat.cancelClear')}
+            >
+              {t('chat.confirmationModal.cancel')}
+            </button>
           </div>
         </div>
       )}

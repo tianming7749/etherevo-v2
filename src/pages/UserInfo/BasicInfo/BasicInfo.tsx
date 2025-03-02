@@ -171,15 +171,23 @@ const BasicInfo: React.FC = () => {
   };
 
   if (isLoading || contextLoading) {
-    return <div className="loading-message">{t('basicInfoPage.loadingMessage', 'Loading...')}</div>;
+    return (
+      <div className="loading-message" role="alert" aria-label={t('basicInfoPage.loadingMessage')}>
+        {t('basicInfoPage.loadingMessage', 'Loading...')}
+      </div>
+    );
   }
 
   if (!userId) {
-    return <div className="error-message">{t('basicInfoPage.noLoginMessage', 'Please log in to set your basic information.')}</div>;
+    return (
+      <div className="error-message" role="alert" aria-label={t('basicInfoPage.noLoginMessage')}>
+        {t('basicInfoPage.noLoginMessage', 'Please log in to set your basic information.')}
+      </div>
+    );
   }
 
   return (
-    <div className="basic-info-container">
+    <div className="basic-info-container" role="form" aria-label={t('basicInfoPage.pageTitle')}>
       <NameInput value={basicInfo.name} onChange={(value) => handleFieldChange("name", value)} />
       <AgeSelector value={basicInfo.age_group} onChange={(value) => handleFieldChange("age_group", value)} />
       <GenderSelector
@@ -194,12 +202,20 @@ const BasicInfo: React.FC = () => {
         onChange={(field, value) => handleFieldChange(field, value)}
         onOtherChange={(value) => handleFieldChange("occupation_other", value)}
       />
-      <div className="buttons-container"> {/* 添加容器以并排放置按钮 */}
-        <button onClick={handleSkip} disabled={isSaving}> {/* 使用 isSaving 禁用按钮 */}
-          {t('basicInfoPage.skipButton')} {/* 保持原始文本，无状态反馈 */}
+      <div className="buttons-container">
+        <button 
+          onClick={handleSkip} 
+          disabled={isSaving}
+          aria-label={t('basicInfoPage.skipButton')}
+        >
+          {t('basicInfoPage.skipButton', 'Skip')}
         </button>
-        <button onClick={handleSave} disabled={isSaving}> {/* 使用 isSaving 禁用按钮 */}
-          {saveStatus || (isSaving ? t('basicInfoPage.savingButton', 'Saving...') : t('basicInfoPage.saveButton', 'Save'))} {/* 动态显示保存状态 */}
+        <button 
+          onClick={handleSave} 
+          disabled={isSaving}
+          aria-label={t('basicInfoPage.saveButton')}
+        >
+          {saveStatus || (isSaving ? t('basicInfoPage.savingButton', 'Saving...') : t('basicInfoPage.saveButton', 'Save'))}
         </button>
       </div>
     </div>

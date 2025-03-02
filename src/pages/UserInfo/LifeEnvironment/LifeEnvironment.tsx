@@ -165,11 +165,15 @@ const LifeEnvironment: React.FC = () => {
   };
 
   if (isLoading) {
-    return <div className="loading-message">{t('lifeEnvironmentPage.loadingMessage', 'Loading...')}</div>;
+    return (
+      <div className="loading-message" role="alert" aria-label={t('lifeEnvironmentPage.loadingMessage')}>
+        {t('lifeEnvironmentPage.loadingMessage', 'Loading...')}
+      </div>
+    );
   }
 
   return (
-    <div className="life-environment">
+    <div className="life-environment" role="form" aria-label={t('lifeEnvironmentPage.pageTitle')}>
       <StressLevelSelector
         value={formData.stress_level}
         onChange={(value) => handleChange("stress_level", value)}
@@ -190,16 +194,20 @@ const LifeEnvironment: React.FC = () => {
         value={formData.additional_details}
         onChange={(value) => handleChange("additional_details", value)}
       />
-      <div className="buttons-container"> {/* 添加容器以并排放置按钮 */}
-        <button onClick={handleSkip} disabled={isSaving}> {/* 使用 isSaving 禁用按钮 */}
-          {t('lifeEnvironmentPage.skipButton')} {/* 保持原始文本，无状态反馈 */}
+      <div className="buttons-container">
+        <button 
+          onClick={handleSkip} 
+          disabled={isSaving}
+          aria-label={t('lifeEnvironmentPage.skipButton')}
+        >
+          {t('lifeEnvironmentPage.skipButton', 'Skip')}
         </button>
-        <button
+        <button 
           onClick={handleSaveToSupabase}
           disabled={isSaving}
-          className="save-button"
+          aria-label={t('lifeEnvironmentPage.saveButton')}
         >
-          {saveStatus || (isSaving ? t('lifeEnvironmentPage.savingButton') : t('lifeEnvironmentPage.saveButton'))} {/* 动态显示保存状态 */}
+          {saveStatus || (isSaving ? t('lifeEnvironmentPage.savingButton', 'Saving...') : t('lifeEnvironmentPage.saveButton', 'Save'))}
         </button>
       </div>
     </div>

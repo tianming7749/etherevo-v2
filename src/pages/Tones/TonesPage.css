@@ -1,47 +1,58 @@
 /* TonesPage.css */
 
 .tones-page {
-  font-family: 'Arial', sans-serif;
-  max-width: 800px;
-  margin: 0px; /* 减少顶部间距为 0px，保持底部间距 */
-  padding: 20px;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; /* 使用 San Francisco */
+  max-width: 100%; /* 适配移动设备，移除固定宽度 */
+  margin: 20px auto; /* 增加顶部间距为 20px，适配 iOS 屏幕 */
+  padding: 16px; /* 标准的 iOS 内边距 */
+  background-color: #FFFFFF; /* 白色背景，符合 iOS 标准 */
+  border-radius: 12px; /* 更圆润的圆角，符合 iOS */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* 轻微阴影 */
+  position: relative;
 }
 
-.tones-page h1 {
-  color: #333;
+.tones-title {
+  color: #333333; /* 深灰色文字 */
   text-align: center;
-  margin-bottom: 30px;
-  font-size: 28px;
+  margin-bottom: 20px; /* 减少间距以符合 iOS */
+  font-size: 20px; /* 标准的 iOS 标题大小 */
+  font-weight: 600; /* 更符合 iOS 的粗体 */
 }
 
 .tones-list {
   list-style: none;
   padding: 0;
-  margin-bottom: 20px;
+  margin-bottom: 20px; /* 保持间距 */
 }
 
 .tone-option {
   display: flex;
   align-items: center;
-  background-color: white;
-  border: 1px solid #e0e0e0;
-  border-radius: 5px;
-  padding: 15px;
-  margin-bottom: 10px;
+  background-color: #F9F9F9; /* 浅灰色背景，符合 iOS */
+  border: 1px solid #E5E5E5; /* 浅灰色边框 */
+  border-radius: 8px; /* 更圆润的圆角 */
+  padding: 16px; /* 增加内边距以符合 iOS */
+  margin-bottom: 12px; /* 减少间距 */
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.3s ease; /* 保持过渡效果 */
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05); /* 轻微阴影 */
 }
 
 .tone-option:hover {
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  transform: translateY(-2px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 增强悬停效果 */
+  transform: translateY(-2px); /* 保持轻微抬升效果 */
+}
+
+.tone-option.selected {
+  background-color: #E6F0FF; /* 选中状态使用浅蓝色背景 */
+  border-color: #A3C8F0; /* 浅蓝色边框 */
 }
 
 .tone-option input[type="radio"] {
-  margin-right: 15px;
+  margin-right: 16px; /* 增加间距以确保触控目标 */
+  width: 20px; /* 确保触控目标 */
+  height: 20px; /* 确保触控目标 */
+  cursor: pointer;
 }
 
 .tone-details {
@@ -49,58 +60,108 @@
 }
 
 .tone-name {
-  font-size: 18px;
-  font-weight: bold;
-  margin-bottom: 5px;
-  color: #333;
+  font-size: 17px; /* 标准的 iOS 文本大小 */
+  font-weight: 500; /* 更符合 iOS 的中粗体 */
+  margin-bottom: 8px; /* 减少间距 */
+  color: #333333; /* 深灰色文字 */
 }
 
 .tone-description {
-  font-size: 14px;
-  color: #666;
+  font-size: 15px; /* 略小的 iOS 辅助文本大小 */
+  color: #666666; /* 深灰色文字 */
+  line-height: 1.5; /* 增加行高以提高可读性 */
 }
 
+/* 按钮样式 */
 button {
-  background-color: #007bff;
+  background-color: #007AFF; /* 苹果的系统蓝色 */
   color: white;
   border: none;
-  border-radius: 5px;
-  padding: 12px 20px;
-  font-size: 16px;
+  border-radius: 8px; /* 更圆润的圆角 */
+  padding: 12px 24px; /* 增加内边距以确保触控目标 */
+  font-size: 17px; /* 标准的 iOS 文本大小 */
   cursor: pointer;
-  transition: background-color 0.3s;
+  min-width: 100px; /* 确保触控目标 */
+  transition: background-color 0.2s ease; /* 更细腻的过渡 */
 }
 
-/* 通用按钮悬停效果 */
 button:not(:disabled):hover {
-  background-color: #4169E1; /* 匹配 GoalsPage 的悬停效果 */
+  background-color: #0056B3; /* 深蓝色悬停效果 */
 }
 
-/* 禁用状态 */
 button:disabled {
-  background-color: #B0C4DE; /* 匹配 GoalsPage 的禁用状态颜色 */
+  background-color: #B0C4DE; /* 浅灰色禁用状态 */
   cursor: not-allowed;
+  opacity: 0.7; /* 降低透明度以符合 iOS */
 }
 
-/* 按钮容器样式，确保“跳过”和“Save”按钮并排 */
+/* 按钮容器样式 */
 .buttons-container {
   display: flex;
-  gap: 10px; /* 按钮之间的间距 */
+  gap: 12px; /* 增加按钮之间的间距 */
   justify-content: flex-end; /* 按钮靠右对齐 */
   margin-top: 20px; /* 与内容保持一定间距 */
 }
 
 /* “跳过”按钮样式 */
-.buttons-container button:first-child { /* 针对跳过按钮 */
-  background-color: #4682B4; /* 使用较浅的蓝色，与主题一致但稍低调 */
-  color: white;
+.buttons-container button:first-child {
+  background-color: #6C757D; /* 苹果的灰色，较低调 */
 }
 
 .buttons-container button:first-child:not(:disabled):hover {
-  background-color: #335881; /* 悬停时加深蓝色 */
+  background-color: #5A6268; /* 深灰色悬停效果 */
 }
 
-/* 确保按钮宽度自适应，但不超过容器宽度 */
-button {
-  width: auto; /* 移除原来的 width: 100%，让按钮根据内容调整宽度 */
+/* 加载和错误消息样式 */
+.loading-message, .error-message, .no-tones-message {
+  text-align: center;
+  padding: 16px;
+  color: #666666; /* 深灰色文字 */
+  font-size: 17px; /* 标准的 iOS 文本大小 */
+  background-color: #F9F9F9; /* 浅灰色背景 */
+}
+
+.error-message {
+  color: #FF3B30; /* 苹果的系统红色 */
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .tones-page {
+    margin: 16px auto; /* 移动设备上减少顶部间距 */
+    padding: 12px; /* 减少内边距以适配小屏幕 */
+  }
+
+  .tones-title {
+    font-size: 20px; /* 缩小标题字体 */
+  }
+
+  .tone-option {
+    padding: 12px; /* 减少内边距 */
+    margin-bottom: 10px; /* 减少间距 */
+  }
+
+  .tone-name {
+    font-size: 16px; /* 略小字体 */
+  }
+
+  .tone-description {
+    font-size: 14px; /* 略小字体 */
+  }
+
+  button {
+    padding: 10px 20px; /* 调整按钮内边距 */
+    font-size: 16px; /* 略小字体 */
+    min-width: 90px; /* 减少最小宽度 */
+  }
+
+  .buttons-container {
+    gap: 8px; /* 减少按钮间距 */
+    margin-top: 16px; /* 减少间距 */
+  }
+
+  .loading-message, .error-message, .no-tones-message {
+    padding: 12px; /* 减少内边距 */
+    font-size: 16px; /* 略小字体 */
+  }
 }
