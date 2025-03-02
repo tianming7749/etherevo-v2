@@ -1,98 +1,141 @@
 /* SocialSupportPage.css */
 
 .social-support-container {
-  font-family: 'Arial', sans-serif;
-  max-width: 800px;
-  margin: 0 auto;
-  padding: 20px;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif; /* 使用 San Francisco */
+  max-width: 100%; /* 适配移动设备，移除固定宽度 */
+  margin: 20px auto; /* 增加顶部间距为 20px，适配 iOS 屏幕 */
+  padding: 16px; /* 标准的 iOS 内边距 */
+  background-color: #FFFFFF; /* 白色背景，符合 iOS 标准 */
+  border-radius: 12px; /* 更圆润的圆角，符合 iOS */
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* 轻微阴影 */
+  position: relative;
 }
 
-.social-support-container h2 {
-  color: #333;
-  text-align: center;
-  margin-bottom: 30px;
+/* 标题样式 */
+.section-title {
+  color: #333333; /* 深灰色文字 */
+  margin-top: 16px; /* 减少间距以符合 iOS */
+  margin-bottom: 12px; /* 减少间距 */
+  font-size: 17px; /* 标准的 iOS 文本大小 */
+  font-weight: 600; /* 更符合 iOS 的粗体 */
 }
 
-.social-support-container h3 {
-  color: #555;
-  margin-top: 20px;
-  margin-bottom: 10px;
-}
-
-.social-support-container label {
+/* 标签样式 */
+.form-label {
   display: block;
-  margin-bottom: 10px;
+  margin-bottom: 16px; /* 减少间距 */
+  font-size: 17px; /* 标准的 iOS 文本大小 */
+  color: #333333; /* 深灰色文字 */
 }
 
+/* 选择框样式 */
 .social-support-container select {
   width: 100%;
-  padding: 10px;
-  margin-top: 5px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 16px;
+  max-width: 300px; /* 增加最大宽度以适配 iOS */
+  padding: 12px; /* 增加内边距以确保触控目标 */
+  border: 1px solid #E5E5E5; /* 浅灰色边框，符合 iOS */
+  border-radius: 8px; /* 更圆润的圆角 */
+  font-size: 17px; /* 标准的 iOS 文本大小 */
+  margin-top: 8px; /* 增加间距 */
+  box-sizing: border-box; /* 确保内边距计算在内 */
+  transition: border-color 0.2s ease; /* 添加聚焦过渡 */
 }
 
-/* 按钮容器样式，确保“跳过”和“Save”按钮并排 */
+.social-support-container select:focus {
+  border-color: #007AFF; /* 苹果的系统蓝色 */
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(0, 122, 255, 0.3); /* 苹果的聚焦效果 */
+}
+
+/* 按钮样式 */
+button {
+  background-color: #007AFF; /* 苹果的系统蓝色 */
+  color: white;
+  border: none;
+  border-radius: 8px; /* 更圆润的圆角 */
+  padding: 12px 24px; /* 增加内边距以确保触控目标 */
+  font-size: 17px; /* 标准的 iOS 文本大小 */
+  cursor: pointer;
+  min-width: 100px; /* 确保触控目标 */
+  transition: background-color 0.2s ease; /* 更细腻的过渡 */
+}
+
+button:not(:disabled):hover {
+  background-color: #0056B3; /* 深蓝色悬停效果 */
+}
+
+button:disabled {
+  background-color: #B0C4DE; /* 浅灰色禁用状态 */
+  cursor: not-allowed;
+  opacity: 0.7; /* 降低透明度以符合 iOS */
+}
+
+/* 按钮容器样式 */
 .buttons-container {
   display: flex;
-  gap: 10px;
-  justify-content: flex-end;
-  margin-top: 20px;
+  gap: 12px; /* 增加按钮之间的间距 */
+  justify-content: flex-end; /* 按钮靠右对齐 */
+  margin-top: 20px; /* 与内容保持一定间距 */
 }
 
 /* “跳过”按钮样式 */
 .buttons-container button:first-child {
-  background-color: #4682B4;
+  background-color: #6C757D; /* 苹果的灰色，较低调 */
   color: white;
-  border: none;
-  border-radius: 4px;
-  padding: 10px 20px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background-color 0.3s;
 }
 
+/* “跳过”按钮悬停样式 */
 .buttons-container button:first-child:not(:disabled):hover {
-  background-color: #335881;
+  background-color: #5A6268; /* 深灰色悬停效果 */
 }
 
-/* 禁用时的“跳过”按钮样式，保持原始颜色但禁用交互 */
-.buttons-container button:first-child:disabled {
-  background-color: #4682B4; /* 保持原始颜色 */
-  color: #ffffff; /* 保持文字白色，确保可读性 */
-  cursor: not-allowed; /* 保持禁用光标效果 */
-  opacity: 0.6; /* 可选：降低透明度以提示禁用状态，但保持颜色 */
-}
-
-/* “保存”按钮样式 */
-.social-support-container button:not(:first-child) {
-  background-color: #004085;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  padding: 10px 20px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-.social-support-container button:not(:first-child):not(:disabled):hover {
-  background-color: #0279f0;
-}
-
-/* 禁用时的“保存”按钮样式 */
-.social-support-container button:not(:first-child):disabled {
-  background-color: #888; /* 保持原有灰色禁用样式 */
-  cursor: not-allowed;
-}
-
-.loading-message {
+/* 加载和错误消息样式 */
+.loading-message, .error-message {
   text-align: center;
-  padding: 20px;
-  font-size: 18px;
-  color: #666;
+  padding: 16px;
+  color: #666666; /* 深灰色文字 */
+  font-size: 17px; /* 标准的 iOS 文本大小 */
+  background-color: #F9F9F9; /* 浅灰色背景 */
+}
+
+.error-message {
+  color: #FF3B30; /* 苹果的系统红色 */
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .social-support-container {
+    margin: 16px auto; /* 移动设备上减少顶部间距 */
+    padding: 12px; /* 减少内边距以适配小屏幕 */
+  }
+
+  .section-title {
+    font-size: 16px; /* 缩小标题字体 */
+  }
+
+  .form-label {
+    font-size: 16px; /* 略小字体 */
+  }
+
+  .social-support-container select {
+    max-width: 250px; /* 减少最大宽度以适配小屏幕 */
+    font-size: 16px; /* 略小字体 */
+    padding: 10px; /* 调整内边距 */
+  }
+
+  button {
+    padding: 10px 20px; /* 调整按钮内边距 */
+    font-size: 16px; /* 略小字体 */
+    min-width: 90px; /* 减少最小宽度 */
+  }
+
+  .buttons-container {
+    gap: 8px; /* 减少按钮间距 */
+    margin-top: 16px; /* 减少间距 */
+  }
+
+  .loading-message, .error-message {
+    padding: 12px; /* 减少内边距 */
+    font-size: 16px; /* 略小字体 */
+  }
 }

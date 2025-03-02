@@ -147,6 +147,7 @@
     "prompt_emotionally_supportive": "Role:\nA wise, empathetic, and adaptable emotional companion.\nGoal:\nProvide emotional support and life guidance through warm conversations, helping users ease stress, release emotions, and foster a positive mindset.\nStyle:\nOptimistic and humorous, creating a light and pleasant atmosphere, blending critical thinking with practical tips, listening empathetically, user-focused, infusing humor into advice, pacing conversations gradually with a slower tempo, moderate info density, emphasizing interaction, and using casual, everyday language.\nConversation Guidelines:\n- Empathetic Support: Express genuine understanding and care.\n- Light Atmosphere: Use humor to relieve stress and encourage positivity.\n- Inspire Reflection: Ask open questions and offer positive suggestions to explore perspectives.\n- Practical Tips: Provide effective emotional support strategies.\n- Avoid Preaching: Keep tone flexible and light, suggestions not directives.\n- Interactive Guidance: Slow the pace and rhythm, unfolding info gradually, avoiding overload. Pause thoughtfully with space for reflection, encouraging participation and checking if users understand or need more.\n- Casual Tone: Use everyday, conversational language, steering clear of formal or stiff phrasing.\nKey Traits:\nOptimism, Humor, Encouragement, Critical Thinking, Empathy, Flexibility."
   },
   "goalsPage": {
+    "pageTitle": "Set Goals Page",
     "title": "Set Your Goals",
     "loadingMessage": "Loading...",
     "description": "Tip: Setting your goals helps us tailor mental health support for you. You can select up to 3 goals to keep us focused on what matters most. Feel free to adjust them anytime as your needs evolve.",
@@ -445,6 +446,7 @@
     }
   },
   "socialSupportPage": {
+    "pageTitle": "Social Support Page",
     "socialNetworkSizeTitle": "Social Network Size",
     "friendsLabel": "Number of close friends:",
     "familyLabel": "Number of family members regularly in contact:",
@@ -472,6 +474,7 @@
     "saveNetworkErrorAlert": "Save failed, please check your network connection or try again later!"
   },
   "recentEventsPage": {
+    "pageTitle": "Recent Events Page",
     "loadingMessage": "Loading...",
     "skipButton": "Skip",
     "saveButton": "Save",

@@ -147,6 +147,7 @@
     "prompt_emotionally_supportive": "角色：\n智慧、同理心、灵活的情感陪护助手。\n目标：\n通过温暖对话提供情感支持和生活指导，助用户缓解压力、疏解情绪、激发积极心态。\n风格：\n乐观幽默，轻松愉快氛围，批判性思维提供实用建议，倾听共情，以用户为中心，建议中带幽默，对话节奏循序渐进，语速放缓，信息密度适中，注重对话互动性，回复风格口语化日常化。\n对话要点：\n- 共情支持：真诚表达理解关怀。\n- 轻松氛围：幽默语气缓解压力，鼓励积极。\n- 启发思考：开放提问，积极建议，鼓励看到问题多面性。\n- 实用建议：提供有效情绪支持。\n- 避免教条：语气轻松灵活，建议非命令。\n- 互动引导：在对话中主动放慢语速和节奏，逐步展开信息，避免信息过载。在适当时候主动停顿，并使用留白，营造思考空间。注重对话互动性，鼓励用户参与，主动询问用户是否理解或需要更多信息。\n- 口语日常：使用更口语化、更贴近日常对话的语言风格，避免过于正式或书面化的表达。\n关键词：\n乐观，幽默，鼓励，批判性，同理心，灵活。"
   },
   "goalsPage": {
+    "pageTitle": "设定目标页面",
     "title": "设定你的目标",
     "loadingMessage": "加载中...",
     "description": "提示：设定你的目标可以帮助我们为你量身定制心理健康支持。你可以选择最多3个目标，以便我们专注于重要的事情。随时可以调整你的目标以适应你的需求变化。",
@@ -183,8 +184,9 @@
       "interests": "兴趣与爱好",
       "socialSupport": "社交支持系统",
       "recentEvents": "近期的重大生活事件"
-    },
+      },
     "navLabel": "用户信息导航"
+
   },
   "basicInfoPage": {
     "pageTitle": "基本信息页面",
@@ -323,6 +325,7 @@
       "ptsd": "创伤后应激障碍",
       "bipolar": "双相情感障碍",
       "other": "其他"
+    }
   },
   "interestsPage": {
     "pageTitle": "兴趣页面",
@@ -443,6 +446,7 @@
     }
   },
   "socialSupportPage": {
+    "pageTitle": "社交支持页面",
     "socialNetworkSizeTitle": "社交网络规模",
     "friendsLabel": "亲密朋友数量：",
     "familyLabel": "经常联系的家庭成员数量：",
@@ -470,6 +474,7 @@
     "saveNetworkErrorAlert": "保存失败，请检查网络连接或稍后重试！"
   },
   "recentEventsPage": {
+    "pageTitle": "近期事件页面",
     "loadingMessage": "加载中...",
     "skipButton": "跳过",
     "saveButton": "保存",
@@ -627,7 +632,6 @@
       "saveSuccessAlert": "保存成功！",
       "saveErrorAlert": "保存失败，请稍后重试！",
       "saveNetworkErrorAlert": "保存失败，请检查网络连接或稍后重试！"
-    }
     },
     "interestsSection": "兴趣与爱好：",
     "interestCategories": {

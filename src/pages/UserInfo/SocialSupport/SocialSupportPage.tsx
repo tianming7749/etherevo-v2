@@ -150,67 +150,92 @@ const SocialSupportPage: React.FC = () => {
   const frequencyOptions = t('socialSupportPage.frequencyOptions', { returnObjects: true }) as Record<string, string>;
 
   if (isLoading) {
-    return <div className="loading-message">{t('socialSupportPage.loadingMessage', 'Loading...')}</div>;
+    return (
+      <div className="loading-message" role="alert" aria-label={t('socialSupportPage.loadingMessage')}>
+        {t('socialSupportPage.loadingMessage', 'Loading...')}
+      </div>
+    );
   }
 
   if (error) {
-    return <div className="error-message">{error}</div>;
+    return (
+      <div className="error-message" role="alert" aria-label={error}>
+        {error}
+      </div>
+    );
   }
 
   return (
-    <div className="social-support-container">
+    <div className="social-support-container" role="form" aria-label={t('socialSupportPage.pageTitle')}>
       <form>
-        <h3>{t('socialSupportPage.socialNetworkSizeTitle')}</h3>
-        <label>
+        <h3 className="section-title">{t('socialSupportPage.socialNetworkSizeTitle')}</h3>
+        <label className="form-label">
           {t('socialSupportPage.friendsLabel')}
           <select
             value={socialSupport.friends || ""}
             onChange={(e) => setSocialSupport({ ...socialSupport, friends: e.target.value })}
             disabled={isSaving} // 使用 isSaving 禁用输入框
+            aria-label={t('socialSupportPage.friendsLabel')}
           >
             <option value="">{t('socialSupportPage.selectOption')}</option>
             {Object.entries(numberOptions).map(([key, value]) => (
-              <option key={key} value={key}>{value}</option>
+              <option key={key} value={key} aria-label={value}>
+                {value}
+              </option>
             ))}
           </select>
         </label>
-        <label>
+        <label className="form-label">
           {t('socialSupportPage.familyLabel')}
           <select
             value={socialSupport.family || ""}
             onChange={(e) => setSocialSupport({ ...socialSupport, family: e.target.value })}
             disabled={isSaving} // 使用 isSaving 禁用输入框
+            aria-label={t('socialSupportPage.familyLabel')}
           >
             <option value="">{t('socialSupportPage.selectOption')}</option>
             {Object.entries(numberOptions).map(([key, value]) => (
-              <option key={key} value={key}>{value}</option>
+              <option key={key} value={key} aria-label={value}>
+                {value}
+              </option>
             ))}
           </select>
         </label>
 
-        <h3>{t('socialSupportPage.socialContactFrequencyTitle')}</h3>
-        <label>
+        <h3 className="section-title">{t('socialSupportPage.socialContactFrequencyTitle')}</h3>
+        <label className="form-label">
           {t('socialSupportPage.meetFrequencyLabel')}
           <select
             value={socialSupport.meetFrequency || ""}
-            onChange={(e) =>
-              setSocialSupport({ ...socialSupport, meetFrequency: e.target.value })
-            }
+            onChange={(e) => setSocialSupport({ ...socialSupport, meetFrequency: e.target.value })}
             disabled={isSaving} // 使用 isSaving 禁用输入框
+            aria-label={t('socialSupportPage.meetFrequencyLabel')}
           >
             <option value="">{t('socialSupportPage.selectOption')}</option>
             {Object.entries(frequencyOptions).map(([key, value]) => (
-              <option key={key} value={key}>{value}</option>
+              <option key={key} value={key} aria-label={value}>
+                {value}
+              </option>
             ))}
           </select>
         </label>
 
-        <div className="buttons-container"> {/* 添加容器以并排放置按钮 */}
-          <button type="button" onClick={handleSkip} disabled={isSaving}> {/* 仅在未登录时禁用 */}
-            {t('socialSupportPage.skipButton')} {/* 保持原始文本，无状态反馈 */}
+        <div className="buttons-container">
+          <button 
+            type="button" 
+            onClick={handleSkip} 
+            disabled={isSaving}
+            aria-label={t('socialSupportPage.skipButton')}
+          >
+            {t('socialSupportPage.skipButton', 'Skip')}
           </button>
-          <button type="button" onClick={saveSocialSupport} disabled={isSaving}> {/* 使用 isSaving 禁用按钮 */}
-            {saveStatus || (isSaving ? t('socialSupportPage.savingButton') : t('socialSupportPage.saveButton'))} {/* 动态显示保存状态 */}
+          <button 
+            type="button" 
+            onClick={saveSocialSupport} 
+            disabled={isSaving}
+            aria-label={t('socialSupportPage.saveButton')}
+          >
+            {saveStatus || (isSaving ? t('socialSupportPage.savingButton', 'Saving...') : t('socialSupportPage.saveButton', 'Save'))}
           </button>
         </div>
       </form>

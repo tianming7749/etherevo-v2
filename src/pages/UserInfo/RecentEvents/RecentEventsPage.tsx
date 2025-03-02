@@ -159,17 +159,25 @@ const RecentEventsPage: React.FC = () => {
   };
 
   if (isLoading) {
-    return <div className="loading-message">{t('recentEventsPage.loadingMessage', 'Loading...')}</div>;
+    return (
+      <div className="loading-message" role="alert" aria-label={t('recentEventsPage.loadingMessage')}>
+        {t('recentEventsPage.loadingMessage', 'Loading...')}
+      </div>
+    );
   }
 
   if (error) {
-    return <div className="error-message">{error}</div>;
+    return (
+      <div className="error-message" role="alert" aria-label={error}>
+        {error}
+      </div>
+    );
   }
 
   return (
-    <div className="recent-events-page">
+    <div className="recent-events-page" role="form" aria-label={t('recentEventsPage.pageTitle', 'Recent Events Page')}>
       <div className="form-section">
-        <h3>{t('recentEventsPage.sections.moving.title')}</h3>
+        <h3 className="section-title">{t('recentEventsPage.sections.moving.title')}</h3>
         <label className="checkbox-label">
           <input
             type="checkbox"
@@ -178,13 +186,14 @@ const RecentEventsPage: React.FC = () => {
               setRecentEvents((prev) => ({ ...prev, moving: e.target.checked }))
             }
             disabled={isSaving} // 使用 isSaving 禁用输入框
+            aria-label={t('recentEventsPage.sections.moving.label')}
           />
           <span>{t('recentEventsPage.sections.moving.label')}</span>
         </label>
       </div>
 
       <div className="form-section">
-        <h3>{t('recentEventsPage.sections.careerAndEducation.title')}</h3>
+        <h3 className="section-title">{t('recentEventsPage.sections.careerAndEducation.title')}</h3>
         <label className="checkbox-label">
           <input
             type="checkbox"
@@ -196,6 +205,7 @@ const RecentEventsPage: React.FC = () => {
               }))
             }
             disabled={isSaving} // 使用 isSaving 禁用输入框
+            aria-label={t('recentEventsPage.sections.careerAndEducation.jobChangeLabel')}
           />
           <span>{t('recentEventsPage.sections.careerAndEducation.jobChangeLabel')}</span>
         </label>
@@ -210,6 +220,7 @@ const RecentEventsPage: React.FC = () => {
               }))
             }
             disabled={isSaving} // 使用 isSaving 禁用输入框
+            aria-label={t('recentEventsPage.sections.careerAndEducation.promotionLabel')}
           />
           <span>{t('recentEventsPage.sections.careerAndEducation.promotionLabel')}</span>
         </label>
@@ -224,13 +235,14 @@ const RecentEventsPage: React.FC = () => {
               }))
             }
             disabled={isSaving} // 使用 isSaving 禁用输入框
+            aria-label={t('recentEventsPage.sections.careerAndEducation.studyChangeLabel')}
           />
           <span>{t('recentEventsPage.sections.careerAndEducation.studyChangeLabel')}</span>
         </label>
       </div>
 
       <div className="form-section">
-        <h3>{t('recentEventsPage.sections.relationships.title')}</h3>
+        <h3 className="section-title">{t('recentEventsPage.sections.relationships.title')}</h3>
         <label className="checkbox-label">
           <input
             type="checkbox"
@@ -242,6 +254,7 @@ const RecentEventsPage: React.FC = () => {
               }))
             }
             disabled={isSaving} // 使用 isSaving 禁用输入框
+            aria-label={t('recentEventsPage.sections.relationships.marriageLabel')}
           />
           <span>{t('recentEventsPage.sections.relationships.marriageLabel')}</span>
         </label>
@@ -256,6 +269,7 @@ const RecentEventsPage: React.FC = () => {
               }))
             }
             disabled={isSaving} // 使用 isSaving 禁用输入框
+            aria-label={t('recentEventsPage.sections.relationships.newBabyLabel')}
           />
           <span>{t('recentEventsPage.sections.relationships.newBabyLabel')}</span>
         </label>
@@ -270,6 +284,7 @@ const RecentEventsPage: React.FC = () => {
               }))
             }
             disabled={isSaving} // 使用 isSaving 禁用输入框
+            aria-label={t('recentEventsPage.sections.relationships.relationshipChangeLabel')}
           />
           <span>{t('recentEventsPage.sections.relationships.relationshipChangeLabel')}</span>
         </label>
@@ -284,13 +299,14 @@ const RecentEventsPage: React.FC = () => {
               }))
             }
             disabled={isSaving} // 使用 isSaving 禁用输入框
+            aria-label={t('recentEventsPage.sections.relationships.bereavementLabel')}
           />
           <span>{t('recentEventsPage.sections.relationships.bereavementLabel')}</span>
         </label>
       </div>
 
       <div className="form-section">
-        <h3>{t('recentEventsPage.sections.health.title')}</h3>
+        <h3 className="section-title">{t('recentEventsPage.sections.health.title')}</h3>
         <label className="checkbox-label">
           <input
             type="checkbox"
@@ -302,13 +318,14 @@ const RecentEventsPage: React.FC = () => {
               }))
             }
             disabled={isSaving} // 使用 isSaving 禁用输入框
+            aria-label={t('recentEventsPage.sections.health.healthIssueLabel')}
           />
           <span>{t('recentEventsPage.sections.health.healthIssueLabel')}</span>
         </label>
       </div>
 
       <div className="form-section">
-        <h3>{t('recentEventsPage.sections.finance.title')}</h3>
+        <h3 className="section-title">{t('recentEventsPage.sections.finance.title')}</h3>
         <label className="checkbox-label">
           <input
             type="checkbox"
@@ -320,13 +337,14 @@ const RecentEventsPage: React.FC = () => {
               }))
             }
             disabled={isSaving} // 使用 isSaving 禁用输入框
+            aria-label={t('recentEventsPage.sections.finance.financialChangeLabel')}
           />
           <span>{t('recentEventsPage.sections.finance.financialChangeLabel')}</span>
         </label>
       </div>
 
       <div className="form-section">
-        <h3>{t('recentEventsPage.sections.other.title')}</h3>
+        <h3 className="section-title">{t('recentEventsPage.sections.other.title')}</h3>
         <textarea
           placeholder={t('recentEventsPage.sections.other.placeholder')}
           value={recentEvents.other}
@@ -334,14 +352,23 @@ const RecentEventsPage: React.FC = () => {
             setRecentEvents((prev) => ({ ...prev, other: e.target.value }))
           }
           disabled={isSaving} // 使用 isSaving 禁用输入框
+          aria-label={t('recentEventsPage.sections.other.placeholder')}
         />
       </div>
 
-      <div className="buttons-container"> {/* 添加容器以并排放置按钮 */}
-        <button onClick={handleSkip} disabled={isSaving}>
+      <div className="buttons-container">
+        <button 
+          onClick={handleSkip} 
+          disabled={isSaving}
+          aria-label={t('recentEventsPage.skipButton')}
+        >
           {t('recentEventsPage.skipButton', 'Skip')} {/* 保持原始文本，无状态反馈 */}
         </button>
-        <button onClick={saveRecentEvents} disabled={isSaving}>
+        <button 
+          onClick={saveRecentEvents} 
+          disabled={isSaving}
+          aria-label={t('recentEventsPage.saveButton')}
+        >
           {saveStatus || (isSaving ? t('recentEventsPage.savingButton', 'Saving...') : t('recentEventsPage.saveButton', 'Save'))} {/* 动态显示保存状态 */}
         </button>
       </div>
