@@ -12,7 +12,7 @@ const ConfirmReset: React.FC = () => {
   const { t } = useTranslation();
   const [searchParams] = useSearchParams();
   const confirmationUrl = searchParams.get('confirmation_url');
-  const { setIsPasswordRecovery } = useUserContext(); // 获取 setIsPasswordRecovery
+  const { userEmail, setIsPasswordRecovery } = useUserContext(); // 假设 UserContext 提供 userEmail
 
   useEffect(() => {
     if (!confirmationUrl) {
@@ -42,13 +42,18 @@ const ConfirmReset: React.FC = () => {
         return;
       }
 
-      // 验证 token，尝试添加 email 参数
-      const email = 'yangtianming@yeah.net'; // 硬编码或从 localStorage/Context 获取
+      // 验证 token，动态获取 email
+      const email = userEmail || localStorage.getItem('resetEmail'); // 从 UserContext 或 localStorage 获取
+      if (!email) {
+        setError(t('resetPassword.messages.emailRequired')); // 添加翻译：邮箱不可用
+        return;
+      }
+
       console.log('Verifying token with email:', { token, type, email });
       const { data, error } = await supabase.auth.verifyOtp({
         token,
         type: 'recovery',
-        email, // 添加 email 参数以尝试匹配后端要求
+        email, // 使用动态获取的 email
       });
 
       console.log('Verify OTP response:', { data, error }); // 添加详细日志
