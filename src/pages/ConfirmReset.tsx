@@ -42,11 +42,15 @@ const ConfirmReset: React.FC = () => {
         return;
       }
 
-      // 验证 token
-      console.log('Verifying token:', token);
+      // 尝试使用 email 参数（从邮件地址推测，例如 yangtianming@yeah.net）
+      const email = 'yangtianming@yeah.net'; // 硬编码或从 localStorage/Context 获取
+
+      // 验证 token，尝试添加 email 参数
+      console.log('Verifying token with email:', { token, type, email });
       const { data, error } = await supabase.auth.verifyOtp({
         token,
-        type: 'recovery', // 确保 type 为 'recovery'
+        type: 'recovery',
+        email, // 添加 email 参数以尝试匹配后端要求
       });
 
       console.log('Verify OTP response:', { data, error }); // 添加详细日志
