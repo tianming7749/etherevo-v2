@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
 import { useTranslation } from 'react-i18next';
+import { useUserContext } from '../context/UserContext'; // 导入 useUserContext
 
 const ConfirmReset: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -11,6 +12,7 @@ const ConfirmReset: React.FC = () => {
   const { t } = useTranslation();
   const [searchParams] = useSearchParams();
   const confirmationUrl = searchParams.get('confirmation_url');
+  const { setIsPasswordRecovery } = useUserContext(); // 获取 setIsPasswordRecovery
 
   useEffect(() => {
     if (!confirmationUrl) {
@@ -38,10 +40,13 @@ const ConfirmReset: React.FC = () => {
       }
 
       // 验证 token
+      console.log('Verifying token:', token);
       const { data, error } = await supabase.auth.verifyOtp({
         token,
-        type: 'recovery',
+        type: 'recovery', // 确保 type 为 'recovery'
       });
+
+      console.log('Verify OTP response:', { data, error }); // 添加详细日志
 
       if (error) {
         if (error.message.includes('expired')) {
@@ -53,7 +58,8 @@ const ConfirmReset: React.FC = () => {
           console.error('Token verification error:', error.message, error);
         }
       } else {
-        // 验证成功，重定向到密码重置页面
+        // 验证成功，设置 isPasswordRecovery 为 true，并重定向到密码重置页面
+        setIsPasswordRecovery(true); // 更新 UserContext 状态
         navigate(`/reset-password?token=${token}&type=recovery&redirect_to=${redirectTo || '/auth'}`);
       }
     } catch (err) {
