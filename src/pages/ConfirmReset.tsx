@@ -32,8 +32,8 @@ const ConfirmReset: React.FC = () => {
       console.log('Parsing confirmation URL:', confirmationUrl);
       const url = new URL(confirmationUrl);
       const token = url.searchParams.get('token');
-      const type = url.searchParams.get('type');
-      const redirectTo = url.searchParams.get('redirect_to');
+      const type = url.searchParams.get('type') || 'recovery'; // 默认值为 'recovery'
+      const redirectTo = url.searchParams.get('redirect_to') || '/reset-password'; // 默认值为 '/reset-password'
 
       console.log('Parsed token, type, redirectTo:', { token, type, redirectTo });
 
@@ -64,7 +64,7 @@ const ConfirmReset: React.FC = () => {
         // 验证成功，设置 isPasswordRecovery 为 true，并重定向到密码重置页面
         setIsPasswordRecovery(true); // 更新 UserContext 状态
         console.log('Token verified successfully, redirecting to reset-password');
-        navigate(`/reset-password?token=${token}&type=recovery&redirect_to=${redirectTo || '/auth'}`);
+        navigate(`/reset-password?token=${token}&type=recovery&redirect_to=${redirectTo}`);
       }
     } catch (err) {
       console.error('Error in confirm reset:', err);
