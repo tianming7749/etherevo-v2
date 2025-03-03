@@ -42,10 +42,8 @@ const ConfirmReset: React.FC = () => {
         return;
       }
 
-      // 尝试使用 email 参数（从邮件地址推测，例如 yangtianming@yeah.net）
-      const email = 'yangtianming@yeah.net'; // 硬编码或从 localStorage/Context 获取
-
       // 验证 token，尝试添加 email 参数
+      const email = 'yangtianming@yeah.net'; // 硬编码或从 localStorage/Context 获取
       console.log('Verifying token with email:', { token, type, email });
       const { data, error } = await supabase.auth.verifyOtp({
         token,
