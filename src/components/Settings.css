@@ -3,7 +3,7 @@
     max-width: 100%; /* 适配移动设备，移除固定宽度 */
     margin: 20px auto; /* 增加顶部间距为 20px，适配 iOS 屏幕 */
     padding: 16px; /* 标准的 iOS 内边距 */
-    background-color: #ffffff; /* 白色背景 */
+    background-color: #f0f8ff; ; /* 白色背景 */
     border-radius: 12px; /* 微调圆角以符合 iOS */
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* 轻微阴影 */
     position: relative;

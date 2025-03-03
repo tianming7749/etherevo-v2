@@ -54,13 +54,16 @@
   },
   "resetPassword": {
     "title": "重置密码",
+    "titleConfirm": "确认重置密码",
     "labels": {
       "newPassword": "新密码",
       "confirmNewPassword": "确认新密码"
     },
     "buttons": {
       "resetPassword": "重置密码",
-      "backToLogin": "返回登录"
+      "backToLogin": "返回登录",
+      "confirmReset": "确认重置"
+
     },
     "messages": {
       "loading": "加载中...",

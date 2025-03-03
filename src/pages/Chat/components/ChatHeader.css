@@ -2,7 +2,7 @@
   display: flex;
   align-items: center;
   padding: 16px; /* 增加内边距以符合 iOS 标准，保持与 chat-container 一致 */
-  background-color: #F9F9F9; /* 统一为 chat-container 的背景色，移除浅蓝色 */
+  background-color: #f0f8ff; /* 统一为 chat-container 的背景色，移除浅蓝色 */
   border-bottom: 1px solid #E5E5E5; /* 使用更符合 iOS 的浅灰色分隔线 */
   justify-content: flex-end;
   margin: 0; /* 移除外边距 */

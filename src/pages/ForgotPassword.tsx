@@ -12,7 +12,7 @@ const ForgotPassword: React.FC = () => {
   const { t } = useTranslation();
 
   const handlePasswordReset = async () => {
-    // 验证邮箱格式（可选，但推荐）
+    // 验证邮箱格式
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       setError(t('forgotPassword.messages.invalidEmail'));
@@ -21,7 +21,7 @@ const ForgotPassword: React.FC = () => {
 
     try {
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: 'http://34.118.249.177:5174/reset-password', // 确保指向重置密码页面
+        redirectTo: 'http://34.118.249.177:5174/reset-password',
       });
 
       if (error) {
@@ -34,12 +34,12 @@ const ForgotPassword: React.FC = () => {
         }
         console.error("Error resetting password:", error.message);
       } else {
-        // 成功发送邮件后，存储 email 到 localStorage
-        console.log('Storing email in localStorage:', email);
+        console.log('Password reset email sent successfully for:', email);
         localStorage.setItem('resetEmail', email);
         setSuccess(true);
         setError(null);
-        setTimeout(() => navigate("/auth"), 3000); // 3 秒后返回登录页
+        // 暂时移除自动导航，改为用户手动点击返回
+        // setTimeout(() => navigate("/auth"), 3000);
       }
     } catch (err) {
       console.error("Unexpected error during password reset:", err);
@@ -53,26 +53,36 @@ const ForgotPassword: React.FC = () => {
 
   return (
     <div className="auth-container">
-      <h2>{t('forgotPassword.title')}</h2>
-      <input
-        type="email"
-        placeholder={t('forgotPassword.input.emailPlaceholder')}
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-        className="auth-input"
-        required
-      />
-      <button onClick={handlePasswordReset} className="auth-button" disabled={!email.trim()}>
-        {t('forgotPassword.buttons.resetPassword')}
-      </button>
+      <h2 className="auth-title">{t('forgotPassword.title')}</h2>
+      <div className="auth-form">
+        <input
+          type="email"
+          placeholder={t('forgotPassword.input.emailPlaceholder')}
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className="auth-input"
+          required
+        />
+        <button 
+          onClick={handlePasswordReset} 
+          className="auth-button" 
+          disabled={!email.trim()}
+        >
+          {t('forgotPassword.buttons.resetPassword')}
+        </button>
+        <button 
+          onClick={handleBackToLogin} 
+          className="auth-button auth-back-button"
+          style={{ marginTop: '16px' }} // 添加间距，使其与重置按钮分开
+        >
+          {t('forgotPassword.buttons.backToLogin') || 'Back to Login'}
+        </button>
+      </div>
       {error && <p className="auth-message error">{error}</p>}
       {success && (
         <>
           <p className="auth-message success">{t('forgotPassword.messages.success')}</p>
           <p className="auth-message info">{t('forgotPassword.messages.checkEmail', 'Please check your email for a password reset link.')}</p>
-          <button onClick={handleBackToLogin} className="auth-button auth-back-button">
-            {t('forgotPassword.buttons.backToLogin')}
-          </button>
         </>
       )}
     </div>

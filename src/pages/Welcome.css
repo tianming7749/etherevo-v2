@@ -1,94 +1,104 @@
 /* Welcome.css */
 
 .welcome-container {
-  font-family: 'Arial', sans-serif;
-  max-width: 900px;
-  margin: 80px auto 20px; /* 保持顶部间距，避免被 Navbar 遮挡 */
-  padding: 30px;
-  background-color: #fff;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  width: 100vw;
+  background: #f0f8ff; /* 保持与你的应用一致的淡蓝色背景 */
+  padding: 20px;
+  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, "San Francisco", "Helvetica Neue", Arial, sans-serif; /* 使用iOS系统字体 */
 }
 
-.welcome-container h1 {
-  color: #333;
-  font-size: 30px;
-  margin-bottom: 20px;
+.welcome-title {
+  color: #000000; /* iOS黑色标题 */
+  font-size: 28px;
+  font-weight: 600; /* 半粗体，符合iOS标题 */
+  margin-bottom: 24px;
 }
 
 .welcome-content, .welcome-privacy {
   text-align: left;
-  margin-bottom: 30px;
+  width: 100%;
+  max-width: 350px; /* 限制宽度，符合iOS表单布局 */
+  margin-bottom: 24px;
 }
 
-.welcome-content h2, .welcome-privacy h2 {
-  color: #333;
-  font-size: 24px;
-  margin-bottom: 15px;
+.welcome-subtitle {
+  color: #000000;
+  font-size: 20px;
+  font-weight: 500;
+  margin-bottom: 16px;
 }
 
-.welcome-content p, .welcome-privacy p {
-  color: #666;
-  font-size: 16px;
-  line-height: 1.6;
-  margin-bottom: 15px;
+.welcome-text {
+  color: #6e6e73; /* iOS次要文本颜色 */
+  font-size: 17px; /* iOS标准字体大小 */
+  line-height: 1.5;
+  margin-bottom: 16px;
 }
 
-.welcome-content ul, .welcome-privacy ul {
+.welcome-list {
   list-style-type: disc;
   padding-left: 20px;
-  margin-bottom: 15px;
+  margin-bottom: 16px;
 }
 
-.welcome-content li, .welcome-privacy li {
-  color: #666;
-  font-size: 16px;
-  line-height: 1.6;
-  margin-bottom: 10px;
+.welcome-item {
+  color: #6e6e73;
+  font-size: 17px;
+  line-height: 1.5;
+  margin-bottom: 8px;
 }
 
 .welcome-button {
-  background-color: #4682B4; /* 匹配应用主题蓝色 */
-  color: white;
+  padding: 12px 20px;
+  background: #007aff; /* iOS默认蓝色 */
+  color: #ffffff;
   border: none;
-  border-radius: 5px;
-  padding: 12px 24px;
-  font-size: 16px;
+  border-radius: 10px; /* iOS圆角 */
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  width: 100%;
+  max-width: 350px;
+  font-size: 17px;
+  font-weight: 500;
+  transition: opacity 0.2s ease; /* iOS按钮动画 */
+  margin-top: 16px; /* 与内容保持间距 */
 }
 
-.welcome-button:hover {
-  background-color: #4169E1; /* 悬停效果 */
+.welcome-button:hover:not(:disabled) {
+  opacity: 0.9; /* iOS按钮悬停效果 */
 }
 
 .welcome-button:disabled {
-  background-color: #B0C4DE; /* 禁用状态 */
-  cursor: not-allowed;
+  opacity: 0.6;
+  background: #6e6e73; /* 禁用时使用灰色 */
 }
 
 .welcome-loading {
-  font-family: 'Arial', sans-serif;
-  max-width: 900px;
-  margin: 80px auto;
-  padding: 30px;
+  font-family: -apple-system, BlinkMacSystemFont, "San Francisco", "Helvetica Neue", Arial, sans-serif;
+  max-width: 350px;
+  margin: 0 auto;
+  padding: 20px;
   text-align: center;
-  color: #666;
-  font-size: 16px;
+  color: #6e6e73;
+  font-size: 17px;
 }
 
-.welcome-privacy label {
+.welcome-privacy-label {
   display: flex;
   align-items: center;
   gap: 10px;
-  margin-top: 15px;
-  font-size: 16px;
+  margin-top: 16px;
+  font-size: 17px;
   color: #333;
 }
 
-.welcome-privacy input[type="checkbox"] {
-  margin-right: 5px;
-  width: 16px;
-  height: 16px;
+.welcome-checkbox {
+  width: 20px;
+  height: 20px;
+  margin-right: 8px;
 }

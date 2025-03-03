@@ -1,7 +1,8 @@
-/* 重置 body 的默认样式，确保无空白 */
+/* 重置 body 的默认样式 */
 body {
   margin: 0;
   padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "San Francisco", "Helvetica Neue", Arial, sans-serif; /* 使用iOS系统字体 */
 }
 
 /* 容器样式 */
@@ -12,21 +13,25 @@ body {
   justify-content: center;
   min-height: 100vh;
   width: 100vw;
-  background: #f0f8ff;
-  padding: 0;
-  margin: 0;
+  background: #f0f8ff; /* 保留淡蓝色背景 */
+  padding: 20px;
+  box-sizing: border-box;
 }
 
 /* 标题样式 */
 .auth-title {
-  color: #4682b4;
-  margin-bottom: 10px;
-  font-size: 2.5em;
+  color: #000000; /* iOS黑色标题 */
+  margin-bottom: 8px;
+  font-size: 28px;
+  font-weight: 600; /* 半粗体，符合iOS标题 */
 }
 
 /* 副标题样式 */
 .auth-subtitle {
-  color: #4682b4;
+  color: #000000;
+  font-size: 20px;
+  font-weight: 500;
+  margin-bottom: 24px;
 }
 
 /* 表单样式 */
@@ -34,69 +39,112 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 10px;
+  width: 100%;
+  max-width: 350px; /* 限制宽度，符合iOS表单布局 */
 }
 
 /* 输入框样式 */
 .auth-input {
-  padding: 10px;
-  margin-bottom: 10px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  width: 300px;
+  padding: 12px 16px;
+  margin-bottom: 12px;
+  border: none;
+  border-radius: 10px; /* iOS圆角 */
+  background: #ffffff; /* 输入框白色背景 */
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 17px; /* iOS标准字体大小 */
+  color: #000000;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075); /* 轻微内阴影 */
+}
+
+.auth-input:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px #007aff; /* iOS蓝色聚焦边框 */
 }
 
 /* 登录/注册按钮样式 */
 .auth-button {
-  padding: 10px 20px;
-  background: #4682b4;
-  color: white;
+  padding: 12px 20px;
+  background: #007aff; /* iOS默认蓝色 */
+  color: #ffffff;
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
   cursor: pointer;
-  width: 323px;
-  transition: background 0.3s ease;
+  width: 100%;
+  max-width: 350px;
+  font-size: 17px;
+  font-weight: 500;
+  transition: opacity 0.2s ease; /* iOS按钮动画 */
 }
 
-.auth-button:hover {
-  background: #366b99;
+.auth-button:disabled {
+  opacity: 0.6;
+}
+
+.auth-button:hover:not(:disabled) {
+  opacity: 0.9; /* iOS按钮悬停效果 */
 }
 
 /* 切换提示样式 */
 .auth-toggle {
-  margin-top: 10px;
-  color: #6a8fbf;
+  margin-top: 16px;
+  color: #6e6e73; /* iOS次要文本颜色 */
+  font-size: 15px;
 }
 
 .auth-toggle span {
-  color: #4682b4;
+  color: #007aff; /* iOS蓝色链接 */
   cursor: pointer;
-  text-decoration: underline;
-}
-
-/* 消息样式 */
-.auth-message {
-  margin-top: 10px;
 }
 
 /* 忘记密码和语言切换共用样式 */
 .auth-forgot-password {
-  margin-top: 10px;
-  color: #6a8fbf;
+  margin-top: 12px;
+  color: #007aff;
   cursor: pointer;
-  text-decoration: underline;
-  font-size: 0.9em; /* 稍微小一点，与页面协调 */
+  font-size: 15px;
 }
 
 .auth-forgot-password:hover {
-  color: #4682b4; /* 悬停时颜色变深 */
+  opacity: 0.8;
+}
+
+/* 消息样式 */
+.auth-message {
+  margin-top: 16px;
+  font-size: 15px;
+  text-align: center;
 }
 
 /* 成功和错误消息颜色 */
 .success {
-  color: green;
+  color: #34c759; /* iOS绿色 */
 }
 
 .error {
-  color: red;
+  color: #ff3b30; /* iOS红色 */
+
+}
+/* 返回登录按钮样式（次要按钮，使用更浅的蓝色） */
+.auth-back-button {
+  padding: 12px 20px;
+  background: #6a8fbf; /* 更浅的蓝色，与淡蓝色背景协调 */
+  color: #ffffff;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  width: 100%;
+  max-width: 350px;
+  font-size: 17px;
+  font-weight: 500;
+  transition: opacity 0.2s ease; /* iOS按钮动画 */
+  margin-top: 16px; /* 与其他元素保持间距 */
+}
+
+.auth-back-button:hover:not(:disabled) {
+  opacity: 0.8; /* iOS按钮悬停效果 */
+}
+
+.auth-back-button:disabled {
+  opacity: 0.6;
 }

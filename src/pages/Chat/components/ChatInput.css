@@ -1,6 +1,7 @@
 .chat-input-container {
   display: flex;
   align-items: flex-end;
+  background-color: #f0f8ff;
   gap: 10px;
 }
 

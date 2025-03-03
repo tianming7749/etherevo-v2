@@ -54,13 +54,15 @@
   },
   "resetPassword": {
     "title": "Reset Password",
+    "titleConfirm": "Confirm Password Reset",
     "labels": {
       "newPassword": "New Password",
       "confirmNewPassword": "Confirm New Password"
     },
     "buttons": {
       "resetPassword": "Reset Password",
-      "backToLogin": "Back to Login"
+      "backToLogin": "Back to Login",
+      "confirmReset": "Confirm Reset"
     },
     "messages": {
       "loading": "Loading...",

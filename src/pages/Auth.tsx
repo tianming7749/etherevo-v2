@@ -1,9 +1,8 @@
-// Auth.tsx
 import React, { useState } from "react";
 import { supabase } from "../supabaseClient";
 import { useNavigate } from "react-router-dom";
 import { useTranslation } from 'react-i18next';
-import i18n from '../i18n'; // 导入 i18n，以便直接使用 changeLanguage
+import i18n from '../i18n';
 import "./Auth.css";
 
 const Auth: React.FC = () => {
@@ -13,7 +12,7 @@ const Auth: React.FC = () => {
   const [isLogin, setIsLogin] = useState(true);
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
-  const [language, setLanguage] = useState<string>(i18n.language || 'en'); // 跟踪当前语言
+  const [language, setLanguage] = useState<string>(i18n.language || 'en');
   const navigate = useNavigate();
   const { t } = useTranslation();
 
@@ -23,7 +22,6 @@ const Auth: React.FC = () => {
   const handleAuth = async () => {
     setLoading(true);
     setMessage("");
-
     if (!validateEmail(email)) {
       setMessage(t('auth.messages.invalidEmail'));
       setLoading(false);
@@ -34,13 +32,11 @@ const Auth: React.FC = () => {
       setLoading(false);
       return;
     }
-
     if (!isLogin && password !== confirmPassword) {
       setMessage(t('auth.messages.passwordMismatch'));
       setLoading(false);
       return;
     }
-
     try {
       let result;
       if (isLogin) {
@@ -48,24 +44,18 @@ const Auth: React.FC = () => {
       } else {
         result = await supabase.auth.signUp({ email, password });
       }
-
       if (result.error) {
         setMessage(result.error.message);
       } else {
         setMessage(isLogin ? t('auth.messages.loginSuccess') : t('auth.messages.signUpSuccess'));
-
-        // 存储当前选择的语言到 localStorage
-        localStorage.setItem('i18nextLng', language); // 确保与 i18n.ts 中的 lookupLocalStorage 一致
-
+        localStorage.setItem('i18nextLng', language);
         if (isLogin) {
           const userId = result.data.user.id;
-
           const { data: settings, error: settingsError } = await supabase
             .from('user_settings')
             .select('setup_completed')
             .eq('user_id', userId)
             .single();
-
           if (settingsError) {
             console.error("Error checking user setup:", settingsError);
             navigate("/");
@@ -74,7 +64,6 @@ const Auth: React.FC = () => {
           } else {
             navigate("/");
           }
-
           await supabase
             .from('user_settings')
             .upsert(
@@ -85,7 +74,6 @@ const Auth: React.FC = () => {
               },
               { onConflict: 'user_id' }
             );
-
           localStorage.setItem("supabase.auth.token", JSON.stringify(result.data));
         } else {
           await supabase
@@ -97,9 +85,7 @@ const Auth: React.FC = () => {
             });
           navigate("/");
         }
-
-        // 确保登录后使用当前语言
-        i18n.changeLanguage(language); // 同步 i18n.language
+        i18n.changeLanguage(language);
       }
     } catch (error) {
       setMessage(t('auth.messages.unexpectedError'));
@@ -110,9 +96,9 @@ const Auth: React.FC = () => {
 
   const toggleLanguage = () => {
     const newLang = language === 'zh' ? 'en' : 'zh';
-    setLanguage(newLang); // 更新本地状态
-    i18n.changeLanguage(newLang); // 切换 i18n 语言
-    localStorage.setItem('i18nextLng', newLang); // 持久化到 localStorage
+    setLanguage(newLang);
+    i18n.changeLanguage(newLang);
+    localStorage.setItem('i18nextLng', newLang);
   };
 
   return (
@@ -158,7 +144,6 @@ const Auth: React.FC = () => {
         </span>
       </p>
       <a href="/forgot-password" className="auth-forgot-password">{t('auth.links.forgotPassword')}</a>
-      {/* 语言切换改为文本链接 */}
       <span
         onClick={toggleLanguage}
         className="auth-forgot-password"
